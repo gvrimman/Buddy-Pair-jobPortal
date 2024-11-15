@@ -1,0 +1,25 @@
+
+import { Input, Tooltip } from "@material-tailwind/react";
+import { PiExclamationMarkBold } from "react-icons/pi";
+
+function TextInput({ type, label, registering, errors }) {
+
+
+	return (
+		<div className="relative">
+			<Input type={type} size="" label={label} {...registering} />
+			{errors && (
+				<Tooltip
+					content={errors?.message}
+					placement="right"
+					className="bg-gray-300 text-red-500 tooltip-custom">
+					<span className="absolute top-2 right-2 bg-gray-300 text-red-500 p-1 rounded-full cursor-pointer">
+						<PiExclamationMarkBold />
+					</span>
+				</Tooltip>
+			)}
+		</div>
+	);
+}
+
+export default TextInput;

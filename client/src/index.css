@@ -1,0 +1,55 @@
+@import url("https://fonts.googleapis.com/css2?family=Montserrat:ital,wght@0,100..900;1,100..900&display=swap");
+@import url("https://fonts.googleapis.com/css2?family=Playwrite+AU+QLD:wght@100..400&display=swap");
+
+@tailwind base;
+@tailwind components;
+@tailwind utilities;
+
+body {
+	font-family: "Montserrat", sans-serif;
+}
+
+.render-para {
+	font-family: "Playwrite AU QLD", sans-serif;
+}
+
+.fade-in {
+	animation: render 5s linear 1;
+}
+
+.tooltip-custom {
+	z-index: 9999;
+}
+
+@keyframes render {
+	0% {
+		opacity: 0;
+	}
+	20% {
+		opacity: 0.2;
+	}
+	40% {
+		opacity: 0.4;
+	}
+	60% {
+		opacity: 0.6;
+	}
+	80% {
+		opacity: 0.8;
+	}
+	100% {
+		opacity: 1;
+	}
+}
+
+.form-input:focus,
+.form-input:valid {
+	border: 2px solid rgb(159, 193, 255);
+}
+
+.form-input:focus + label,
+.form-input:valid + label {
+	color: black;
+	z-index: 1;
+	transform: translateY(-30px) scale(0.82);
+}
