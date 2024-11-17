@@ -44,59 +44,67 @@ const userSchema = new mongoose.Schema(
 			type: String, // added
 			trim: true,
 		},
-		hobbies: {
-			type: [String],
-			// required: true,
-			sparse: true,
-		},
+		// hobbies: {
+		// 	type: [String],
+		// 	// required: true,
+		// 	sparse: true,
+		// },
 		qualification: {
 			type: String,
 			trim: true,
 		},
-		educationType: {
-			type: String, // added
-			trim: true,
+		educationInstitute: {
+			type: ["String"],
+			required: true,
 		},
-		preferredJobLocation: {
-			type: [String], // added
-			trim: true,
+		profession: {
+			type: ["String"],
+			required: true,
 		},
-		preferredJobType: {
-			type: String, // added
-			trim: true,
-		},
-		skill: {
-			type: [String], // added
-			trim: true,
-		},
-		portfolio: {
-			type: String, // added
-			trim: true,
-		},
-		linkedin: {
-			type: String, // added
-			trim: true,
-		},
-		github: {
-			type: String, // added
-			trim: true,
-		},
-		behance: {
-			type: String, // added
-			trim: true,
-		},
-		jobDetails: {
-			type: Object,
-			// required: true,
-		},
-		employerDetails: {
-			type: Object,
-			// required: true,
-		},
-		resume: {
-			type: String,
-			// required: true,
-		},
+		// educationType: {
+		// 	type: String, // added
+		// 	trim: true,
+		// },
+		// preferredJobLocation: {
+		// 	type: [String], // added
+		// 	trim: true,
+		// },
+		// preferredJobType: {
+		// 	type: String, // added
+		// 	trim: true,
+		// },
+		// skill: {
+		// 	type: [String], // added
+		// 	trim: true,
+		// },
+		// portfolio: {
+		// 	type: String, // added
+		// 	trim: true,
+		// },
+		// linkedin: {
+		// 	type: String, // added
+		// 	trim: true,
+		// },
+		// github: {
+		// 	type: String, // added
+		// 	trim: true,
+		// },
+		// behance: {
+		// 	type: String, // added
+		// 	trim: true,
+		// },
+		// jobDetails: {
+		// 	type: Object,
+		// 	// required: true,
+		// },
+		// employerDetails: {
+		// 	type: Object,
+		// 	// required: true,
+		// },
+		// resume: {
+		// 	type: String,
+		// 	// required: true,
+		// },
 		locationName: {
 			type: String,
 		},
@@ -111,47 +119,57 @@ const userSchema = new mongoose.Schema(
 				required: true,
 			},
 		},
-		smokingHabits: {
-			type: Boolean,
-			trim: true,
-			default: false,
-			sparse: true,
-		},
-		drinkingHabits: {
-			type: Boolean,
-			trim: true,
-			default: false,
-			sparse: true,
-		},
+		// smokingHabits: {
+		// 	type: Boolean,
+		// 	trim: true,
+		// 	default: false,
+		// 	sparse: true,
+		// },
+		// drinkingHabits: {
+		// 	type: Boolean,
+		// 	trim: true,
+		// 	default: false,
+		// 	sparse: true,
+		// },
 		profileImage: {
 			type: String,
 			// required: true,
 		},
-		shortReel: {
-			type: String,
-			// required: true,
-		},
-		story: {
-			type: String,
-		},
-		relationshipGoal: {
-			type: String,
-			// required: true,
-		},
-		refreshToken: {
-			type: String,
-		},
-		images: [
-			{
-				imageUrl: {
-					type: String,
-					// required: true,
-				},
+		// shortReel: {
+		// 	type: String,
+		// 	// required: true,
+		// },
+		// story: {
+		// 	type: String,
+		// },
+		// relationshipGoal: {
+		// 	type: String,
+		// 	// required: true,
+		// },
+		// refreshToken: {
+		// 	type: String,
+		// },
+		// images: [
+		// 	{
+		// 		imageUrl: {
+		// 			type: String,
+		// 			// required: true,
+		// 		},
+		// 	},
+		// ],
+		subscription: {
+			type: {
+				type: String,
+				enum: ["free", "premium"],
+				default: "free",
 			},
-		],
+			expiry: {
+				type: Date,
+			},
+		},
 		role: {
 			type: String,
-			enum: ["employee", "employer", "admin"],
+			enum: ["Employee", "Employer"],
 		},
 	},
 	{ timestamps: true }

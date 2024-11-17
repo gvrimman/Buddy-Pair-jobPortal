@@ -1,18 +1,8 @@
 import React, { useEffect, useState } from "react";
-// import { useJobSearchContext } from "../../../../context/JobSearchContext";
 
 function SwitchSearch({ title, contents }) {
-  // const { clearSearch, setSearchJobType, setSearchExperience } =
-  //   useJobSearchContext();
-  const [selectedValues, setSelectedValues] = useState([]);
 
-  // useEffect(() => {
-  //   if (title === "Job Type") {
-  //     setSearchJobType({employmentType:selectedValues});
-  //   } else if (title === "Experience") {
-  //     setSearchExperience({experience:selectedValues});
-  //   }
-  // }, [selectedValues, setSearchJobType, setSearchExperience, title]);
+  const [selectedValues, setSelectedValues] = useState([]);
 
   const handleToggle = (value) => {
     setSelectedValues((prev) =>
@@ -22,18 +12,13 @@ function SwitchSearch({ title, contents }) {
     );
   };
 
-  // useEffect(() => {
-  //   if (clearSearch) {
-  //     setSelectedValues([])
-  //   }
-  // }, [clearSearch, setSelectedValues]);
 
   return (
     <div>
       <h1 className="font-semibold text-lg">{title}</h1>
       <ul className="mt-3">
-        {contents.map((item) => (
-          <li className="py-1 w-fit" key={item}>
+        {contents?.map((item, i) => (
+          <li className="py-1 w-fit" key={i}>
             <label className="flex items-center text-slate-600 cursor-pointer">
               <input
                 type="checkbox"

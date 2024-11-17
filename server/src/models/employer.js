@@ -7,54 +7,21 @@ const employerSchema = new mongoose.Schema(
 			required: true,
 			ref: "User",
 		},
-		companyLogo: { type: String },
-		companyCoverImg: { type: String },
-		companyName: { type: String },
-		companyMail: { type: String },
-		companyContact: { type: Number },
-		companyAddress: {
-			street: { type: String },
-			city: { type: String },
-			state: { type: String },
-			zip: { type: String },
-			country: { type: String },
-		},
-		completeAddress: { type: String },
+		companyName: { type: String, required: true },
+		companyEmail: { type: String, required: true },
+		companyAddress: { type: String, required: true },
 		companyWebSite: { type: String },
-		founded: { type: String },
-		companyTeamSize: { type: String },
-		aboutCompany: { type: String },
-		industryType: [String],
-		socialMedia: {
-			facebook: {
-				type: String,
-				default: "",
-			},
-			twitter: {
-				type: String,
-				default: "",
-			},
-			instagram: {
-				type: String,
-				default: "",
-			},
-			linkedin: {
-				type: String,
-				default: "",
-			},
-		},
+		companySize: { type: String, required: true },
+		industryType: { type: String, required: true },
+		companyLinkedin: { type: String, required: true },
 		totalJobs: {
 			type: [mongoose.Schema.Types.ObjectId],
 			ref: "Job",
 			default: [],
 		},
-		activeJobs: { type: Number },
-		shortlistedJobs: [
-			{
-				type: mongoose.Schema.Types.ObjectId,
-				ref: "Job",
-			},
-		],
+		companyLogo: {
+			type: String,
+		},
 	},
 	{ timestamps: true }
 );

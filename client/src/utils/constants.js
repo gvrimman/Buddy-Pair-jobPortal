@@ -49,7 +49,21 @@ export const preferredJobType = [
 	{ value: "any", valueToDisplay: "Any" },
 ];
 
-
+export const jobTypes = [
+	{ value: "web_developer", valueToDisplay: "Web Developer" },
+	{ value: "graphics_designer", valueToDisplay: "Graphics Designer" },
+	{ value: "ui_ux_designer", valueToDisplay: "UI/UX Designer" },
+	{ value: "frontend_developer", valueToDisplay: "Frontend Developer" },
+	{ value: "backend_developer", valueToDisplay: "Backend Developer" },
+	{ value: "full_stack_developer", valueToDisplay: "Full Stack Developer" },
+	{ value: "mobile_app_developer", valueToDisplay: "Mobile App Developer" },
+	{ value: "data_analyst", valueToDisplay: "Data Analyst" },
+	{ value: "seo_specialist", valueToDisplay: "SEO Specialist" },
+	{ value: "digital_marketer", valueToDisplay: "Digital Marketer" },
+	{ value: "project_manager", valueToDisplay: "Project Manager" },
+	{ value: "content_writer", valueToDisplay: "Content Writer" },
+	{ value: "qa_engineer", valueToDisplay: "QA Engineer" },
+];
 
 export const companySizeOptions = [
 	{ value: "1-10", valueToDisplay: "1-10" },
@@ -174,17 +188,59 @@ export const locationOptions = [
 	{ value: "wayanad", label: "Wayanad" },
 ];
 
+export const professions = [
+	{ value: "web_developer", label: "Web Developer" },
+	{ value: "graphics_designer", label: "Graphics Designer" },
+	{ value: "ui_ux_designer", label: "UI/UX Designer" },
+	{ value: "frontend_developer", label: "Frontend Developer" },
+	{ value: "backend_developer", label: "Backend Developer" },
+	{ value: "full_stack_developer", label: "Full Stack Developer" },
+	{ value: "mobile_app_developer", label: "Mobile App Developer" },
+	{ value: "data_scientist", label: "Data Scientist" },
+	{ value: "data_analyst", label: "Data Analyst" },
+	{ value: "seo_specialist", label: "SEO Specialist" },
+	{ value: "digital_marketer", label: "Digital Marketer" },
+	{ value: "content_writer", label: "Content Writer" },
+	{ value: "copywriter", label: "Copywriter" },
+	{ value: "qa_engineer", label: "QA Engineer" },
+	{ value: "project_manager", label: "Project Manager" },
+	{ value: "product_manager", label: "Product Manager" },
+	{ value: "business_analyst", label: "Business Analyst" },
+	{ value: "network_administrator", label: "Network Administrator" },
+	{ value: "system_administrator", label: "System Administrator" },
+	{ value: "cybersecurity_specialist", label: "Cybersecurity Specialist" },
+	{ value: "cloud_engineer", label: "Cloud Engineer" },
+	{ value: "ai_ml_engineer", label: "AI/ML Engineer" },
+	{ value: "teacher", label: "Teacher" },
+	{ value: "professor", label: "Professor" },
+	{ value: "accountant", label: "Accountant" },
+	{ value: "financial_analyst", label: "Financial Analyst" },
+	{ value: "banker", label: "Banker" },
+	{ value: "lawyer", label: "Lawyer" },
+	{ value: "doctor", label: "Doctor" },
+	{ value: "nurse", label: "Nurse" },
+	{ value: "pharmacist", label: "Pharmacist" },
+	{ value: "civil_engineer", label: "Civil Engineer" },
+	{ value: "mechanical_engineer", label: "Mechanical Engineer" },
+	{ value: "electrical_engineer", label: "Electrical Engineer" },
+	{ value: "chemical_engineer", label: "Chemical Engineer" },
+	{ value: "architect", label: "Architect" },
+	{ value: "chef", label: "Chef" },
+	{ value: "pilot", label: "Pilot" },
+	{ value: "writer", label: "Writer" },
+	{ value: "artist", label: "Artist" },
+	{ value: "photographer", label: "Photographer" },
+	{ value: "video_editor", label: "Video Editor" },
+	{ value: "musician", label: "Musician" },
+	{ value: "actor", label: "Actor" },
+	{ value: "entrepreneur", label: "Entrepreneur" },
+];
 // job portal data
-export const categoryData = ["On-site", "Remote", "W-F-H", "Hybrid"];
-
-export const jobTypeData = [
-	"Freelancer",
-	"Full Time",
-	"Part Time",
-	"Internship",
-	"Permanent",
-	"Contract",
-	"Temporary",
+export const categoryData = [
+	{ value: "On-site", valueToDisplay: "On-site" },
+	{ value: "Remote", valueToDisplay: "Remote" },
+	{ value: "W-F-H", valueToDisplay: "W-F-H" },
+	{ value: "Hybrid", valueToDisplay: "Hybrid" },
 ];
 
 export const postedDateData = [
@@ -196,4 +252,19 @@ export const postedDateData = [
 	"Last 30 Days",
 ];
 
-export const experienceData = ["Fresher", "0-1", "1-2", "2-4", "4-6", ">6"];
+export const experienceData = [
+	{ value: "fresher", valueToDisplay: "Fresher" },
+	{ value: "0-1", valueToDisplay: "0-1" },
+	{ value: "1-2", valueToDisplay: "1-2" },
+	{ value: "2-3", valueToDisplay: "2-3" },
+	{ value: "4-6", valueToDisplay: "4-6" },
+	{ value: ">6", valueToDisplay: ">6" },
+];
+
+export const manageJobsMonthOptions = [
+	{ value: "Last 6 Months", valueToDisplay: "Last 6 Months" },
+	{ value: "Last 12 Months", valueToDisplay: "Last 12 Months" },
+	{ value: "Last 16 Months", valueToDisplay: "Last 16 Months" },
+	{ value: "Last 24 Months", valueToDisplay: "Last 24 Months" },
+	{ value: "Last 5 Year", valueToDisplay: "Last 5 Year" },
+];

@@ -1,33 +1,29 @@
 const express = require("express");
 const { upload } = require("../middlewares/multer");
-const {
-	fresherSignup,
-	employeeSignup,
-	employerSignup,
-} = require("../controllers/auth/signup");
-const { login } = require("../controllers/auth/login");
+
+
+const { verifyJwt } = require("../middlewares/jwtAuth");
+const { signup, employerSignup, employeeSignup, login } = require("../controllers/auth/authController");
 
 const router = express.Router();
 
 // user sign up
-router.route("/fresher-signup").post(
-	upload.fields([
-		{ name: "resume", maxCount: 1 },
-		{ name: "profileImage", maxCount: 1 },
-	]),
-	fresherSignup
-);
+router
+	.route("/signup")
+	.post(upload.fields([{ name: "profileImage", maxCount: 1 }]), signup);
 router.route("/employee-signup").post(
 	upload.fields([
 		{ name: "resume", maxCount: 1 },
 		{ name: "profileImage", maxCount: 1 },
 	]),
+	verifyJwt,
 	employeeSignup
 );
 router
 	.route("/employer-signup")
 	.post(
 		upload.fields([{ name: "profileImage", maxCount: 1 }]),
+		verifyJwt,
 		employerSignup
 	);
 

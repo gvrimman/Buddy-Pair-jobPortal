@@ -12,15 +12,15 @@ const jobSchema = new mongoose.Schema(
 			ref: "Employee",
 			default: [],
 		},
-		title: {
+		jobTitle: {
 			type: String,
 			required: true,
 		},
-		description: {
+		jobDescription: {
 			type: String,
 			required: true,
 		},
-		email: {
+		companyEmail: {
 			type: String,
 			required: true,
 		},
@@ -44,7 +44,7 @@ const jobSchema = new mongoose.Schema(
 			type: String,
 			required: true,
 		},
-		gender: {
+		candidateGender: {
 			type: String,
 			required: true,
 		},
@@ -56,7 +56,7 @@ const jobSchema = new mongoose.Schema(
 			type: Date,
 			required: true,
 		},
-		location: {
+		jobLocation: {
 			type: String,
 			required: true,
 			// enum: ["On-site", "Remote", "W-F-H", "Hybrid"],

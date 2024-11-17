@@ -58,17 +58,17 @@ const userInfoValidation = Yup.object().shape({
 		.test("fileSize", "File is too large, max size is 20MB", (value) => {
 			return value && value[0] && value[0].size <= 5 * 1024 * 1024;
 		}),
-	educationType: Yup.string().required("Please select your education type"),
-	preferredJobLocation: Yup.array().required(
-		"Please select your preferred job location"
+	educationInstitute: Yup.string().required(
+		"Please select your education institution"
 	),
-	preferredJobType: Yup.string().required(
-		"Please select your preferred job type"
-	),
+	profession: Yup.array().required("Please select your profession"),
 });
 
-const skillValidation = Yup.object().shape({
+const employeeInfoValidation = Yup.object().shape({
 	skill: Yup.array().required("Atleast one skill is required"),
+	educationType: Yup.string().required("Please select your education type"),
+	preferredJobLocation: Yup.array().required("Please select your location"),
+	preferredJobType: Yup.string().required("Please select your job type"),
 	portfolio: Yup.string(),
 	linkedin: Yup.string().required("Please Enter your linkedin url"),
 	github: Yup.string(),
@@ -104,13 +104,36 @@ const emplyerInfoValidation = Yup.object().shape({
 	companySize: Yup.string().required("Please Select your company size"),
 	industryType: Yup.string().required("Please Select your company type"),
 	employmentType: Yup.string().required("Please Select your employment type"),
+	companyLinkedin: Yup.string().required(
+		"Please Enter your company linkedin"
+	),
+	contactNumber: Yup.string()
+		.min(10, "Minimum 10 characters"),
+});
+
+// job posting validation
+const jobPostValidation = Yup.object().shape({
+	jobTitle: Yup.string().required("Please Enter your job title"),
+	jobDescription: Yup.string().required("Please Enter job description"),
+	industry: Yup.string().required("Please Enter your industry"),
+	jobType: Yup.string().required("Please Enter your job type"),
+	employmentType: Yup.string().required("Please Enter your employment type"),
+	experience: Yup.string().required("Please select your experience"),
+	qualification: Yup.string().required("Please select your qualification"),
+	candidateGender: Yup.string(),
+	jobLocation: Yup.string().required("Please select your job location"),
+	offeredSalary: Yup.number().required("Enter your offered salary"),
+	jobPlace: Yup.string().required("Please select your job place"),
+	deadline: Yup.date().required("Please select deadline date"),
+	skill: Yup.array().required("Please Enter required skill"),
 });
 
 export {
 	signupValidations,
 	loginValidations,
-	skillValidation,
+	employeeInfoValidation,
 	userInfoValidation,
 	jobValidation,
 	emplyerInfoValidation,
+	jobPostValidation,
 };
