@@ -146,7 +146,7 @@ const employeeSignup = asyncHandler(async (req, res) => {
 		educationType,
 		preferredJobLocation,
 		preferredJobType,
-		skill,
+		skills,
 		portfolio,
 		linkedin,
 		github,
@@ -175,7 +175,7 @@ const employeeSignup = asyncHandler(async (req, res) => {
 	}
 
 	// Validate skills as non-empty arrays
-	if (!Array.isArray(skill) || skill.length === 0) {
+	if (!Array.isArray(skills) || skills.length === 0) {
 		throw new ApiError(400, "Invalid skills");
 	}
 
@@ -202,13 +202,12 @@ const employeeSignup = asyncHandler(async (req, res) => {
 		educationType,
 		preferredJobLocation,
 		preferredJobType,
-		skill,
+		skills,
 		portfolio,
 		linkedin,
 		github,
 		behance,
 		jobDetails,
-		profileImage: profileImage[0]?.location,
 		resume: resume[0]?.location,
 	});
 

@@ -44,6 +44,7 @@ function EmployeeInfo({ onClose, setUserData, openJobDetailsModal }) {
 		const selectedLocations = data.preferredJobLocation.map(
 			(location) => location.label
 		);
+		const selectedSkills = data.skills.map((skill) => skill.label);
 		const profileImageFile = data.profileImage
 			? data.profileImage[0]
 			: null;
@@ -52,7 +53,7 @@ function EmployeeInfo({ onClose, setUserData, openJobDetailsModal }) {
 		const preferredJobLocation = selectedLocations;
 		const preferredJobType = data.preferredJobType;
 		const portfolio = data.portfolio;
-		const skill = data.skill;
+		const skills = selectedSkills;
 		const linkedin = data.linkedin;
 		const github = data.github;
 		const behance = data.behance;
@@ -62,7 +63,7 @@ function EmployeeInfo({ onClose, setUserData, openJobDetailsModal }) {
 			preferredJobLocation,
 			preferredJobType,
 			portfolio,
-			skill,
+			skills,
 			linkedin,
 			github,
 			behance,
@@ -89,12 +90,12 @@ function EmployeeInfo({ onClose, setUserData, openJobDetailsModal }) {
 				</div>
 				<div className="mb-2 md:mb-3">
 					<MultiSelect
-						name={"skill"}
+						name={"skills"}
 						control={control}
 						options={skillOptions}
 						placeholder={"Select your skills"}
-						registering={register("skill")}
-						errors={errors["skill"]}
+						registering={register("skills")}
+						errors={errors["skills"]}
 					/>
 				</div>
 				<div className="relative grid md:grid-cols-2 gap-3 md:gap-4 mb-3">

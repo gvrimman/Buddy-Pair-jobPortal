@@ -4,14 +4,7 @@ import CandidatesLists from './CandidatesLists'
 import { useDispatch, useSelector } from 'react-redux';
 
 function CandidatesSection({ toggleValue, setToggleValue }) {
-  // const { success } = useSelector((state) => state.employee);
-  // const dispatch = useDispatch();
 
-  // useEffect(() => {
-  //   if (success) {
-  //     dispatch(resetEmployeeSuccess());
-  //   }
-  // }, [success]);
 
   return (
     <div
@@ -19,6 +12,7 @@ function CandidatesSection({ toggleValue, setToggleValue }) {
         toggleValue && "blur-md overflow-hidden"
       }`}
     >
+
       <CandidatesSectionHeader setToggleValue={setToggleValue} />
       <CandidatesLists />
     </div>

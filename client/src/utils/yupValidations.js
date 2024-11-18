@@ -65,7 +65,7 @@ const userInfoValidation = Yup.object().shape({
 });
 
 const employeeInfoValidation = Yup.object().shape({
-	skill: Yup.array().required("Atleast one skill is required"),
+	skills: Yup.array().required("Atleast one skill is required"),
 	educationType: Yup.string().required("Please select your education type"),
 	preferredJobLocation: Yup.array().required("Please select your location"),
 	preferredJobType: Yup.string().required("Please select your job type"),
@@ -79,7 +79,7 @@ const jobValidation = Yup.object().shape({
 	jobTitle: Yup.string().required("Please Enter your job title"),
 	companyName: Yup.string().required("Please Enter your company name"),
 	location: Yup.string().required("Please Enter your job location"),
-	workExperience: Yup.number().required("Please Enter your work experience"),
+	workExperience: Yup.string().required("Please Enter your work experience"),
 	ctc: Yup.number().required("Enter your current CTC"),
 	eCtc: Yup.number().required("Enter your expected CTC"),
 });
@@ -125,7 +125,7 @@ const jobPostValidation = Yup.object().shape({
 	offeredSalary: Yup.number().required("Enter your offered salary"),
 	jobPlace: Yup.string().required("Please select your job place"),
 	deadline: Yup.date().required("Please select deadline date"),
-	skill: Yup.array().required("Please Enter required skill"),
+	skills: Yup.array().required("Please Enter required skill"),
 });
 
 export {

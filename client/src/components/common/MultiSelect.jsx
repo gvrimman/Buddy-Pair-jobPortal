@@ -4,11 +4,17 @@ import { Controller } from "react-hook-form";
 import { PiExclamationMarkBold } from "react-icons/pi";
 import Select from "react-select";
 
-function MultiSelect({ options, placeholder, name, control, errors }) {
+function MultiSelect({ options, placeholder, name, control, errors, value }) {
+	const formattedValue = value?.map((val) => {
+		const matchedOption = options.find((option) => option.value === val);
+		return { value: val, label: val } || matchedOption;
+	});
+
 	return (
 		<Controller
 			name={name}
 			control={control}
+			defaultValue={formattedValue}
 			render={({ field }) => (
 				<div className="relative">
 					<Select
@@ -17,6 +23,7 @@ function MultiSelect({ options, placeholder, name, control, errors }) {
 						isMulti
 						name="colors"
 						options={options}
+						// value={formattedValue || field.value }
 						className="basic-multi-select border-black text-xs"
 						classNamePrefix="select"
 					/>

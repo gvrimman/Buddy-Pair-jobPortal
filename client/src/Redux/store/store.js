@@ -2,17 +2,28 @@ import { configureStore } from "@reduxjs/toolkit";
 import { persistStore, persistReducer } from "redux-persist";
 import storage from "redux-persist/lib/storage";
 import userReducer from "../reducers/userReducer";
+import employerReducer from "../reducers/employerReducer";
 
-const persistConfig = {
-	key: "root",
+const userPersistConfig = {
+	key: "user",
 	storage,
 };
 
-const persistedReducer = persistReducer(persistConfig, userReducer);
+const employerPersistConfig = {
+	key: "employer",
+	storage,
+};
+
+const persistedUserReducer = persistReducer(userPersistConfig, userReducer);
+const persistedEmployerReducer = persistReducer(
+	employerPersistConfig,
+	employerReducer
+);
 
 const store = configureStore({
 	reducer: {
-		user: persistedReducer,
+		user: persistedUserReducer,
+		employer: persistedEmployerReducer,
 	},
 
 	middleware: (getDefaultMiddleware) =>

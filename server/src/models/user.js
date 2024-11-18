@@ -4,6 +4,7 @@ const jwt = require("jsonwebtoken");
 
 const userSchema = new mongoose.Schema(
 	{
+		
 		googleId: { type: String, unique: true, sparse: true },
 		name: {
 			type: String,
@@ -26,6 +27,11 @@ const userSchema = new mongoose.Schema(
 		},
 		password: {
 			type: String,
+
+		/**
+		 * If the user is signing up with Google, the password is not required.
+		 * Otherwise, the password is required.
+		 */
 			required: function () {
 				return !this.googleId;
 			},
@@ -218,3 +224,52 @@ userSchema.methods.generateRefreshToken = function () {
 const User = mongoose.model("User", userSchema);
 
 module.exports = User;
+
+
+
+
+
+
+
+
+
+
+
+// const userSchema = new mongoose.Schema({
+// 	username: { type: String, required: true },
+// 	email: { type: String, required: true, unique: true, index: true },
+// 	phone: { type: String, required: true, unique: true, index: true },
+// 	password: { type: String, required: true },
+// 	apps: {
+// 		jobPortal: { type: mongoose.Schema.Types.ObjectId, ref: "JobPortal" },
+// 		datingApp: { type: mongoose.Schema.Types.ObjectId, ref: "DatingApp" },
+// 		matrimonyApp: {
+// 			type: mongoose.Schema.Types.ObjectId,
+// 			ref: "MatrimonyApp",
+// 		},
+// 		eLearningApp: {
+// 			type: mongoose.Schema.Types.ObjectId,
+// 			ref: "ELearningApp",
+// 		},
+// 		eCommerceApp: {
+// 			type: mongoose.Schema.Types.ObjectId,
+// 			ref: "ECommerceApp",
+// 		},
+// 	},
+// });
+
+
+
+
+// const jobPortalSchema = new mongoose.Schema({
+//     userId: { type: mongoose.Schema.Types.ObjectId, ref: 'User', required: true },
+//     qualification: { type: String, required: true },
+//     designation: { type: String },
+//     experience: { type: Number },
+//     skills: { type: [String] }
+// });
+
+
+
+// const JobPortal = mongoose.model('JobPortal', jobPortalSchema);
+// module.exports = JobPortal;

@@ -1,4 +1,4 @@
-import React from "react";
+import React, { useEffect } from "react";
 import TextInput from "../../../common/TextInput";
 import TextAreaInput from "../../../common/TextAreaInput";
 import MultiSelect from "../../../common/MultiSelect";
@@ -16,13 +16,33 @@ import SelectInput from "../../../common/SelectInput";
 import { Button } from "@material-tailwind/react";
 import useFormHandler from "../../../../hooks/ReactHookForm/Index";
 import { jobPostValidation } from "../../../../utils/yupValidations";
+import { useParams } from "react-router-dom";
+import { useDispatch, useSelector } from "react-redux";
+import { getJobById, updateAJob } from "../../../../apis/employerApi";
 
 function UpdateJob() {
+	const { id } = useParams();
+	const dispatch = useDispatch();
+	const { job, isLoading } = useSelector((state) => state.employer);
+
+	// get job by id
+	useEffect(() => {
+		dispatch(getJobById(id));
+	}, [dispatch]);
+
+	// format date
+	const dateValue = new Date(job.deadline);
+	const formatedDate = dateValue.toISOString().slice(0, 10);
+
 	// hook form validation
 	const { register, handleSubmit, errors, reset, control, watch } =
 		useFormHandler(jobPostValidation);
 
-        const onSubmit = async (data) => {}
+		// console.log(watch())
+	const onSubmit = (data) => {
+		console.log(data)
+		dispatch(updateAJob(id, data));
+	};
 	return (
 		<div className="grid bg-white mx-2 p-4 rounded-md shadow">
 			<h2 className="py-2 text-lg tracking-wide font-semibold">
@@ -36,6 +56,7 @@ function UpdateJob() {
 						label={"Job Title"}
 						type={"text"}
 						placeText={"Title"}
+						value={job.jobTitle}
 						registering={register("jobTitle")}
 						errors={errors.jobTitle}
 					/>
@@ -43,18 +64,20 @@ function UpdateJob() {
 						label={"Job Description"}
 						type={"text"}
 						placeText={""}
+						value={job.jobDescription}
 						registering={register("jobDescription")}
 						errors={errors.jobDescription}
 					/>
 				</div>
 				<div className="my-2 md:mb-3">
 					<MultiSelect
-						name={"skill"}
+						name={"skills"}
 						control={control}
 						options={skillOptions}
 						placeholder={"Select required skills"}
-						registering={register("skill")}
-						errors={errors["skill"]}
+						registering={register("skills")}
+						errors={errors["skills"]}
+						value={job.skills}
 					/>
 				</div>
 				<div className="mt-3 grid lg:grid-cols-2 gap-4">
@@ -64,10 +87,12 @@ function UpdateJob() {
 						name={"industry"}
 						control={control}
 						errors={errors.industry}
+						value={job.industry}
 					/>
 					<SelectInput
 						label={"Job Type"}
 						options={jobTypes}
+						value={job.jobType}
 						name={"jobType"}
 						control={control}
 						errors={errors.jobType}
@@ -75,6 +100,7 @@ function UpdateJob() {
 					<SelectInput
 						label={"Employment Type"}
 						name={"employmentType"}
+						value={job.employmentType}
 						options={preferredJobType}
 						control={control}
 						errors={errors.employmentType}
@@ -84,6 +110,7 @@ function UpdateJob() {
 						name={"experience"}
 						options={experienceData}
 						control={control}
+						value={job.experience}
 						errors={errors.experience}
 					/>
 
@@ -93,6 +120,7 @@ function UpdateJob() {
 						name={"qualification"}
 						control={control}
 						errors={errors.qualification}
+						value={job.qualification}
 					/>
 					<SelectInput
 						label={"Preferred Candidate Gender"}
@@ -100,6 +128,7 @@ function UpdateJob() {
 						options={genderOptions}
 						control={control}
 						errors={errors.candidateGender}
+						value={job.candidateGender}
 					/>
 					<SelectInput
 						label={"Location"}
@@ -107,10 +136,12 @@ function UpdateJob() {
 						name={"jobLocation"}
 						control={control}
 						errors={errors.jobLocation}
+						value={job.jobLocation}
 					/>
 					<TextInput
 						label={"Offered Salary"}
 						type={"number"}
+						value={job.offeredSalary}
 						placeText={"Rs. 25000"}
 						registering={register("offeredSalary")}
 						errors={errors.offeredSalary}
@@ -118,6 +149,7 @@ function UpdateJob() {
 					<TextInput
 						label={"Application Deadline Date"}
 						type={"date"}
+						value={formatedDate}
 						placeText={"20-04-2024"}
 						registering={register("deadline")}
 						errors={errors.deadline}
@@ -126,9 +158,8 @@ function UpdateJob() {
 						<TextInput
 							label={"Job Place"}
 							type={"text"}
-							placeText={
-								"S 107, 4th Floor Monlash Business Centre Crescens Tower, South Kalamassery, Kochi, Kerala 682033, India"
-							}
+							value={job.jobPlace}
+							placeText={""}
 							registering={register("jobPlace")}
 							errors={errors.jobPlace}
 						/>

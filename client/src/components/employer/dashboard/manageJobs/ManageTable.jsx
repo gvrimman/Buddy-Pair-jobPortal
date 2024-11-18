@@ -10,8 +10,13 @@ import axiosInstance from "./../../../../utils/axios";
 import DialogModal from "../../../common/DialogModal";
 import SingleJob from "./SingleJob";
 import { useNavigate } from "react-router-dom";
+import { deleteAJob, getPostedJobs } from "../../../../apis/employerApi";
+import { useDispatch, useSelector } from "react-redux";
 
 function ManageTable() {
+	const navigate = useNavigate();
+	const dispatch = useDispatch();
+	const { jobs, isLoading } = useSelector((store) => store.employer);
 	const tableHead = [
 		"Title",
 		"Applications",
@@ -20,39 +25,16 @@ function ManageTable() {
 		"Status",
 		"Action",
 	];
-	const navigate = useNavigate();
 
-	const [jobs, setJobs] = useState();
 	const [jobViewModalOpen, setJobViewModalOpen] = useState(false);
 
-	const getPostedJobs = async () => {
-		try {
-			const response = await axiosInstance.get(
-				"/employer/get-posted-jobs"
-			);
-			console.log(response);
-			setJobs(response?.data?.data?.totalJobs);
-		} catch (error) {
-			console.log(error);
-		}
-	};
-
 	useEffect(() => {
-		getPostedJobs();
-	}, []);
+		dispatch(getPostedJobs());
+	}, [dispatch]);
 
 	// delete a job
-	const handleDelete = async (jobId) => {
-		console.log(jobId);
-		try {
-			const response = await axiosInstance.delete(
-				`/employer/delete-job/${jobId}`
-			);
-			console.log(response);
-			getPostedJobs();
-		} catch (error) {
-			console.log(error);
-		}
+	const handleDelete = (jobId) => {
+		dispatch(deleteAJob(jobId));
 	};
 
 	return (

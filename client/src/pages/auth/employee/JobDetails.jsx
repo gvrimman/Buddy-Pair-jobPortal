@@ -3,6 +3,8 @@ import React from "react";
 import TextInput from "../../../components/common/TextInput";
 import useFormHandler from "../../../hooks/ReactHookForm/Index";
 import { jobValidation } from "../../../utils/yupValidations";
+import SelectInput from "../../../components/common/SelectInput";
+import { experienceData } from "../../../utils/constants";
 
 function JobDetails({ setUserData, onClose, openEmployeeResumeModal }) {
 	const { register, handleSubmit, errors, reset, control, watch } =
@@ -48,10 +50,13 @@ function JobDetails({ setUserData, onClose, openEmployeeResumeModal }) {
 						registering={register("location")}
 						errors={errors["location"]}
 					/>
-					<TextInput
-						type={"number"}
+					
+					<SelectInput
+						name={"workExperience"}
 						label={"Total Work Experience"}
+						control={control}
 						registering={register("workExperience")}
+						options={experienceData}
 						errors={errors["workExperience"]}
 					/>
 					<TextInput

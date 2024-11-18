@@ -15,7 +15,6 @@ import JobDetails from "../auth/employee/JobDetails";
 // import EmployeeSkill from "../auth/employee/EmployeeSkill";
 import EmployeeResume from "../auth/employee/EmployeeResume";
 import UserInfo from "../auth/userInfo";
-import { setUser } from "../../Redux/reducers/userReducer";
 
 function SplashScreen() {
 	const location = useLocation().state;

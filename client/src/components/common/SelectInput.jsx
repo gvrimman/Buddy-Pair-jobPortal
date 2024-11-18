@@ -2,13 +2,13 @@ import { Select, Option, Tooltip } from "@material-tailwind/react";
 import { Controller } from "react-hook-form";
 import { PiExclamationMarkBold } from "react-icons/pi";
 
-function SelectInput({ name, label, control, options, errors }) {
+function SelectInput({ name, label, control, options, errors, value }) {
 	return (
 		<div className="relative">
 			<Controller
 				name={name}
 				control={control}
-				// rules={{ required: `${label} is required` }}
+				defaultValue={value}
 				render={({ field }) => (
 					<div className="relative">
 						<Select label={label} size="lg" {...field}>
@@ -36,4 +36,3 @@ function SelectInput({ name, label, control, options, errors }) {
 }
 
 export default SelectInput;
-

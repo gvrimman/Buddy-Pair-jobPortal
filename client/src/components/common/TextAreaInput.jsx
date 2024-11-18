@@ -3,10 +3,10 @@ import React from 'react'
 import { PiExclamationMarkBold } from "react-icons/pi";
 
 
-function TextAreaInput({ type, label, registering, errors }) {
+function TextAreaInput({ type, label, registering, errors,value }) {
 	return (
 		<div className="relative">
-			<Textarea type={type} size="lg" label={label} {...registering} />
+			<Textarea type={type} size="lg" label={label} defaultValue={value} {...registering} />
 			{errors && (
 				<Tooltip
 					content={errors?.message}

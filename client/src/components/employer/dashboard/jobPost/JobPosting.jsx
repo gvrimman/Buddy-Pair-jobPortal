@@ -21,25 +21,18 @@ import TextAreaInput from "../../../common/TextAreaInput";
 import axiosInstance from "../../../../utils/axios";
 import { showError, showSuccess } from "../../../../utils/toast";
 import MultiSelect from "../../../common/MultiSelect";
+import { useDispatch } from "react-redux";
+import { createAJob } from "../../../../apis/employerApi";
 
 function JobPosting() {
+	const dispatch = useDispatch();
 	// hook form validation
 	const { register, handleSubmit, errors, reset, control, watch } =
 		useFormHandler(jobPostValidation);
 	// form submit validation
-	const onSubmit = async (data) => {
-		console.log(data);
-		try {
-			const response = await axiosInstance.post(
-				"employer/post-job",
-				data
-			);
-			showSuccess(response.data?.message);
-			reset()
-		} catch (error) {
-			console.log(error);
-			showError(error.response?.data?.message);
-		}
+	const onSubmit = (data) => {
+		dispatch(createAJob(data));
+		reset();
 	};
 
 	return (
@@ -79,12 +72,12 @@ function JobPosting() {
 				</div>
 				<div className="my-2 md:mb-3">
 					<MultiSelect
-						name={"skill"}
+						name={"skills"}
 						control={control}
 						options={skillOptions}
 						placeholder={"Select required skills"}
-						registering={register("skill")}
-						errors={errors["skill"]}
+						registering={register("skills")}
+						errors={errors["skills"]}
 					/>
 				</div>
 				<div className="mt-3 grid lg:grid-cols-2 gap-4">
