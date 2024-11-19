@@ -4,178 +4,31 @@ const jwt = require("jsonwebtoken");
 
 const userSchema = new mongoose.Schema(
 	{
-		
-		googleId: { type: String, unique: true, sparse: true },
-		name: {
-			type: String,
-			required: true,
-			// unique: true,
-			lowercase: true,
-			trim: true,
-		},
-		email: {
-			type: String,
-			required: true,
-			unique: true,
-			trim: true,
-		},
-		contactNumber: {
-			type: String,
-			required: true,
-			unique: true,
-			trim: true,
-		},
-		password: {
-			type: String,
-
-		/**
-		 * If the user is signing up with Google, the password is not required.
-		 * Otherwise, the password is required.
-		 */
-			required: function () {
-				return !this.googleId;
+		username: { type: String, required: true },
+		email: { type: String, required: true, unique: true, index: true },
+		phone: { type: String, required: true, unique: true, index: true },
+		password: { type: String, required: true },
+		apps: {
+			jobPortal: {
+				type: mongoose.Schema.Types.ObjectId,
+				ref: "JobPortal",
 			},
-			trim: true,
-			minlength: 3,
-		},
-		dob: {
-			type: Date,
-			trim: true,
-		},
-		age: {
-			type: Number,
-			trim: true,
-		},
-		gender: {
-			type: String, // added
-			trim: true,
-		},
-		// hobbies: {
-		// 	type: [String],
-		// 	// required: true,
-		// 	sparse: true,
-		// },
-		qualification: {
-			type: String,
-			trim: true,
-		},
-		educationInstitute: {
-			type: ["String"],
-			required: true,
-		},
-		profession: {
-			type: ["String"],
-			required: true,
-		},
-		// educationType: {
-		// 	type: String, // added
-		// 	trim: true,
-		// },
-		// preferredJobLocation: {
-		// 	type: [String], // added
-		// 	trim: true,
-		// },
-		// preferredJobType: {
-		// 	type: String, // added
-		// 	trim: true,
-		// },
-		// skill: {
-		// 	type: [String], // added
-		// 	trim: true,
-		// },
-		// portfolio: {
-		// 	type: String, // added
-		// 	trim: true,
-		// },
-		// linkedin: {
-		// 	type: String, // added
-		// 	trim: true,
-		// },
-		// github: {
-		// 	type: String, // added
-		// 	trim: true,
-		// },
-		// behance: {
-		// 	type: String, // added
-		// 	trim: true,
-		// },
-		// jobDetails: {
-		// 	type: Object,
-		// 	// required: true,
-		// },
-		// employerDetails: {
-		// 	type: Object,
-		// 	// required: true,
-		// },
-		// resume: {
-		// 	type: String,
-		// 	// required: true,
-		// },
-		locationName: {
-			type: String,
-		},
-		location: {
-			type: {
-				type: String,
-				enum: ["Point"],
-				// required: true,
+			datingApp: {
+				type: mongoose.Schema.Types.ObjectId,
+				ref: "DatingApp",
 			},
-			coordinates: {
-				type: [Number],
-				required: true,
+			matrimonyApp: {
+				type: mongoose.Schema.Types.ObjectId,
+				ref: "MatrimonyApp",
 			},
-		},
-		// smokingHabits: {
-		// 	type: Boolean,
-		// 	trim: true,
-		// 	default: false,
-		// 	sparse: true,
-		// },
-		// drinkingHabits: {
-		// 	type: Boolean,
-		// 	trim: true,
-		// 	default: false,
-		// 	sparse: true,
-		// },
-		profileImage: {
-			type: String,
-			// required: true,
-		},
-		// shortReel: {
-		// 	type: String,
-		// 	// required: true,
-		// },
-		// story: {
-		// 	type: String,
-		// },
-		// relationshipGoal: {
-		// 	type: String,
-		// 	// required: true,
-		// },
-		// refreshToken: {
-		// 	type: String,
-		// },
-		// images: [
-		// 	{
-		// 		imageUrl: {
-		// 			type: String,
-		// 			// required: true,
-		// 		},
-		// 	},
-		// ],
-		subscription: {
-			type: {
-				type: String,
-				enum: ["free", "premium"],
-				default: "free",
+			eLearningApp: {
+				type: mongoose.Schema.Types.ObjectId,
+				ref: "ELearningApp",
 			},
-			expiry: {
-				type: Date,
+			eCommerceApp: {
+				type: mongoose.Schema.Types.ObjectId,
+				ref: "ECommerceApp",
 			},
-		},
-		role: {
-			type: String,
-			enum: ["Employee", "Employer"],
 		},
 	},
 	{ timestamps: true }
@@ -225,41 +78,182 @@ const User = mongoose.model("User", userSchema);
 
 module.exports = User;
 
+// googleId: { type: String, unique: true, sparse: true },
+// 		name: {
+// 			type: String,
+// 			required: true,
+// 			// unique: true,
+// 			lowercase: true,
+// 			trim: true,
+// 		},
+// 		email: {
+// 			type: String,
+// 			required: true,
+// 			unique: true,
+// 			trim: true,
+// 		},
+// 		contactNumber: {
+// 			type: String,
+// 			required: true,
+// 			unique: true,
+// 			trim: true,
+// 		},
+// 		password: {
+// 			type: String,
 
-
-
-
-
-
-
-
-
+// 		/**
+// 		 * If the user is signing up with Google, the password is not required.
+// 		 * Otherwise, the password is required.
+// 		 */
+// 			required: function () {
+// 				return !this.googleId;
+// 			},
+// 			trim: true,
+// 			minlength: 3,
+// 		},
+// 		dob: {
+// 			type: Date,
+// 			trim: true,
+// 		},
+// 		age: {
+// 			type: Number,
+// 			trim: true,
+// 		},
+// 		gender: {
+// 			type: String, // added
+// 			trim: true,
+// 		},
+// 		hobbies: {
+// 			type: [String],
+// 			// required: true,
+// 			sparse: true,
+// 		},
+// 		qualification: {
+// 			type: String,
+// 			trim: true,
+// 		},
+// 		educationInstitute: {
+// 			type: ["String"],
+// 			required: true,
+// 		},
+// 		profession: {
+// 			type: ["String"],
+// 			required: true,
+// 		},
+// 		educationType: {
+// 			type: String, // added
+// 			trim: true,
+// 		},
+// 		preferredJobLocation: {
+// 			type: [String], // added
+// 			trim: true,
+// 		},
+// 		preferredJobType: {
+// 			type: String, // added
+// 			trim: true,
+// 		},
+// 		skill: {
+// 			type: [String], // added
+// 			trim: true,
+// 		},
+// 		portfolio: {
+// 			type: String, // added
+// 			trim: true,
+// 		},
+// 		linkedin: {
+// 			type: String, // added
+// 			trim: true,
+// 		},
+// 		github: {
+// 			type: String, // added
+// 			trim: true,
+// 		},
+// 		behance: {
+// 			type: String, // added
+// 			trim: true,
+// 		},
+// 		jobDetails: {
+// 			type: Object,
+// 			// required: true,
+// 		},
+// 		employerDetails: {
+// 			type: Object,
+// 			// required: true,
+// 		},
+// 		resume: {
+// 			type: String,
+// 			// required: true,
+// 		},
+// 		locationName: {
+// 			type: String,
+// 		},
+// 		location: {
+// 			type: {
+// 				type: String,
+// 				enum: ["Point"],
+// 				// required: true,
+// 			},
+// 			coordinates: {
+// 				type: [Number],
+// 				required: true,
+// 			},
+// 		},
+// 		smokingHabits: {
+// 			type: Boolean,
+// 			trim: true,
+// 			default: false,
+// 			sparse: true,
+// 		},
+// 		drinkingHabits: {
+// 			type: Boolean,
+// 			trim: true,
+// 			default: false,
+// 			sparse: true,
+// 		},
+// 		profileImage: {
+// 			type: String,
+// 			// required: true,
+// 		},
+// 		shortReel: {
+// 			type: String,
+// 			// required: true,
+// 		},
+// 		story: {
+// 			type: String,
+// 		},
+// 		relationshipGoal: {
+// 			type: String,
+// 			// required: true,
+// 		},
+// 		refreshToken: {
+// 			type: String,
+// 		},
+// 		images: [
+// 			{
+// 				imageUrl: {
+// 					type: String,
+// 					// required: true,
+// 				},
+// 			},
+// 		],
+// 		subscription: {
+// 			type: {
+// 				type: String,
+// 				enum: ["free", "premium"],
+// 				default: "free",
+// 			},
+// 			expiry: {
+// 				type: Date,
+// 			},
+// 		},
+// 		role: {
+// 			type: String,
+// 			enum: ["Employee", "Employer"],
+// 		},
 
 // const userSchema = new mongoose.Schema({
-// 	username: { type: String, required: true },
-// 	email: { type: String, required: true, unique: true, index: true },
-// 	phone: { type: String, required: true, unique: true, index: true },
-// 	password: { type: String, required: true },
-// 	apps: {
-// 		jobPortal: { type: mongoose.Schema.Types.ObjectId, ref: "JobPortal" },
-// 		datingApp: { type: mongoose.Schema.Types.ObjectId, ref: "DatingApp" },
-// 		matrimonyApp: {
-// 			type: mongoose.Schema.Types.ObjectId,
-// 			ref: "MatrimonyApp",
-// 		},
-// 		eLearningApp: {
-// 			type: mongoose.Schema.Types.ObjectId,
-// 			ref: "ELearningApp",
-// 		},
-// 		eCommerceApp: {
-// 			type: mongoose.Schema.Types.ObjectId,
-// 			ref: "ECommerceApp",
-// 		},
-// 	},
+//
 // });
-
-
-
 
 // const jobPortalSchema = new mongoose.Schema({
 //     userId: { type: mongoose.Schema.Types.ObjectId, ref: 'User', required: true },
@@ -268,8 +262,6 @@ module.exports = User;
 //     experience: { type: Number },
 //     skills: { type: [String] }
 // });
-
-
 
 // const JobPortal = mongoose.model('JobPortal', jobPortalSchema);
 // module.exports = JobPortal;

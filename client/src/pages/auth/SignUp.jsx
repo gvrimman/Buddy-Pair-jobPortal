@@ -1,46 +1,40 @@
-import {
-	Button,
-	List,
-	ListItem,
-	ListItemPrefix,
-	Radio,
-	Typography,
-} from "@material-tailwind/react";
-import React, { useState } from "react";
+import { Button } from "@material-tailwind/react";
+import React from "react";
 import { AiOutlineHome } from "react-icons/ai";
 import { FcGoogle, FcPhoneAndroid } from "react-icons/fc";
 import { Link } from "react-router-dom";
 import TextInput from "../../components/common/TextInput";
 import useFormHandler from "../../hooks/ReactHookForm/Index";
 import { signupValidations } from "../../utils/yupValidations";
+import { showError, showSuccess } from "./../../utils/toast";
+import axiosInstance from "./../../utils/axios";
+import { setUser } from "../../Redux/reducers/userReducer";
+import { useDispatch } from 'react-redux';
 
-function SignUp({ onClose, setUserData, openSignInModal, openUserInfoModal }) {
-	const [selectedOption, setSelectedOption] = useState("");
+function SignUp({ onClose, openSignInModal, openUserInfoModal }) {
 
-	const handleRadioChange = (option) => {
-		setSelectedOption(option);
-	};
-
+	const dispatch = useDispatch()
 	// validate inputs
 	const { register, handleSubmit, errors, reset } =
 		useFormHandler(signupValidations);
 
-	const onSubmit = (data) => {
-		
+	const onSubmit = async (data) => {
+		console.log(data)
+		try {
+			const response = await axiosInstance.post("/auth/signup", data);
 
-		if (selectedOption !== "") {
+			dispatch(setUser(response?.data?.data));
+			reset();
 			onClose();
-		} else {
-			alert("Please select option");
-			return;
+			showSuccess(response.data?.message);
+
+			setTimeout(() => {
+				openUserInfoModal();
+			}, 300);
+		} catch (error) {
+			console.log(error);
+			showError(error.response?.data?.message);
 		}
-
-		setUserData({ ...data, role: selectedOption });
-		reset();
-
-		setTimeout(() => {
-			openUserInfoModal();
-		}, 300);
 	};
 
 	return (
@@ -91,83 +85,6 @@ function SignUp({ onClose, setUserData, openSignInModal, openUserInfoModal }) {
 						registering={register("confirmPassword")}
 						errors={errors["confirmPassword"]}
 					/>
-				</div>
-
-				<div>
-					<List className="flex-row flex-wrap sm:flex-nowrap">
-						<ListItem className="p-0 w-fit sm:w-full">
-							<label className="flex w-full cursor-pointer items-center px-3 py-2">
-								<ListItemPrefix className="mr-3">
-									<Radio
-										color="blue-gray"
-										name="horizontal-list"
-										ripple={false}
-										className="hover:before:opacity-0 "
-										containerProps={{
-											className: "p-0",
-										}}
-										onChange={() =>
-											handleRadioChange("Fresher")
-										}
-										checked={selectedOption === "Fresher"}
-									/>
-								</ListItemPrefix>
-								<Typography
-									color="blue-gray"
-									className="font-medium text-blue-gray-400 text-sm md:text-base">
-									Fresher
-								</Typography>
-							</label>
-						</ListItem>
-						<ListItem className="p-0 w-fit sm:w-full">
-							<label className="flex w-full cursor-pointer items-center px-3 py-2">
-								<ListItemPrefix className="mr-3">
-									<Radio
-										color="blue-gray"
-										name="horizontal-list"
-										ripple={false}
-										className="hover:before:opacity-0"
-										containerProps={{
-											className: "p-0",
-										}}
-										onChange={() =>
-											handleRadioChange("Employee")
-										}
-										checked={selectedOption === "Employee"}
-									/>
-								</ListItemPrefix>
-								<Typography
-									color="blue-gray"
-									className="font-medium text-blue-gray-400 text-sm md:text-base">
-									Employee
-								</Typography>
-							</label>
-						</ListItem>
-						<ListItem className="p-0 w-fit sm:w-full">
-							<label className="flex w-full cursor-pointer items-center px-3 py-2">
-								<ListItemPrefix className="mr-3">
-									<Radio
-										color="blue-gray"
-										name="horizontal-list"
-										ripple={true}
-										className="hover:before:opacity-0"
-										containerProps={{
-											className: "p-0",
-										}}
-										onChange={() =>
-											handleRadioChange("Employer")
-										}
-										checked={selectedOption === "Employer"}
-									/>
-								</ListItemPrefix>
-								<Typography
-									color="blue-gray"
-									className="font-medium text-blue-gray-400 text-sm md:text-base">
-									Employer
-								</Typography>
-							</label>
-						</ListItem>
-					</List>
 				</div>
 
 				<Button

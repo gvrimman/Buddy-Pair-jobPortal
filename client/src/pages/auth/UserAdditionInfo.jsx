@@ -1,82 +1,66 @@
-import React, { useEffect, useState } from "react";
-import avatar from "/assets/images/avatar.png";
 import { Button } from "@material-tailwind/react";
 import {
 	educationType,
-	genderOptions,
 	locationOptions,
 	preferredJobType,
-	qualificationOptions,
 	skillOptions,
-} from "../../../utils/constants";
-import { employeeInfoValidation } from "../../../utils/yupValidations";
-import useFormHandler from "../../../hooks/ReactHookForm/Index";
-import SelectInput from "../../../components/common/SelectInput";
-import TextInput from "../../../components/common/TextInput";
-import MultiSelect from "../../../components/common/MultiSelect";
+} from "../../utils/constants";
+import useFormHandler from "../../hooks/ReactHookForm/Index";
+import SelectInput from "../../components/common/SelectInput";
+import TextInput from "../../components/common/TextInput";
+import MultiSelect from "../../components/common/MultiSelect";
+import { userAdditionInfoValidation } from "../../utils/yupValidations";
 
-function EmployeeInfo({ onClose, setUserData, openJobDetailsModal }) {
-	const [previewSrc, setPreviewSrc] = useState(null);
-
+function UserAdditionInfo({
+	onClose,
+	setUserData,
+	userData,
+	openJobDetailsModal,
+	openUserResumeModal,
+}) {
 	// hook form validation
 	const { register, handleSubmit, errors, reset, control, watch } =
-		useFormHandler(employeeInfoValidation);
-
-	// get img before submit
-	const prfImg = watch("profileImage");
-
-	const handleImagePreview = () => {
-		const file = prfImg && prfImg[0];
-		if (file) {
-			const reader = new FileReader();
-			reader.onloadend = () => {
-				setPreviewSrc(reader.result);
-			};
-			reader.readAsDataURL(file);
-		}
-	};
-
-	useEffect(() => {
-		handleImagePreview();
-	}, [prfImg]);
+		useFormHandler(userAdditionInfoValidation);
 
 	const onSubmit = (data) => {
 		const selectedLocations = data.preferredJobLocation.map(
 			(location) => location.label
 		);
 		const selectedSkills = data.skills.map((skill) => skill.label);
-		const profileImageFile = data.profileImage
-			? data.profileImage[0]
-			: null;
 
+		const educationInstitute = data.educationInstitute;
 		const educationType = data.educationType;
 		const preferredJobLocation = selectedLocations;
 		const preferredJobType = data.preferredJobType;
-		const portfolio = data.portfolio;
+		const socialLinks = {
+			linkedin: data.linkedin,
+			github: data.github,
+			behance: data.behance,
+			portfolio: data.portfolio,
+		};
 		const skills = selectedSkills;
-		const linkedin = data.linkedin;
-		const github = data.github;
-		const behance = data.behance;
 
 		const formatedData = {
+			educationInstitute,
 			educationType,
 			preferredJobLocation,
 			preferredJobType,
-			portfolio,
+			socialLinks,
 			skills,
-			linkedin,
-			github,
-			behance,
-			profileImage: profileImageFile ? profileImageFile : null,
 		};
 		setUserData((prev) => ({ ...prev, ...formatedData }));
 		onClose();
 		reset();
 
 		setTimeout(() => {
-			openJobDetailsModal();
+			if (userData.role === "fresher") {
+				openUserResumeModal();
+			} else if (userData.role === "employee") {
+				openJobDetailsModal();
+			}
 		}, 300);
 	};
+
 	return (
 		<div className=" flex flex-col gap-4 px-1">
 			<form onSubmit={handleSubmit(onSubmit)}>
@@ -98,7 +82,14 @@ function EmployeeInfo({ onClose, setUserData, openJobDetailsModal }) {
 						errors={errors["skills"]}
 					/>
 				</div>
+
 				<div className="relative grid md:grid-cols-2 gap-3 md:gap-4 mb-3">
+					<TextInput
+						type={"text"}
+						label={"Education institute"}
+						registering={register("educationInstitute")}
+						errors={errors.educationInstitute}
+					/>
 					<SelectInput
 						name={"educationType"}
 						label={"Education Type"}
@@ -161,4 +152,4 @@ function EmployeeInfo({ onClose, setUserData, openJobDetailsModal }) {
 	);
 }
 
-export default EmployeeInfo;
+export default UserAdditionInfo;

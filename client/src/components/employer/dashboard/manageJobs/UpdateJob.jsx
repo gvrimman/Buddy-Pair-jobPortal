@@ -30,9 +30,11 @@ function UpdateJob() {
 		dispatch(getJobById(id));
 	}, [dispatch]);
 
+
+	console.log(job)
 	// format date
-	const dateValue = new Date(job.deadline);
-	const formatedDate = dateValue.toISOString().slice(0, 10);
+	const dateValue = new Date(job?.deadline);
+	const formatedDate = dateValue?.toISOString().slice(0, 10);
 
 	// hook form validation
 	const { register, handleSubmit, errors, reset, control, watch } =
@@ -56,7 +58,7 @@ function UpdateJob() {
 						label={"Job Title"}
 						type={"text"}
 						placeText={"Title"}
-						value={job.jobTitle}
+						value={job?.jobTitle}
 						registering={register("jobTitle")}
 						errors={errors.jobTitle}
 					/>
@@ -64,7 +66,7 @@ function UpdateJob() {
 						label={"Job Description"}
 						type={"text"}
 						placeText={""}
-						value={job.jobDescription}
+						value={job?.jobDescription}
 						registering={register("jobDescription")}
 						errors={errors.jobDescription}
 					/>
@@ -77,7 +79,7 @@ function UpdateJob() {
 						placeholder={"Select required skills"}
 						registering={register("skills")}
 						errors={errors["skills"]}
-						value={job.skills}
+						value={job?.skills}
 					/>
 				</div>
 				<div className="mt-3 grid lg:grid-cols-2 gap-4">
@@ -87,12 +89,12 @@ function UpdateJob() {
 						name={"industry"}
 						control={control}
 						errors={errors.industry}
-						value={job.industry}
+						value={job?.industry}
 					/>
 					<SelectInput
 						label={"Job Type"}
 						options={jobTypes}
-						value={job.jobType}
+						value={job?.jobType}
 						name={"jobType"}
 						control={control}
 						errors={errors.jobType}
@@ -100,7 +102,7 @@ function UpdateJob() {
 					<SelectInput
 						label={"Employment Type"}
 						name={"employmentType"}
-						value={job.employmentType}
+						value={job?.employmentType}
 						options={preferredJobType}
 						control={control}
 						errors={errors.employmentType}
@@ -110,7 +112,7 @@ function UpdateJob() {
 						name={"experience"}
 						options={experienceData}
 						control={control}
-						value={job.experience}
+						value={job?.experience}
 						errors={errors.experience}
 					/>
 
@@ -120,7 +122,7 @@ function UpdateJob() {
 						name={"qualification"}
 						control={control}
 						errors={errors.qualification}
-						value={job.qualification}
+						value={job?.qualification}
 					/>
 					<SelectInput
 						label={"Preferred Candidate Gender"}
@@ -128,7 +130,7 @@ function UpdateJob() {
 						options={genderOptions}
 						control={control}
 						errors={errors.candidateGender}
-						value={job.candidateGender}
+						value={job?.candidateGender}
 					/>
 					<SelectInput
 						label={"Location"}
@@ -136,12 +138,12 @@ function UpdateJob() {
 						name={"jobLocation"}
 						control={control}
 						errors={errors.jobLocation}
-						value={job.jobLocation}
+						value={job?.jobLocation}
 					/>
 					<TextInput
 						label={"Offered Salary"}
 						type={"number"}
-						value={job.offeredSalary}
+						value={job?.offeredSalary}
 						placeText={"Rs. 25000"}
 						registering={register("offeredSalary")}
 						errors={errors.offeredSalary}
@@ -158,7 +160,7 @@ function UpdateJob() {
 						<TextInput
 							label={"Job Place"}
 							type={"text"}
-							value={job.jobPlace}
+							value={job?.jobPlace}
 							placeText={""}
 							registering={register("jobPlace")}
 							errors={errors.jobPlace}

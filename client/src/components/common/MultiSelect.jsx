@@ -24,10 +24,10 @@ function MultiSelect({ options, placeholder, name, control, errors, value }) {
 						name="colors"
 						options={options}
 						// value={formattedValue || field.value }
-						className="basic-multi-select border-black text-xs"
+						className="basic-multi-select border-black text-xs py-1"
 						classNamePrefix="select"
 					/>
-					<label className="absolute -top-2 left-4 text-black text-xs bg-white ">
+					<label className="absolute -top-1 left-4 text-black text-xs bg-white ">
 						{placeholder}
 					</label>
 					{errors && (

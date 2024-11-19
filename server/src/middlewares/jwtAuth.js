@@ -14,7 +14,6 @@ const verifyJwt = asyncHandler(async (req, _, next) => {
 			process.env.ACCESS_TOKEN_SECRET_KEY
 		);
 
-
 		const user = await User.findById(decodedToken._id).select(
 			"-password -refreshToken"
 		);
@@ -37,8 +36,9 @@ const verifyJwt = asyncHandler(async (req, _, next) => {
 
 // protect routes by role middleware
 const authorize = (...roles) => {
-	return (req, res, next) => {
-		if (!roles.includes(req.user.role)) {
+	return async (req, res, next) => {
+		const user = await User.findById(req.user._id).populate("apps.jobPortal")
+		if (!roles.includes(user?.apps?.jobPortal?.role)) {
 			throw new ApiError(401, "Unauthorized access");
 		}
 		next();

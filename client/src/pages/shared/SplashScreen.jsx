@@ -3,18 +3,13 @@ import { useLocation } from "react-router-dom";
 import TitleRendering from "./TitleRendering";
 import DialogModal from "../../components/common/DialogModal";
 import UserLocation from "../auth/UserLocation";
-import FresherResume from "../auth/employee/FresherResume";
-import EmployeeLocation from "../auth/employee/EmployeeLocation";
 import SignUp from "../auth/SignUp";
 import SignIn from "../auth/SignIn";
-import FresherInfo from "../auth/employee/FresherInfo";
-// import FresherSkill from "../auth/employee/FresherSkill";
-import EmployerInfo from "../auth/employer/EmployerInfo";
-import EmployeeInfo from "../auth/employee/EmployeeInfo";
-import JobDetails from "../auth/employee/JobDetails";
-// import EmployeeSkill from "../auth/employee/EmployeeSkill";
-import EmployeeResume from "../auth/employee/EmployeeResume";
+import EmployerInfo from "../auth/EmployerInfo";
+import JobDetails from "../auth/JobDetails";
 import UserInfo from "../auth/userInfo";
+import UserAdditionInfo from "../auth/UserAdditionInfo";
+import UserResume from "../auth/userResume";
 
 function SplashScreen() {
 	const location = useLocation().state;
@@ -28,26 +23,19 @@ function SplashScreen() {
 	const [isUserLocationModalOpen, setIsUserLocationModalOpen] =
 		useState(false);
 
-	const [isFresherInfoModalOpen, setIsFresherInfoModalOpen] = useState(false);
-	const [isFresherSkillModal, setIsFresherSkillModal] = useState(false);
-	const [isFresherResumModalOpen, setIsFresherResumModalOpen] =
-		useState(false);
 	// ====================================================================
-	const [isEmployeeInfoModalOpen, setIsEmployeeInfoModalOpen] =
+	const [isUserAdditionInfoModalOpen, setIsUserAdditionInfoModalOpen] =
 		useState(false);
 	const [isJobDetailsModalOpen, setIsJobDetailsModalOpen] = useState(false);
-	const [isEmployeeLocationModalOpen, setIsEmployeeLocationModalOpen] =
-		useState(false);
-	const [isEmployeeSkillModalOpen, setIsEmployeeSkillModalOpen] =
-		useState(false);
-	const [isEmployeeResumModalOpen, setIsEmployeeResumModalOpen] =
+
+	const [isUserResumeModalOpen, setIsUserResumeModalOpen] =
 		useState(false);
 	// ====================================================================
 
 	const [isEmployerInfoModalOpen, setIsEmployerInfoModalOpen] =
 		useState(false);
 
-	console.log(userData);
+	// console.log(userData);
 
 	useEffect(() => {
 		if (location?.landValue) {
@@ -81,7 +69,6 @@ function SplashScreen() {
 					<DialogModal scale={""} isOpen={isSignUpModalOpen}>
 						<SignUp
 							onClose={() => setIsSignUpModalOpen(false)}
-							setUserData={setUserData}
 							openSignInModal={() => {
 								setIsSignUpModalOpen(false);
 								setIsSignInModalOpen(true);
@@ -98,7 +85,7 @@ function SplashScreen() {
 						<UserInfo
 							onClose={() => setIsUserInfoModal(true)}
 							setUserData={setUserData}
-							openFresherLocationModal={() => {
+							openUserLocationModal={() => {
 								setIsUserInfoModal(false);
 								setIsUserLocationModalOpen(true);
 							}}
@@ -111,14 +98,61 @@ function SplashScreen() {
 							onClose={() => setIsUserLocationModalOpen(false)}
 							setUserData={setUserData}
 							userData={userData}
-							openEmployeeInfoModal={() => {
+							openUserAdditionInfoModal={() => {
 								setIsUserLocationModalOpen(false);
-								setIsEmployeeInfoModalOpen(true);
+								setIsUserAdditionInfoModalOpen(true);
 							}}
 							openEmployerInfoModal={() => {
 								setIsUserLocationModalOpen(false);
 								setIsEmployerInfoModalOpen(true);
 							}}
+						/>
+					</DialogModal>
+
+					{/* user addition info modal */}
+					<DialogModal scale={""} isOpen={isUserAdditionInfoModalOpen}>
+						<UserAdditionInfo
+							onClose={() => setIsUserAdditionInfoModalOpen(false)}
+							setUserData={setUserData}
+							userData={userData}
+							openJobDetailsModal={() => {
+								setIsUserAdditionInfoModalOpen(false);
+								setIsJobDetailsModalOpen(true);
+							}}
+							openUserResumeModal={() => {
+								setIsUserAdditionInfoModalOpen(false);
+								setIsUserResumeModalOpen(true);
+							}}
+						/>
+					</DialogModal>
+
+					{/* user job detais modal */}
+					<DialogModal scale={""} isOpen={isJobDetailsModalOpen}>
+						<JobDetails
+							onClose={() => setIsJobDetailsModalOpen(false)}
+							setUserData={setUserData}
+							openUserResumeModal={() => {
+								setIsJobDetailsModalOpen(false);
+								setIsUserResumeModalOpen(true);
+							}}
+						/>
+					</DialogModal>
+
+					{/* user resume modal */}
+					<DialogModal scale={""} isOpen={isUserResumeModalOpen}>
+						<UserResume
+							onClose={() => setIsUserResumeModalOpen(false)}
+							setUserData={setUserData}
+							userData={userData}
+						/>
+					</DialogModal>
+
+					{/* employer info modal */}
+					<DialogModal scale={""} isOpen={isEmployerInfoModalOpen}>
+						<EmployerInfo
+							onClose={() => setIsEmployerInfoModalOpen(false)}
+							setUserData={setUserData}
+							userData={userData}
 						/>
 					</DialogModal>
 
@@ -157,38 +191,6 @@ function SplashScreen() {
 					</DialogModal> */}
 
 					{/* ============================EMPLOYEE MODALS======================================== */}
-					{/* employee info modal */}
-					<DialogModal scale={""} isOpen={isEmployeeInfoModalOpen}>
-						<EmployeeInfo
-							onClose={() => setIsEmployeeInfoModalOpen(false)}
-							setUserData={setUserData}
-							openJobDetailsModal={() => {
-								setIsEmployeeInfoModalOpen(false);
-								setIsJobDetailsModalOpen(true);
-							}}
-						/>
-					</DialogModal>
-
-					{/* employee job detais modal */}
-					<DialogModal scale={""} isOpen={isJobDetailsModalOpen}>
-						<JobDetails
-							onClose={() => setIsJobDetailsModalOpen(false)}
-							setUserData={setUserData}
-							openEmployeeResumeModal={() => {
-								setIsJobDetailsModalOpen(false);
-								setIsEmployeeResumModalOpen(true);
-							}}
-						/>
-					</DialogModal>
-
-					{/* employee resume modal */}
-					<DialogModal scale={""} isOpen={isEmployeeResumModalOpen}>
-						<EmployeeResume
-							onClose={() => setIsEmployeeResumModalOpen(false)}
-							setUserData={setUserData}
-							userData={userData}
-						/>
-					</DialogModal>
 
 					{/* employee location modal */}
 					{/* <DialogModal
@@ -213,20 +215,12 @@ function SplashScreen() {
 							setUserData={setUserData}
 							openEmployeeResumeModel={() => {
 								setIsEmployeeSkillModalOpen(false);
-								setIsEmployeeResumModalOpen(true);
+								setIsUserResumeModalOpen(true);
 							}}
 						/>
 					</DialogModal> */}
 
 					{/* ============================EMPLOYER MODALS======================================== */}
-					{/* employer info modal */}
-					<DialogModal scale={""} isOpen={isEmployerInfoModalOpen}>
-						<EmployerInfo
-							onClose={() => setIsEmployerInfoModalOpen(false)}
-							setUserData={setUserData}
-							userData={userData}
-						/>
-					</DialogModal>
 				</>
 			)}
 		</article>

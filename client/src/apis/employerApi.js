@@ -34,6 +34,7 @@ export const getJobById = (id) => async (dispatch) => {
 	dispatch(fetchStart());
 	try {
 		const response = await axiosInstance.get(`/employer/job/${id}`);
+		console.log(response)
 		dispatch(fetchJob(response?.data?.data));
 	} catch (error) {
 		dispatch(fetchError(error.message));
@@ -76,6 +77,7 @@ export const getCandidates = (query) => async (dispatch) => {
 		const response = await axiosInstance.get("/employer/candidates", {
 			params: { ...query },
 		});
+		console.log(response?.data?.data);
 		dispatch(fetchCandidates(response?.data?.data));
 	} catch (error) {
 		dispatch(fetchError(error.message));

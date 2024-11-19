@@ -2,13 +2,11 @@ import React, { useEffect, useState } from "react";
 import { CiSearch } from "react-icons/ci";
 import { CiLocationOn } from "react-icons/ci";
 
-function TextSearch({ firsttitle, secondtitle }) {
-	const [inputValue, setInputValue] = useState({
-		title: "",
-		jobPlace: "",
-	});
-
-	const handleChange = (e) => {};
+function TextSearch({ firsttitle, secondtitle, setQuery }) {
+	const handleChange = (e) => {
+		setQuery((prev) => ({ ...prev, [e.target.name]: e.target.value }));
+		// setQuery({ ...inputValue, [e.target.name]: e.target.value });
+	};
 
 	return (
 		<div className=" h-fit grid gap-4">
@@ -21,8 +19,8 @@ function TextSearch({ firsttitle, secondtitle }) {
 					className="w-fit outline-none"
 					type="text"
 					placeholder="job title"
-					name="title"
-					value={inputValue.title}
+					name="name"
+					// value={inputValue.title}
 					onChange={handleChange}
 				/>
 			</div>
@@ -36,8 +34,8 @@ function TextSearch({ firsttitle, secondtitle }) {
 					className="outline-none"
 					type="text"
 					placeholder="City "
-					name="jobPlace"
-					value={inputValue.jobPlace}
+					name="location"
+					// value={inputValue.jobPlace}
 					onChange={handleChange}
 				/>
 			</div>

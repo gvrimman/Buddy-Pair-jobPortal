@@ -10,11 +10,9 @@ function UserLocation({
 	onClose,
 	setUserData,
 	userData,
-	openEmployeeInfoModal,
+	openUserAdditionInfoModal,
 	openEmployerInfoModal,
 }) {
-	const dispatch = useDispatch();
-
 	const [location, setLocation] = useState(null);
 	const [loading, setLoading] = useState(true);
 	const [zoom, setZoom] = useState(13);
@@ -121,40 +119,21 @@ function UserLocation({
 		getLocation();
 	};
 
-	const handleSubmit = async () => {
-		try {
-			if (location !== undefined) {
-				setUserData((prev) => ({
-					...prev,
-					location: [location.lat, location.lng],
-					locationName: placeName,
-				}));
-
-				const response = await axiosInstance.post(
-					"/auth/signup",
-					userData,
-					{
-						headers: {
-							"Content-Type": "multipart/form-data",
-						},
-					}
-				);
-
-				dispatch(setUser(response?.data?.data));
-				onClose();
-				showSuccess(response.data?.message);
-				setTimeout(() => {
-					if (userData.role === "Employee") {
-						openEmployeeInfoModal();
-					}
-					if (userData.role === "Employer") {
-						openEmployerInfoModal();
-					}
-				}, 300);
-			}
-		} catch (error) {
-			console.log(error);
-			showError(error.response?.data?.message);
+	const handleSubmit = () => {
+		if (location !== undefined) {
+			setUserData((prev) => ({
+				...prev,
+				location: [location.lat, location.lng],
+				locationName: placeName,
+			}));
+			onClose();
+			setTimeout(() => {
+				if (userData.role === "employer") {
+					openEmployerInfoModal();
+				} else {
+					openUserAdditionInfoModal();
+				}
+			}, 300);
 		}
 	};
 	return (
