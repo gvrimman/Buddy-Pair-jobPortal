@@ -1,15 +1,29 @@
 import React, { useEffect, useState } from "react";
 import avatar from "/assets/images/avatar.png";
-import { Button } from "@material-tailwind/react";
+import {
+	Button,
+	List,
+	ListItem,
+	ListItemPrefix,
+	Radio,
+	Typography,
+} from "@material-tailwind/react";
 import useFormHandler from "../../hooks/ReactHookForm/Index";
 import { userInfoValidation } from "../../utils/yupValidations";
-import { educationType, genderOptions, jobTypes, locationOptions, professions, qualificationOptions } from "../../utils/constants";
+import {
+	educationType,
+	genderOptions,
+	jobTypes,
+	locationOptions,
+	professions,
+	qualificationOptions,
+} from "../../utils/constants";
 import TextInput from "../../components/common/TextInput";
 import SelectInput from "../../components/common/SelectInput";
 import MultiSelect from "../../components/common/MultiSelect";
+import { showError } from "../../utils/toast";
 
-
-function UserInfo({ onClose, setUserData, openFresherLocationModal }) {
+function UserInfo({ onClose, setUserData, openUserLocationModal }) {
 	const [previewSrc, setPreviewSrc] = useState(null);
 
 	// hook form validation
@@ -34,8 +48,18 @@ function UserInfo({ onClose, setUserData, openFresherLocationModal }) {
 		handleImagePreview();
 	}, [prfImg]);
 
+	const [selectedOption, setSelectedOption] = useState("");
+	const handleRadioChange = (option) => {
+		setSelectedOption(option);
+	};
+
 	// form sumbission
 	const onSubmit = (data) => {
+		if(selectedOption === undefined){
+			
+			showError("Please select your status");
+			return;
+		}
 		const selectedProfession = data.profession.map((prof) => prof.label);
 		const profileImageFile = data.profileImage
 			? data.profileImage[0]
@@ -44,23 +68,22 @@ function UserInfo({ onClose, setUserData, openFresherLocationModal }) {
 		const dob = data.dob;
 		const gender = data.gender;
 		const qualification = data.qualification;
-		const educationInstitute = data.educationInstitute;
 		const profession = selectedProfession;
 
 		const formatedData = {
 			dob,
 			gender,
 			qualification,
-			educationInstitute,
 			profession,
 			profileImage: profileImageFile ? profileImageFile : null,
+			role: selectedOption,
 		};
-		setUserData((prev) => ({ ...prev, ...formatedData }));
+		setUserData(formatedData);
 		onClose();
 		reset();
 
 		setTimeout(() => {
-			openFresherLocationModal();
+			openUserLocationModal();
 		}, 300);
 	};
 
@@ -105,20 +128,6 @@ function UserInfo({ onClose, setUserData, openFresherLocationModal }) {
 						options={qualificationOptions}
 						errors={errors["qualification"]}
 					/>
-					<TextInput
-						type={"text"}
-						label={"Education institute"}
-						registering={register("educationInstitute")}
-						errors={errors.educationInstitute}
-					/>
-					{/* <MultiSelect
-						name={"preferredJobLocation"}
-						control={control}
-						options={locationOptions}
-						placeholder={"Preferred Job Location"}
-						registering={register("preferredJobLocation")}
-						errors={errors["preferredJobLocation"]}
-					/> */}
 
 					<MultiSelect
 						name={"profession"}
@@ -128,6 +137,82 @@ function UserInfo({ onClose, setUserData, openFresherLocationModal }) {
 						registering={register("profession")}
 						errors={errors["profession"]}
 					/>
+				</div>
+				<div>
+					<List className="flex-row flex-wrap sm:flex-nowrap">
+						<ListItem className="p-0 w-fit sm:w-full">
+							<label className="flex w-full cursor-pointer items-center px-3 py-2">
+								<ListItemPrefix className="mr-3">
+									<Radio
+										color="blue-gray"
+										name="horizontal-list"
+										ripple={false}
+										className="hover:before:opacity-0 "
+										containerProps={{
+											className: "p-0",
+										}}
+										onChange={() =>
+											handleRadioChange("fresher")
+										}
+										checked={selectedOption === "fresher"}
+									/>
+								</ListItemPrefix>
+								<Typography
+									color="blue-gray"
+									className="font-medium text-blue-gray-400 text-sm md:text-base">
+									Fresher
+								</Typography>
+							</label>
+						</ListItem>
+						<ListItem className="p-0 w-fit sm:w-full">
+							<label className="flex w-full cursor-pointer items-center px-3 py-2">
+								<ListItemPrefix className="mr-3">
+									<Radio
+										color="blue-gray"
+										name="horizontal-list"
+										ripple={false}
+										className="hover:before:opacity-0"
+										containerProps={{
+											className: "p-0",
+										}}
+										onChange={() =>
+											handleRadioChange("employee")
+										}
+										checked={selectedOption === "employee"}
+									/>
+								</ListItemPrefix>
+								<Typography
+									color="blue-gray"
+									className="font-medium text-blue-gray-400 text-sm md:text-base">
+									Employee
+								</Typography>
+							</label>
+						</ListItem>
+						<ListItem className="p-0 w-fit sm:w-full">
+							<label className="flex w-full cursor-pointer items-center px-3 py-2">
+								<ListItemPrefix className="mr-3">
+									<Radio
+										color="blue-gray"
+										name="horizontal-list"
+										ripple={true}
+										className="hover:before:opacity-0"
+										containerProps={{
+											className: "p-0",
+										}}
+										onChange={() =>
+											handleRadioChange("employer")
+										}
+										checked={selectedOption === "employer"}
+									/>
+								</ListItemPrefix>
+								<Typography
+									color="blue-gray"
+									className="font-medium text-blue-gray-400 text-sm md:text-base">
+									Employer
+								</Typography>
+							</label>
+						</ListItem>
+					</List>
 				</div>
 				<div className="text-end">
 					<Button className="rounded py-2 px-3 sm:py-3 sm:px-4 mx-1 bg-red-400">

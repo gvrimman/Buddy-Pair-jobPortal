@@ -1,22 +1,39 @@
-import React from 'react'
-import { categoryData, experienceData } from '../../../utils/constants.js'
-import TextSearch from '../../common/TextSearch.jsx'
-import OptionSearch from '../../common/OptionSearch.jsx'
-import SwitchSearch from '../../common/SwitchSearch.jsx'
-import RadioSearch from '../../common/RadioSearch.jsx'
-import { jobTypeData, postedDateData } from '../../../utils/job-search.js'
+import React from "react";
+import {
+	experienceData,
+	genderOptions,
+	preferredJobType,
+} from "../../../utils/constants.js";
+import TextSearch from "../../common/TextSearch.jsx";
+import OptionSearch from "../../common/OptionSearch.jsx";
+import SwitchSearch from "../../common/SwitchSearch.jsx";
 
-
-function CandidatesSideSection() {
-  return (
-    <div className="my-5 p-3 hidden lg:grid gap-4 bg-customBgColor rounded-lg ">
-      <TextSearch firsttitle={"Search by keywords"} secondtitle={"Location"}  />
-      <OptionSearch title={"Category"} contents={categoryData}  />
-      {/* <SwitchSearch title={"Job Type"} contents={jobTypeData}  /> */}
-      <RadioSearch title={"Date Posted"} contents={postedDateData}  />
-      {/* <SwitchSearch title={"Experience"} contents={experienceData}  /> */}
-    </div>
-  )
+function CandidatesSideSection({ setQuery }) {
+	return (
+		<div className="my-5 p-3 hidden lg:grid gap-4 bg-customBgColor rounded-lg ">
+			<TextSearch
+				setQuery={setQuery}
+				firsttitle={"Search by keywords"}
+				secondtitle={"Location"}
+			/>
+			<OptionSearch
+				setQuery={setQuery}
+				title={"Category"}
+				contents={preferredJobType}
+			/>
+			<SwitchSearch
+				setQuery={setQuery}
+				title={"Experience"}
+				contents={experienceData}
+			/>
+			{/* <RadioSearch title={"Date Posted"} contents={postedDateData} /> */}
+			<SwitchSearch
+				setQuery={setQuery}
+				title={"Gender"}
+				contents={genderOptions}
+			/>
+		</div>
+	);
 }
 
-export default CandidatesSideSection
+export default CandidatesSideSection;

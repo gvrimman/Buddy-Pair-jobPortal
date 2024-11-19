@@ -7,52 +7,52 @@ const jobPortalSchema = new mongoose.Schema({
 		required: true,
 	},
 	dob: {
-		type: Date,
+		type: Date, // all
 		trim: true,
 	},
 	age: {
-		type: Number,
+		type: Number, // all
 		trim: true,
 	},
 	gender: {
-		type: String,
+		type: String, // all
 		trim: true,
 	},
 	qualification: {
-		type: String,
+		type: String, // all
 		trim: true,
 	},
 	educationInstitute: {
-		type: String,
+		type: String, // both
 	},
 	educationType: {
-		type: String,
+		type: String, // both
 		trim: true,
 	},
 	profession: {
-		type: ["String"],
+		type: ["String"], // all
 		required: true,
 	},
 	jobDetails: {
-		type: Object,
+		type: Object, // employee
 	},
 	preferredJobLocation: {
-		type: [String],
+		type: [String], // both
 		trim: true,
 	},
 	preferredJobType: {
-		type: String,
+		type: String, // both
 		trim: true,
 	},
 	socialLinks: {
-		type: Object,
+		type: Object, // both
 	},
 	skills: {
-		type: [String],
+		type: [String], // both
 		trim: true,
 	},
 	locationName: {
-		type: String,
+		type: String, // all
 	},
 	location: {
 		type: {
@@ -66,10 +66,27 @@ const jobPortalSchema = new mongoose.Schema({
 		},
 	},
 	resume: {
-		type: String,
+		type: String, // both
 	},
 	profileImage: {
-		type: String,
+		type: String, // all
+	},
+	companyName: { type: String }, // employer
+	companyEmail: { type: String }, // employer
+	companyWebSite: { type: String }, // employer
+	companyAddress: { type: String }, // employer
+	companyDescription: { type: String },
+	companySize: { type: String }, // employer
+	industryType: { type: String }, // employer
+	employmentType: { type: String },
+	companyLinkedin: { type: String },
+	totalJobs: {
+		type: [mongoose.Schema.Types.ObjectId],
+		ref: "Job",
+		default: [],
+	},
+	companyLogo: {
+		type: String, // employer
 	},
 	subscription: {
 		type: {
@@ -84,6 +101,11 @@ const jobPortalSchema = new mongoose.Schema({
 	role: {
 		type: String,
 		enum: ["employee", "employer"],
+		required: true,
+	},
+	createdAt: {
+		type: Date,
+		default: Date.now,
 	},
 });
 

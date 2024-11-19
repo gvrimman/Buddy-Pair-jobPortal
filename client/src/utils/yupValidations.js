@@ -1,5 +1,4 @@
 import * as Yup from "yup";
-import { educationType } from "./constants";
 
 const signupValidations = Yup.object().shape({
 	name: Yup.string().required("Name is Required"),
@@ -58,14 +57,14 @@ const userInfoValidation = Yup.object().shape({
 		.test("fileSize", "File is too large, max size is 20MB", (value) => {
 			return value && value[0] && value[0].size <= 5 * 1024 * 1024;
 		}),
-	educationInstitute: Yup.string().required(
-		"Please select your education institution"
-	),
 	profession: Yup.array().required("Please select your profession"),
 });
 
-const employeeInfoValidation = Yup.object().shape({
+const userAdditionInfoValidation = Yup.object().shape({
 	skills: Yup.array().required("Atleast one skill is required"),
+	educationInstitute: Yup.string().required(
+		"Please select your education institution"
+	),
 	educationType: Yup.string().required("Please select your education type"),
 	preferredJobLocation: Yup.array().required("Please select your location"),
 	preferredJobType: Yup.string().required("Please select your job type"),
@@ -131,7 +130,7 @@ const jobPostValidation = Yup.object().shape({
 export {
 	signupValidations,
 	loginValidations,
-	employeeInfoValidation,
+	userAdditionInfoValidation,
 	userInfoValidation,
 	jobValidation,
 	emplyerInfoValidation,

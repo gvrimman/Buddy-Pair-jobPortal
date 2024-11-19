@@ -38,6 +38,9 @@ export const educationType = [
 	{ value: "distance", valueToDisplay: "Distance" },
 ];
 export const preferredJobType = [
+	{ value: "On-site", valueToDisplay: "On-site" },
+	{ value: "W-F-H", valueToDisplay: "W-F-H" },
+	{ value: "Hybrid", valueToDisplay: "Hybrid" },
 	{ value: "part_time", valueToDisplay: "Part Time" },
 	{ value: "full_time", valueToDisplay: "Full Time" },
 	{ value: "contract", valueToDisplay: "Contract" },

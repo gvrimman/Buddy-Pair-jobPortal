@@ -4,14 +4,14 @@ import avatar from "/assets/images/office.png";
 import { Button } from "@material-tailwind/react";
 import { useNavigate } from "react-router-dom";
 import { useDispatch } from "react-redux";
-import { companySizeOptions, industyTypeOptions, preferredJobType } from "../../../utils/constants";
-import { setUser } from "../../../Redux/reducers/userReducer";
-import TextInput from "../../../components/common/TextInput";
-import SelectInput from "../../../components/common/SelectInput";
-import useFormHandler from "../../../hooks/ReactHookForm/Index";
-import { emplyerInfoValidation } from "../../../utils/yupValidations";
-import { showError, showSuccess } from "../../../utils/toast";
-import axiosInstance from "../../../utils/axios";
+import { companySizeOptions, industyTypeOptions, preferredJobType } from "../../utils/constants";
+import { setUser } from "../../Redux/reducers/userReducer";
+import TextInput from "../../components/common/TextInput";
+import SelectInput from "../../components/common/SelectInput";
+import useFormHandler from "../../hooks/ReactHookForm/Index";
+import { emplyerInfoValidation } from "../../utils/yupValidations";
+import { showError, showSuccess } from "../../utils/toast";
+import axiosInstance from "../../utils/axios";
 
 function EmployerInfo({ userData, onClose }) {
 	const navigate = useNavigate();
@@ -44,18 +44,16 @@ function EmployerInfo({ userData, onClose }) {
 		try {
 			const finalData = {
 				...userData,
-				profileImage: data.profileImage ? data.profileImage[0] : null,
-				employerDetails: {
-					companyName: data.companyName,
-					companyEmail: data.companyEmail,
-					companySite: data.companySite,
-					companyAddress: data.companyAddress,
-					companyDescription: data.companyDescription,
-					companySize: data.companySize,
-					industryType: data.industryType,
-					employmentType: data.employmentType,
-					companyLinkedin: data.companyLinkedin
-				},
+				companyLogo: data.profileImage ? data.profileImage[0] : null,
+				companyName: data.companyName,
+				companyEmail: data.companyEmail,
+				companySite: data.companySite,
+				companyAddress: data.companyAddress,
+				companyDescription: data.companyDescription,
+				companySize: data.companySize,
+				industryType: data.industryType,
+				employmentType: data.employmentType,
+				companyLinkedin: data.companyLinkedin,
 			};
 			const response = await axiosInstance.post(
 				"/auth/employer-signup",

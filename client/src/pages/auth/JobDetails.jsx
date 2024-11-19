@@ -1,12 +1,12 @@
 import { Button } from "@material-tailwind/react";
 import React from "react";
-import TextInput from "../../../components/common/TextInput";
-import useFormHandler from "../../../hooks/ReactHookForm/Index";
-import { jobValidation } from "../../../utils/yupValidations";
-import SelectInput from "../../../components/common/SelectInput";
-import { experienceData } from "../../../utils/constants";
+import TextInput from "../../components/common/TextInput";
+import SelectInput from "../../components/common/SelectInput";
+import useFormHandler from "../../hooks/ReactHookForm/Index";
+import { jobValidation } from "../../utils/yupValidations";
+import { experienceData } from "../../utils/constants";
 
-function JobDetails({ setUserData, onClose, openEmployeeResumeModal }) {
+function JobDetails({ setUserData, onClose, openUserResumeModal }) {
 	const { register, handleSubmit, errors, reset, control, watch } =
 		useFormHandler(jobValidation);
 
@@ -17,9 +17,10 @@ function JobDetails({ setUserData, onClose, openEmployeeResumeModal }) {
 		reset();
 
 		setTimeout(() => {
-			openEmployeeResumeModal();
+			openUserResumeModal();
 		}, 300);
 	};
+	
 	return (
 		<div className="flex flex-col gap-4 px-1 py-5">
 			<div className="relative text-center">
@@ -50,7 +51,7 @@ function JobDetails({ setUserData, onClose, openEmployeeResumeModal }) {
 						registering={register("location")}
 						errors={errors["location"]}
 					/>
-					
+
 					<SelectInput
 						name={"workExperience"}
 						label={"Total Work Experience"}
