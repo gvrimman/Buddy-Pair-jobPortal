@@ -1,14 +1,16 @@
 import React, { useEffect } from 'react'
-import BookMarked from '../../../../../components/job-portal/employee/dashboard/bookmarked/BookMarked'
-import { getBookMarkedJobs } from '../../../../../redux/employeeSlice';
 import { useDispatch } from 'react-redux';
+import BookMarked from '../../../components/employee/dashboard/bookmarked/BookMarked';
+import { getBookmarkedJobs } from '../../../apis/employeeApi';
 
 function EmployeeBookMarked() {
-  const dispatch = useDispatch();
+
+  const dispatch = useDispatch()
 
   useEffect(() => {
-      dispatch(getBookMarkedJobs());
-  }, [dispatch]);
+    dispatch(getBookmarkedJobs());
+  }, [dispatch])
+
   return (
     <>
       <BookMarked />

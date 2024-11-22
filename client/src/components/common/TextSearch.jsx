@@ -5,7 +5,6 @@ import { CiLocationOn } from "react-icons/ci";
 function TextSearch({ firsttitle, secondtitle, setQuery }) {
 	const handleChange = (e) => {
 		setQuery((prev) => ({ ...prev, [e.target.name]: e.target.value }));
-		// setQuery({ ...inputValue, [e.target.name]: e.target.value });
 	};
 
 	return (

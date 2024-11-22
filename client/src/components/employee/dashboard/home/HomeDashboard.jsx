@@ -5,14 +5,11 @@ import { MdOutlineMessage } from "react-icons/md";
 import { IoBookmarkOutline } from "react-icons/io5";
 import { IoMdNotificationsOutline } from "react-icons/io";
 
-import StatusBox from "../../../StatusBox";
 import CandidateCards from "../../../employer/dashboard/CandidateCards";
+import StatusBox from "../../../common/StatusBox";
 
 function HomeDashboard() {
-  const { appliedJobs, bookMarkedJobs, recentApplied } = useSelector(
-    (state) => state.employee
-  );
-  const { messages } = useSelector((state) => state.chat);
+
 
   return (
     <div>
@@ -21,21 +18,21 @@ function HomeDashboard() {
           text={"applied jobs"}
           textColor={"blue-500"}
           bgColor={"blue-100"}
-          count={appliedJobs?.length || 0}
+          count={ 0}
           icon={<IoBriefcaseOutline />}
         />
         <StatusBox
           text={"bookmarks"}
           textColor={"blue-500"}
           bgColor={"blue-100"}
-          count={bookMarkedJobs?.length || 0}
+          count={ 0}
           icon={<IoBookmarkOutline />}
         />
         <StatusBox
           text={"messages"}
           textColor={"blue-500"}
           bgColor={"blue-100"}
-          count={messages?.length || 0}
+          count={ 0}
           icon={<MdOutlineMessage />}
         />
         <StatusBox
@@ -50,7 +47,7 @@ function HomeDashboard() {
         <h2 className="my-3 mx-4 font-semibold">Recent Applications</h2>
         <div className="grid lg:grid-cols-2 gap-3 mx-4">
           <CandidateCards
-            data={recentApplied}
+            data={[]}
           />
         </div>
       </div>

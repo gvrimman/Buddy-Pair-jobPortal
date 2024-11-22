@@ -1,102 +1,86 @@
 import React, { useEffect, useState } from "react";
-import InputForms from "../../../InputForms";
-import FormButton from "../../../FormButton";
-import TextArea from "../../../TextArea";
 import { useDispatch, useSelector } from "react-redux";
-import ChoiceSelection from "../../../ChoiceSelection";
-import { formatDate } from "../../../../../utils/formatDate";
-import { updateProjectInfos } from "../../../../../redux/employeeSlice";
+import TextInput from "../../../common/TextInput";
+import { Button } from "@material-tailwind/react";
+import useFormHandler from "../../../../hooks/ReactHookForm/Index";
+import { profileSocialValidation } from "../../../../utils/yupValidations";
+import axiosInstance from "../../../../utils/axios";
+import { updateUserInfo } from "../../../../Redux/reducers/userReducer";
+import { showError, showSuccess } from "../../../../utils/toast";
 
 function ProjectInfos() {
-  const { project } = useSelector((state) => state.employee);
+	const dispatch = useDispatch();
+	const { userInfo } = useSelector((state) => state.user);
+	// hook form validation
+	const { register, handleSubmit, errors, reset, control, watch } =
+		useFormHandler(profileSocialValidation);
 
-  const [projectInfos, setProjectInfos] = useState({
-    projectName: "",
-    startDate: "",
-    endDate: "",
-    isWorking: "",
-    skills: "",
-    description: "",
-  });
+	const onSubmit = async (data) => {
+		const formatedData = {
+			socialLinks: {
+				portfolio: data.portfolio,
+				linkedin: data.linkedin,
+				github: data.github,
+				behance: data.behance,
+			},
+		};
+		try {
+			const response = await axiosInstance.put(
+				`/auth/update-profile`,
+				formatedData
+			);
+			dispatch(updateUserInfo(response?.data?.data));
+			showSuccess(response?.data?.message);
+		} catch (error) {
+			showError(error?.response?.data?.message);
+		}
+	};
 
-  const dispatch = useDispatch();
+	return (
+		<div className="grid bg-white mx-2 p-4 rounded-md shadow">
+			<h2 className="py-2 text-lg tracking-wide font-semibold">
+				Social Network
+			</h2>
+			<form onSubmit={handleSubmit(onSubmit)}>
+				<div className="mt-5 grid lg:grid-cols-2 gap-3">
+					<TextInput
+						label={"Portfolio Url"}
+						type={"text"}
+						value={
+							userInfo?.apps?.jobPortal?.socialLinks?.portfolio
+						}
+						registering={register("portfolio")}
+						errors={errors.portfolio}
+					/>
+					<TextInput
+						label={"GitHub Url"}
+						type={"text"}
+						value={userInfo?.apps?.jobPortal?.socialLinks?.github}
+						registering={register("github")}
+						errors={errors.github}
+					/>
+					<TextInput
+						label={"LinkedIn Url"}
+						type={"text"}
+						value={userInfo?.apps?.jobPortal?.socialLinks?.linkedin}
+						registering={register("linkedin")}
+						errors={errors.linkedin}
+					/>
+					<TextInput
+						label={"Behance Url"}
+						type={"text"}
+						value={userInfo?.apps?.jobPortal?.socialLinks?.behance}
+						registering={register("behance")}
+						errors={errors.behance}
+					/>
+				</div>
 
-  useEffect(() => {
-    setProjectInfos({
-      projectName: project?.projectName,
-      startDate: project?.startDate,
-      endDate: project?.endDate,
-      isWorking: project?.isWorking,
-      skills: project?.skills,
-      description: project?.description,
-    });
-  }, [project]);
-
-  const handleProjectInfos = (name, value) => {
-    setProjectInfos({ ...projectInfos, [name]: value });
-  };
-
-  const handleProjectSave = () => {
-    dispatch(updateProjectInfos({ id: project._id, infos: projectInfos }));
-    console.log("PROJECT: ", projectInfos);
-  };
-
-  return (
-    <div className="grid bg-white mx-2 p-4 rounded-md shadow">
-      <h2 className="py-2 text-lg tracking-wide font-semibold">My Projects</h2>
-      <div className="mt-5 grid lg:grid-cols-2 gap-3">
-        <InputForms
-          title={"Project Name"}
-          type={"text"}
-          placeText={"Job Portal"}
-          name={"projectName"}
-          handleChildValue={handleProjectInfos}
-          value={project?.projectName}
-        />
-        <InputForms
-          title={"Start Date"}
-          type={"date"}
-          placeText={""}
-          name={"startDate"}
-          handleChildValue={handleProjectInfos}
-          value={formatDate(project?.startDate)}
-        />
-        <InputForms
-          title={"End Date"}
-          type={"date"}
-          placeText={""}
-          name={"endDate"}
-          handleChildValue={handleProjectInfos}
-          value={formatDate(project?.endDate)}
-        />
-
-        <ChoiceSelection
-          label={"Currently Working"}
-          option={"currently working"}
-          name={"isWorking"}
-          handleChildValue={handleProjectInfos}
-        />
-
-        <InputForms
-          title={"Used Technologies"}
-          type={"text"}
-          placeText={"React"}
-          name={"skills"}
-          handleChildValue={handleProjectInfos}
-          value={project?.skills}
-        />
-        <TextArea
-          label={"Description"}
-          name={"description"}
-          value={project?.description}
-          handleChildValue={handleProjectInfos}
-          placeText={"A detailed description of the certification or job."}
-        />
-      </div>
-
-      <FormButton text={"Save"} saveParentValue={handleProjectSave} />
-    </div>
-  );
+				<Button type="submit" className="w-fit mt-3 text-end">
+					Update
+				</Button>
+			</form>
+		</div>
+	);
 }
 
 export default ProjectInfos;

@@ -1,88 +1,131 @@
 import React, { useEffect, useState } from "react";
 import { useDispatch, useSelector } from "react-redux";
-import InputForms from "../../../InputForms";
-import FormButton from "../../../FormButton";
-import ImgUploader from "../../../ImgUploader";
-import { formatDate } from "../../../../../utils/formatDate";
-import { updateProfileInfos } from "../../../../../redux/employeeSlice";
+import TextInput from "../../../common/TextInput";
+import { Button } from "@material-tailwind/react";
+import useFormHandler from "../../../../hooks/ReactHookForm/Index";
+import SelectInput from "../../../common/SelectInput";
+import { genderOptions } from "../../../../utils/constants";
+import { profileInfoValidation } from "../../../../utils/yupValidations";
+import axiosInstance from "./../../../../utils/axios";
+import { showError, showSuccess } from "../../../../utils/toast";
+import { updateUserInfo } from "../../../../Redux/reducers/userReducer";
 
 function PersonalInfos() {
-  const { profile } = useSelector((state) => state.employee);
-  const [personalInfos, setPersonalInfos] = useState({
-    picture: "",
-    username: "",
-    email: "",
-    phone: "",
-    dateOfBirth: "",
-  });
+	const dispatch = useDispatch();
+	const { userInfo } = useSelector((state) => state.user);
+	// hook form validation
+	const { register, handleSubmit, errors, reset, control, watch } =
+		useFormHandler(profileInfoValidation);
 
-  const dispatch = useDispatch();
+	const dateValue = new Date(userInfo?.apps?.jobPortal?.dob);
+	const formatedDate = dateValue?.toISOString().slice(0, 10);
+	// ----------------------------------------------------------------
+	const [previewSrc, setPreviewSrc] = useState(null);
+	// get img before submit
+	const prfImg = watch("profileImage");
+	const handleImagePreview = () => {
+		const file = prfImg && prfImg[0];
+		if (file) {
+			const reader = new FileReader();
+			reader.onloadend = () => {
+				setPreviewSrc(reader.result);
+			};
+			reader.readAsDataURL(file);
+		}
+	};
 
-  useEffect(() => {
-    setPersonalInfos({
-      picture: profile?.picture,
-      username: profile?.username,
-      email: profile?.email,
-      phone: profile?.phone,
-      dateOfBirth: profile?.dateOfBirth,
-    });
-  }, [profile]);
+	useEffect(() => {
+		handleImagePreview();
+	}, [prfImg]);
+	// ----------------------------------------------------------------
 
-  const handlePersonalInfos = (name, value) => {
-    setPersonalInfos({ ...personalInfos, [name]: value });
-  };
+	const onSubmit = async (data) => {
+		try {
+			const response = await axiosInstance.put(
+				`/auth/update-profile`,
+				data,
+				{
+					headers: {
+						"Content-Type": "multipart/form-data",
+					},
+				}
+			);
+			dispatch(updateUserInfo(response?.data?.data));
+			showSuccess(response?.data?.message);
+		} catch (error) {
+			showError(error?.response?.data?.message);
+		}
+	};
 
-  const handlePersonalSave = () => {
-    dispatch(updateProfileInfos(personalInfos));
-    console.log("PERSONAL: ", personalInfos);
-  };
-
-  return (
-    <div className="grid bg-white mx-2 p-4 rounded-md shadow">
-      <h2 className="py-2 text-lg tracking-wide font-semibold">My Profile</h2>
-      <ImgUploader
-        boxText={"Browse Image"}
-        name={"picture"}
-        handleChildValue={handlePersonalInfos}
-        value={profile?.picture}
-      />
-      <div className="mt-5 grid lg:grid-cols-2 gap-3">
-        <InputForms
-          title={"Name"}
-          type={"text"}
-          placeText={"Jhon Doal"}
-          name={"username"}
-          handleChildValue={handlePersonalInfos}
-          value={profile?.username}
-        />
-        <InputForms
-          title={"Email Address"}
-          type={"email"}
-          placeText={"jhondoal@gmail.com"}
-          name={"email"}
-          handleChildValue={handlePersonalInfos}
-          value={profile?.email}
-        />
-        <InputForms
-          title={"Phone"}
-          type={"number"}
-          placeText={"9988587898"}
-          name={"phone"}
-          handleChildValue={handlePersonalInfos}
-          value={profile?.phone}
-        />
-        <InputForms
-          title={"Date of Birth"}
-          type={"date"}
-          placeText={"20-12-2002"}
-          name={"dateOfBirth"}
-          handleChildValue={handlePersonalInfos}
-          value={formatDate(profile?.dateOfBirth)}
-        />
-      </div>
-      <FormButton text={"Save"} saveParentValue={handlePersonalSave} />
-    </div>
-  );
+	return (
+		<div className="grid bg-white mx-2 p-4 rounded-md shadow">
+			<h2 className="py-2 text-lg tracking-wide font-semibold">
+				My Profile
+			</h2>
+			<form onSubmit={handleSubmit(onSubmit)}>
+				<div className=" rounded-full w-20 sm:w-24 aspect-square overflow-hidden mx-auto mb-8 relative">
+					<div className="absolute top-1/2 -translate-y-1/2 cursor-pointer opacity-0 scale-150">
+						<TextInput
+							type={"file"}
+							label={"ProfileImage"}
+							registering={register("profileImage")}
+							errors={errors["profileImage"]}
+						/>
+					</div>
+					<img
+						src={
+							previewSrc
+								? previewSrc
+								: userInfo?.apps?.jobPortal?.profileImage
+						}
+						alt=""
+						className="w-full h-full object-contain"
+					/>
+				</div>
+				<div className="mt-5 grid lg:grid-cols-2 gap-3">
+					<TextInput
+						label={"Name"}
+						type={"text"}
+						value={userInfo?.username}
+						registering={register("username")}
+						errors={errors.username}
+					/>
+					<TextInput
+						label={"Email Address"}
+						type={"email"}
+						value={userInfo?.email}
+						registering={register("email")}
+						errors={errors.email}
+					/>
+					<TextInput
+						label={"Phone"}
+						type={"number"}
+						value={userInfo?.phone}
+						registering={register("phone")}
+						errors={errors.phone}
+					/>
+					<TextInput
+						label={"Date of Birth"}
+						type={"date"}
+						value={formatedDate}
+						registering={register("dob")}
+						errors={errors.dob}
+					/>
+					<SelectInput
+						label={"Gender"}
+						options={genderOptions}
+						name={"gender"}
+						control={control}
+						errors={errors.gender}
+						value={userInfo?.apps?.jobPortal?.gender}
+					/>
+				</div>
+				<Button type="submit" className="w-fit mt-3 text-end">
+					Update
+				</Button>
+			</form>
+		</div>
+	);
 }
 
 export default PersonalInfos;

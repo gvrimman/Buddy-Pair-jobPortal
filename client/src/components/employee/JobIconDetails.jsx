@@ -11,14 +11,14 @@ function JobIconDetails({job, center}) {
         <span className="text-lg">
           <IoBagHandleOutline />
         </span>
-        <p className="text-sm sm:text-base capitalize">{job?.owner?.companyName}</p>
+        <p className="text-sm sm:text-base capitalize">{job?.owner?.apps?.jobPortal?.companyName}</p>
       </div>
 
       <div className="capitalize flex items-center gap-2">
         <span className="text-lg">
           <GrLocation />
         </span>
-        <p className="text-sm sm:text-base capitalize">{job?.jobPlace} || London,Uk</p>
+        <p className="text-sm sm:text-base capitalize">{job?.jobPlace}</p>
       </div>
 
       <div className="flex items-center gap-2 ">
@@ -26,7 +26,7 @@ function JobIconDetails({job, center}) {
           <GoClock />
         </span>
         <p className="text-sm sm:text-base capitalize">
-          {new Date(job?.deadline).toLocaleDateString()} || Aug, 10, 2024
+          {new Date(job?.deadline).toLocaleDateString()}
         </p>
       </div>
 
@@ -34,7 +34,7 @@ function JobIconDetails({job, center}) {
         <span className="text-lg">
           <FaMoneyBill1Wave />
         </span>
-        <p className="text-sm sm:text-base capitalize">{job?.offeredSalary} || 40000</p>
+        <p className="text-sm sm:text-base capitalize">{job?.offeredSalary}</p>
       </div>
     </div>
   );

@@ -12,11 +12,11 @@ function CandidatesSectionHeader({ setToggleValue, setQuery, query }) {
 	};
 
 	const handleSortChange = (e) => {
-		setQuery({ sort: e.target.value });
+		setQuery((prev) => ({ ...prev, sort: e.target.value }));
 		dispatch(getCandidates(query));
 	};
 
-	const handleSearchJob = () => {
+	const handleSearchCandidate = () => {
 		dispatch(getCandidates(query));
 	};
 
@@ -40,7 +40,7 @@ function CandidatesSectionHeader({ setToggleValue, setQuery, query }) {
 					className="text-sm bg-white outline outline-1 outline-slate-300 px-2 py-2 rounded-md"
 					onChange={handleSortChange}
 					// value={sortValue.sort}
-					>
+				>
 					<option value="default">Sort by (Default)</option>
 					<option value="newest">Newest</option>
 					<option value="oldest">Oldest</option>
@@ -52,7 +52,7 @@ function CandidatesSectionHeader({ setToggleValue, setQuery, query }) {
 				</button>
 				<button
 					className="px-7 py-2 outline outline-1 outline-green-500 antialiased text-[#000] hover:font-semibold rounded-md hover:bg-green-500 hover:text-[#fff]"
-					onClick={handleSearchJob}>
+					onClick={handleSearchCandidate}>
 					Search
 				</button>
 			</div>

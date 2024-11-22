@@ -3,6 +3,7 @@ import { persistStore, persistReducer } from "redux-persist";
 import storage from "redux-persist/lib/storage";
 import userReducer from "../reducers/userReducer";
 import employerReducer from "../reducers/employerReducer";
+import employeeReducer from "../reducers/employeeReducer"
 
 const userPersistConfig = {
 	key: "user",
@@ -14,16 +15,27 @@ const employerPersistConfig = {
 	storage,
 };
 
+const employeePersistConfig = {
+	key: "employee",
+	storage,
+};
+
 const persistedUserReducer = persistReducer(userPersistConfig, userReducer);
 const persistedEmployerReducer = persistReducer(
 	employerPersistConfig,
 	employerReducer
 );
+const persistedEmployeeReducer = persistReducer(
+	employeePersistConfig,
+	employeeReducer
+);
+
 
 const store = configureStore({
 	reducer: {
 		user: persistedUserReducer,
 		employer: persistedEmployerReducer,
+		employee: persistedEmployeeReducer
 	},
 
 	middleware: (getDefaultMiddleware) =>

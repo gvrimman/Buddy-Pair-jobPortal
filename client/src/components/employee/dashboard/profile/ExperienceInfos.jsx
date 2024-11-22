@@ -1,103 +1,157 @@
 import React, { useEffect, useState } from "react";
-import FormButton from "../../../FormButton";
-import InputForms from "../../../InputForms";
-import SelectionOption from "../../../SelectionOption";
-import ChoiceSelection from "../../../ChoiceSelection";
 import { useDispatch, useSelector } from "react-redux";
-import { formatDate } from "../../../../../utils/formatDate";
-import { updateExperienceInfos } from "../../../../../redux/employeeSlice";
+import TextInput from "../../../common/TextInput";
+import useFormHandler from "../../../../hooks/ReactHookForm/Index";
+import SelectInput from "../../../common/SelectInput";
+import {
+	experienceData,
+	locationOptions,
+	preferredJobType,
+	professions,
+	skillOptions,
+} from "../../../../utils/constants";
+import MultiSelect from "../../../common/MultiSelect";
+import { Button } from "@material-tailwind/react";
+import { profileJobValidation } from "../../../../utils/yupValidations";
+import { showError, showSuccess } from "../../../../utils/toast";
+import { updateUserInfo } from "../../../../Redux/reducers/userReducer";
+import axiosInstance from "../../../../utils/axios";
 
 function ExperienceInfos() {
-  const { experience } = useSelector((state) => state.employee);
+	const dispatch = useDispatch();
+	const { userInfo } = useSelector((state) => state.user);
+	// hook form validation
+	const { register, handleSubmit, errors, reset, control, watch } =
+		useFormHandler(profileJobValidation);
 
-  const [experienceInfos, setExperienceInfos] = useState({
-    jobTitle: "",
-    company: "",
-    startDate: "",
-    endDate: "",
-    isWorking: "",
-    achievements: "",
-  });
-  
-  const dispatch = useDispatch()
+	const onSubmit = async (data) => {
+		const formatedData = {
+			jobDetails: {
+				jobTitle: data.jobTitle,
+				companyName: data.companyName,
+				location: data.location,
+				ctc: data.ctc,
+				eCtc: data.eCtc,
+				workExperience: data.workExperience,
+			},
+			profession: data.profession.map((prof) => prof.value),
+			skills: data.skills.map((skill) => skill.value),
+			preferredJobLocation: data.preferredJobLocation.map(
+				(loc) => loc.value
+			),
+			preferredJobType: data.preferredJobType,
+		};
+		try {
+			const response = await axiosInstance.put(
+				`/auth/update-profile`,
+				formatedData
+			);
+			dispatch(updateUserInfo(response?.data?.data));
+			showSuccess(response?.data?.message);
+		} catch (error) {
+			showError(error?.response?.data?.message);
+		}
+	};
 
-  useEffect(() => {
-    setExperienceInfos({
-      jobTitle: experience?.jobTitle,
-      company: experience?.company,
-      startDate: experience?.startDate,
-      endDate: experience?.endDate,
-      isWorking: experience?.isWorking,
-      achievements: experience?.achievements,
-    });
-  }, [experience]);
+	return (
+		<div className="grid bg-white mx-2 p-4 rounded-md shadow">
+			<h2 className="py-2 text-lg tracking-wide font-semibold">
+				My Job Experience
+			</h2>
+			<form onSubmit={handleSubmit(onSubmit)}>
+				<div className="mt-5 grid lg:grid-cols-2 gap-3">
+					<MultiSelect
+						name={"profession"}
+						control={control}
+						options={professions}
+						placeholder={"Professions"}
+						registering={register("profession")}
+						errors={errors["profession"]}
+						value={userInfo?.apps?.jobPortal?.profession}
+					/>
+					<TextInput
+						label={"Job Title"}
+						type={"text"}
+						value={userInfo?.apps?.jobPortal?.jobDetails?.jobTitle}
+						registering={register("jobTitle")}
+						errors={errors.jobTitle}
+					/>
+					<TextInput
+						label={"Recent Company Name"}
+						type={"text"}
+						value={
+							userInfo?.apps?.jobPortal?.jobDetails?.companyName
+						}
+						registering={register("companyName")}
+						errors={errors.companyName}
+					/>
+					<TextInput
+						label={"Company Location"}
+						type={"text"}
+						value={userInfo?.apps?.jobPortal?.jobDetails?.location}
+						registering={register("location")}
+						errors={errors.location}
+					/>
+					<TextInput
+						label={"Current CTC"}
+						type={"number"}
+						value={userInfo?.apps?.jobPortal?.jobDetails?.ctc}
+						registering={register("ctc")}
+						errors={errors.ctc}
+					/>
+					<TextInput
+						label={"Expected CTC"}
+						type={"number"}
+						value={userInfo?.apps?.jobPortal?.jobDetails?.eCtc}
+						registering={register("eCtc")}
+						errors={errors.eCtc}
+					/>
 
-  const handleExperienceInfos = (name, value) => {
-    setExperienceInfos({ ...experienceInfos, [name]: value });
-  };
+					<SelectInput
+						label={"Total Work Experience"}
+						options={experienceData}
+						name={"workExperience"}
+						control={control}
+						errors={errors.workExperience}
+						value={
+							userInfo?.apps?.jobPortal?.jobDetails
+								?.workExperience
+						}
+					/>
+					<MultiSelect
+						name={"skills"}
+						control={control}
+						options={skillOptions}
+						placeholder={"Skills"}
+						registering={register("skills")}
+						errors={errors["skills"]}
+						value={userInfo?.apps?.jobPortal?.skills}
+					/>
+					<MultiSelect
+						name={"preferredJobLocation"}
+						control={control}
+						options={locationOptions}
+						placeholder={"Preferred Job Location"}
+						registering={register("preferredJobLocation")}
+						errors={errors["preferredJobLocation"]}
+						value={userInfo?.apps?.jobPortal?.preferredJobLocation}
+					/>
 
-  const handleExperienceSave = () => {
-    dispatch(updateExperienceInfos({id: experience._id, infos: experienceInfos}))
-    console.log("Experie: ", experienceInfos);
-  };
-
-  return (
-    <div className="grid bg-white mx-2 p-4 rounded-md shadow">
-      <h2 className="py-2 text-lg tracking-wide font-semibold">
-        My Experience
-      </h2>
-      <div className="mt-5 grid lg:grid-cols-2 gap-3">
-        <InputForms
-          title={"Job Title"}
-          type={"text"}
-          placeText={"UI Designer"}
-          name={"jobTitle"}
-          handleChildValue={handleExperienceInfos}
-          value={experience?.jobTitle}
-        />
-        <InputForms
-          title={"Company Name"}
-          type={"text"}
-          placeText={"TechX"}
-          name={"company"}
-          handleChildValue={handleExperienceInfos}
-          value={experience?.company}
-        />
-        <InputForms
-          title={"Start Date"}
-          type={"date"}
-          placeText={""}
-          name={"startDate"}
-          handleChildValue={handleExperienceInfos}
-          value={formatDate(experience?.startDate)}
-        />
-        <InputForms
-          title={"End Date"}
-          type={"date"}
-          placeText={""}
-          name={"endDate"}
-          handleChildValue={handleExperienceInfos}
-          value={formatDate(experience?.endDate)}
-        />
-        <ChoiceSelection
-          label={"Currently Working"}
-          name={"isWorking"}
-          option={"currently working"}
-          handleChildValue={handleExperienceInfos}
-        />
-
-        <InputForms
-          title={"Achievements"}
-          type={"text"}
-          name={"achievements"}
-          placeText={"Award-Winning Mobile App Design"}
-          handleChildValue={handleExperienceInfos}
-          value={experience?.achievements}
-        />
-      </div>
-      <FormButton text={"Save"} saveParentValue={handleExperienceSave} />
-    </div>
-  );
+					<SelectInput
+						label={"Preferred Job Type"}
+						options={preferredJobType}
+						name={"preferredJobType"}
+						control={control}
+						errors={errors.preferredJobType}
+						value={userInfo?.apps?.jobPortal?.preferredJobType}
+					/>
+				</div>
+				<Button type="submit" className="w-fit mt-3 text-end">
+					Update
+				</Button>
+			</form>
+		</div>
+	);
 }
 
 export default ExperienceInfos;

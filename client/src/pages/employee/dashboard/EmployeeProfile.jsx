@@ -1,18 +1,17 @@
 import React, { useEffect } from 'react'
-import Profile from '../../../../../components/job-portal/employee/dashboard/profile/Profile'
 import { useDispatch} from "react-redux";
-import { getCertificateInfos, getEducationInfos, getExperienceInfos, getProfileInfos, getProjectInfos } from '../../../../../redux/employeeSlice';
+import Profile from '../../../components/employee/dashboard/profile/Profile';
 
 function EmployeeProfile() {
   const dispatch = useDispatch()
 
-  useEffect(() => {
-    dispatch(getProfileInfos());
-    dispatch(getEducationInfos());
-    dispatch(getExperienceInfos());
-    dispatch(getProjectInfos());
-    dispatch(getCertificateInfos());
-  }, [dispatch])
+  // useEffect(() => {
+  //   dispatch(getProfileInfos());
+  //   dispatch(getEducationInfos());
+  //   dispatch(getExperienceInfos());
+  //   dispatch(getProjectInfos());
+  //   dispatch(getCertificateInfos());
+  // }, [dispatch])
   
   return (
     <>

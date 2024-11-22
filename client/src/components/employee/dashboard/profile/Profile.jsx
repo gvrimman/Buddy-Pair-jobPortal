@@ -10,7 +10,7 @@ function Profile() {
     <div className="grid gap-5">
       <PersonalInfos />
       <EducationInfos />
-      <CertificateInfos />
+      {/* <CertificateInfos /> */}
       <ExperienceInfos />
       <ProjectInfos />
     </div>

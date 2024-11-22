@@ -1,100 +1,75 @@
 import React, { useEffect, useState } from "react";
-import InputForms from "../../../InputForms";
-import FormButton from "../../../FormButton";
 import { useDispatch, useSelector } from "react-redux";
-import { formatDate } from "../../../../../utils/formatDate";
-import { updateEducationInfos } from "../../../../../redux/employeeSlice";
+import TextInput from "../../../common/TextInput";
+import { formatDate } from "../../../../utils/formatDate";
+import FormButton from "../../../common/FormButton";
+import { Button } from "@material-tailwind/react";
+import useFormHandler from "../../../../hooks/ReactHookForm/Index";
+import { educationType, qualificationOptions } from "../../../../utils/constants";
+import SelectInput from "../../../common/SelectInput";
+import { profileEducationValidation } from "../../../../utils/yupValidations";
+import axiosInstance from "../../../../utils/axios";
+import { showError, showSuccess } from "../../../../utils/toast";
+import { updateUserInfo } from "../../../../Redux/reducers/userReducer";
 
 function EducationInfos() {
-  const { education } = useSelector((state) => state.employee);
+	const dispatch = useDispatch();
+  const { userInfo } = useSelector((state) => state.user);
+  // hook form validation
+  const { register, handleSubmit, errors, reset, control, watch } =
+		useFormHandler(profileEducationValidation);
 
-  const [educationalInfos, setEducationalInfos] = useState({
-    degree: "",
-    institution: "",
-    startDate: "",
-    endDate: "",
-    fieldOfStudy: "",
-    grade: "",
-  });
+		const onSubmit = async (data) => {
+			try {
+				const response = await axiosInstance.put(
+					`/auth/update-profile`,
+					data
+				);
+				console.log(response);
+				dispatch(updateUserInfo(response?.data?.data));
+				showSuccess(response?.data?.message);
+			} catch (error) {
+				showError(error?.response?.data?.message);
+			}
+		};
 
-  const dispatch = useDispatch();
-
-  useEffect(() => {
-    setEducationalInfos({
-      degree: education?.degree,
-      institution: education?.institution,
-      startDate: education?.startDate,
-      endDate: education?.endDate,
-      fieldOfStudy: education?.fieldOfStudy,
-      grade: education?.grade,
-    });
-  }, [education]);
-
-  const handleEducationInfos = (name, value) => {
-    setEducationalInfos({ ...educationalInfos, [name]: value });
-  };
-
-  const handleEducationSave = () => {
-    dispatch(updateEducationInfos({ id:education._id ,infos:educationalInfos}))
-    console.log("EDUCATION: ", educationalInfos);
-  };
-
-  return (
-    <div className="grid bg-white mx-2 p-4 rounded-md shadow">
-      <h2 className="py-2 text-lg tracking-wide font-semibold">My Education</h2>
-      <div className="mt-5 grid lg:grid-cols-2 gap-3">
-        <InputForms
-          title={"Degree"}
-          type={"text"}
-          placeText={"B.A.English"}
-          name={"degree"}
-          handleChildValue={handleEducationInfos}
-          value={education?.degree}
-        />
-        <InputForms
-          title={"Institution"}
-          type={"text"}
-          placeText={"JNU University"}
-          name={"institution"}
-          handleChildValue={handleEducationInfos}
-          value={education?.institution}
-        />
-        <InputForms
-          title={"Start Date"}
-          type={"date"}
-          placeText={""}
-          name={"startDate"}
-          handleChildValue={handleEducationInfos}
-          value={formatDate(education?.startDate)}
-        />
-        <InputForms
-          title={"End Date"}
-          type={"date"}
-          placeText={"20-12-2002"}
-          name={"endDate"}
-          handleChildValue={handleEducationInfos}
-          value={formatDate(education?.endDate)}
-        />
-        <InputForms
-          title={"Field Of Study"}
-          type={"text"}
-          placeText={"Literature"}
-          name={"fieldOfStudy"}
-          handleChildValue={handleEducationInfos}
-          value={education?.fieldOfStudy}
-        />
-        <InputForms
-          title={"Grade"}
-          type={"text"}
-          placeText={"A"}
-          name={"grade"}
-          handleChildValue={handleEducationInfos}
-          value={education?.grade}
-        />
-      </div>
-      <FormButton text={"Save"} saveParentValue={handleEducationSave} />
-    </div>
-  );
+	return (
+		<div className="grid bg-white mx-2 p-4 rounded-md shadow">
+			<h2 className="py-2 text-lg tracking-wide font-semibold">
+				My Education
+			</h2>
+			<form onSubmit={handleSubmit(onSubmit)}>
+				<div className="mt-5 grid lg:grid-cols-2 gap-3">
+					<SelectInput
+						label={"Qualification"}
+						options={qualificationOptions}
+						name={"qualification"}
+						control={control}
+						errors={errors.qualification}
+						value={userInfo?.apps?.jobPortal?.qualification}
+					/>
+					<TextInput
+						label={"Education Institution"}
+						type={"text"}
+						value={userInfo?.apps?.jobPortal?.educationInstitute}
+						registering={register("educationInstitute")}
+						errors={errors.educationInstitute}
+					/>
+					<SelectInput
+						label={"Education Type"}
+						options={educationType}
+						name={"educationType"}
+						control={control}
+						errors={errors.educationType}
+						value={userInfo?.apps?.jobPortal?.educationType}
+					/>
+				</div>
+				<Button type="submit" className="w-fit mt-3 text-end">
+					Update
+				</Button>
+			</form>
+		</div>
+	);
 }
 
 export default EducationInfos;

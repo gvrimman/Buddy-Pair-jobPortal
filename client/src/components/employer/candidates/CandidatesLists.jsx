@@ -6,7 +6,7 @@ import { GrOrganization } from "react-icons/gr";
 import { TbLoader2 } from "react-icons/tb";
 
 import { useNavigate } from "react-router-dom";
-import { useDispatch, useSelector } from "react-redux";
+import {  useSelector } from "react-redux";
 
 function CandidatesLists() {
 	const { candidates, isLoading } = useSelector((state) => state.employer);
@@ -14,8 +14,6 @@ function CandidatesLists() {
 	const [hoveredIndex, setHoveredIndex] = useState(null);
 
 	const navigate = useNavigate();
-	const dispatch = useDispatch();
-	// console.log(candidates);
 	return (
 		<div className={`grid gap-4 my-5 tracking-wide`}>
 			<div

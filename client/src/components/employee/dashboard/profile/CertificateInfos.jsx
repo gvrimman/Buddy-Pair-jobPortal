@@ -1,10 +1,9 @@
 import React, { useEffect, useState } from "react";
-import InputForms from "../../../InputForms";
-import FormButton from "../../../FormButton";
-import TextArea from "../../../TextArea";
 import { useDispatch, useSelector } from "react-redux";
-import { formatDate } from "../../../../../utils/formatDate";
-import { updateCertificationInfos } from "../../../../../redux/employeeSlice";
+import TextInput from "../../../common/TextInput";
+import FormButton from "../../../common/FormButton";
+import TextAreaInput from "../../../common/TextAreaInput";
+import { formatDate } from "../../../../utils/formatDate";
 
 function CertificateInfos() {
   const { certification } = useSelector((state) => state.employee);
@@ -44,7 +43,7 @@ function CertificateInfos() {
         My Certification
       </h2>
       <div className="mt-5 grid lg:grid-cols-2 gap-3">
-        <InputForms
+        <TextInput
           title={"Certification"}
           type={"text"}
           placeText={"Google Cloud Certified"}
@@ -52,7 +51,7 @@ function CertificateInfos() {
           handleChildValue={handleCertificationInfos}
           value={certification?.certificateName}
         />
-        <InputForms
+        <TextInput
           title={"Issued"}
           type={"text"}
           placeText={"Google"}
@@ -60,7 +59,7 @@ function CertificateInfos() {
           handleChildValue={handleCertificationInfos}
           value={certification?.issuedOrganization}
         />
-        <InputForms
+        <TextInput
           title={"Start Date"}
           type={"date"}
           placeText={""}
@@ -68,7 +67,7 @@ function CertificateInfos() {
           handleChildValue={handleCertificationInfos}
           value={formatDate(certification?.startDate)}
         />
-        <InputForms
+        <TextInput
           title={"End Date"}
           type={"date"}
           placeText={""}
@@ -76,7 +75,7 @@ function CertificateInfos() {
           handleChildValue={handleCertificationInfos}
           value={formatDate(certification?.endDate)}
         />
-        <TextArea
+        <TextAreaInput
           label={"Description"}
           name={"description"}
           value={certification?.description}

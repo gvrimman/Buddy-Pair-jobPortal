@@ -1,23 +1,45 @@
-import React, { useEffect } from "react";
+import React from "react";
 import { CiLocationOn } from "react-icons/ci";
 import { IoBagHandleOutline } from "react-icons/io5";
 import { FaMoneyBill1Wave } from "react-icons/fa6";
 import { GoClock } from "react-icons/go";
 import { IoBookmarkOutline } from "react-icons/io5";
+import { useDispatch, useSelector } from "react-redux";
+import { TbLoader2 } from "react-icons/tb";
+import { useNavigate } from "react-router-dom";
+import { bookmarkAJob } from "../../../apis/employeeApi";
+import { MdBookmarkAdded } from "react-icons/md";
 
 function JobListedSection() {
-	const jobs = null;
+	const navigate = useNavigate();
+	const dispatch = useDispatch();
+	const { jobs, isLoading, bookmarkedJobs } = useSelector(
+		(state) => state.employee
+	);
 
+	const handleBookMark = (id) => {
+		dispatch(bookmarkAJob(id));
+	};
 	return (
 		<div className="grid lg:grid-cols-2 gap-3 my-5">
+			<div
+				className={`fixed inset-0  bg-gray-500 opacity-30 transition  ${
+					isLoading ? "block" : "hidden"
+				}`}></div>
+			<span
+				className={`text-purple-900 text-2xl fixed top-1/2 left-1/2 transform -translate-x-1/2 -translate-y-1/2  ${
+					isLoading ? "block" : "hidden"
+				} `}>
+				<TbLoader2 className="animate-spin" />
+			</span>
 			{jobs?.map((item) => (
 				<div
 					key={item._id}
 					className="grid grid-cols-7 gap-3 p-4 bg-white outline outline-1 outline-[#673ab7] rounded-lg">
 					<div className="mt-1 ">
 						<img
-							src={item.owner?.companyLogo}
-							alt={item.company}
+							src={item?.owner?.companyLogo}
+							alt={item?.owner?.companyName}
 							className="w-12 h-12 object-cover rounded-lg"
 						/>
 					</div>
@@ -27,9 +49,9 @@ function JobListedSection() {
 							onClick={() =>
 								navigate(`/job-portal/employee/job/${item._id}`)
 							}>
-							{item.title}
+							{item?.jobTitle}
 						</h2>
-						<div className="md:flex lg:grid xl:grid-cols-4 gap-2  ">
+						<div className="md:flex lg:grid ">
 							<div className="text-sm capitalize text-slate-500 flex items-center gap-2">
 								<IoBagHandleOutline />
 								<p>{item.owner?.companyName}</p>
@@ -37,33 +59,37 @@ function JobListedSection() {
 
 							<div className="text-sm capitalize text-slate-500 flex items-center gap-2">
 								<CiLocationOn />
-								<p>{item.jobPlace}</p>
+								<p>{item?.jobPlace}</p>
 							</div>
 
 							<div className="hidden md:flex items-center gap-2 xl:col-span-2 text-sm text-slate-500 ">
 								<GoClock />
 								<p>
 									{new Date(
-										item.deadline
+										item?.deadline
 									).toLocaleDateString()}
 								</p>
 							</div>
 
 							<div className="hidden md:flex items-center text-sm capitalize text-slate-500  gap-2">
 								<FaMoneyBill1Wave />
-								<p>{item.offeredSalary}</p>
+								<p>{item?.offeredSalary}</p>
 							</div>
 						</div>
 						<div className="w-fit flex flex-wrap items-center gap-2 xl:gap-4 mt-2">
 							<p className="antialiased capitalize text-xs md:text-sm bg-white outline outline-1 outline-blue-500 px-2 py-[2px] rounded-lg">
-								{item.employmentType}
+								{item?.employmentType}
 							</p>
 						</div>
 					</div>
 					<div
 						className="mt-1 mx-auto text-lg hover:text-blue-500 cursor-pointer"
 						onClick={() => handleBookMark(item._id)}>
-						<IoBookmarkOutline />
+						{bookmarkedJobs.some((job) => job._id === item?._id) ? (
+							<MdBookmarkAdded />
+						) : (
+							<IoBookmarkOutline />
+						)}
 					</div>
 				</div>
 			))}

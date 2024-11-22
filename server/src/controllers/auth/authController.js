@@ -175,20 +175,28 @@ const employeeSignup = asyncHandler(async (req, res) => {
 
 	await employeeData.save();
 
-	const createdEmployee = await JobPortal.findById(employeeData._id);
-
-	// save createdEmployee id in user
-	await User.findByIdAndUpdate(req.user._id, {
-		"apps.jobPortal": createdEmployee._id,
-	});
-
-	if (!createdEmployee) {
-		throw new ApiError(400, "Employee not created");
+	if (!employeeData) {
+		throw new ApiError(400, "data not created");
 	}
 
-	res.json(
-		new ApiResponse(200, createdEmployee, "Signup as Employee Successful")
+	// save createdEmployee id in user
+	await User.findByIdAndUpdate(
+		req.user._id,
+		{
+			"apps.jobPortal": employeeData._id,
+		},
+		{
+			new: true,
+		}
 	);
+
+	const createdEmployee = await User.findById(req.user._id)
+		.select("-password -refreshToken")
+		.populate({
+			path: "apps.jobPortal",
+		});
+
+	res.json(new ApiResponse(200, createdEmployee, "Signup Completed"));
 });
 
 // add employer data
@@ -274,16 +282,26 @@ const employerSignup = asyncHandler(async (req, res) => {
 
 	await employerData.save();
 
-	const createdEmployer = await JobPortal.findById(employerData._id);
+	if (!employerData) {
+		throw new ApiError(400, "data not created");
+	}
 
 	// save createdEmployee id in user
-	await User.findByIdAndUpdate(req.user._id, {
-		"apps.jobPortal": createdEmployer._id,
-	});
+	await User.findByIdAndUpdate(
+		req.user._id,
+		{
+			"apps.jobPortal": employerData._id,
+		},
+		{
+			new: true,
+		}
+	);
 
-	if (!createdEmployer) {
-		throw new ApiError(400, "Employee not created");
-	}
+	const createdEmployer = await User.findById(req.user._id)
+		.select("-password -refreshToken")
+		.populate({
+			path: "apps.jobPortal",
+		});
 
 	res.json(
 		new ApiResponse(200, createdEmployer, "Signup as Employer Successful")
@@ -314,9 +332,11 @@ const login = asyncHandler(async (req, res) => {
 	isUser.refreshToken = refreshToken;
 	await isUser.save();
 
-	const loggedInUser = await User.findById(isUser._id).select(
-		"-password -refreshToken"
-	);
+	const loggedInUser = await User.findById(isUser._id)
+		.select("-password -refreshToken")
+		.populate({
+			path: "apps.jobPortal",
+		});
 	const options = {
 		httpOnly: true,
 		secure: true,
@@ -328,9 +348,90 @@ const login = asyncHandler(async (req, res) => {
 		.json(new ApiResponse(200, loggedInUser, "Login Successful"));
 });
 
+const updateProfileInfo = asyncHandler(async (req, res) => {
+	const {
+		username,
+		email,
+		phone,
+		gender,
+		dob,
+		qualification,
+		educationInstitute,
+		educationType,
+		profession,
+		jobDetails,
+		skills,
+		preferredJobLocation,
+		preferredJobType,
+		socialLinks,
+	} = req.body;
+	const profileImage = req.files[0];
+	const userId = req.user._id;
+
+
+	// check if email and phone already exist
+	const userExist = await User.findOne({ email: email });
+	if (userExist && userExist._id.toString() !== userId.toString()) {
+		throw new ApiError(409, "Email already used, try another..");
+	} else if (userExist && userExist._id.toString() !== userId.toString()) {
+		throw new ApiError(409, "Contact number already exists..");
+	}
+
+	// update user data
+	const user = await User.findByIdAndUpdate(
+		userId,
+		{
+			username,
+			email,
+			phone,
+		},
+		{
+			new: true,
+		}
+	);
+
+	if (!user) {
+		throw new ApiError(400, "user not updated");
+	}
+
+	// update employee data
+	const employee = await JobPortal.findOneAndUpdate(
+		{ userId },
+		{
+			gender,
+			dob,
+			qualification,
+			educationInstitute,
+			educationType,
+			profession,
+			jobDetails,
+			skills,
+			preferredJobLocation,
+			preferredJobType,
+			socialLinks,
+			profileImage: profileImage?.location,
+		},
+		{
+			new: true,
+		}
+	);
+	if (!employee) {
+		throw new ApiError(400, "employee not found");
+	}
+
+	const updatedUser = await User.findById(userId)
+		.select("-password -refreshToken")
+		.populate({
+			path: "apps.jobPortal",
+		});
+
+	res.json(new ApiResponse(200, updatedUser, "profile updated"));
+});
+
 module.exports = {
 	signup,
 	employeeSignup,
 	employerSignup,
 	login,
+	updateProfileInfo,
 };

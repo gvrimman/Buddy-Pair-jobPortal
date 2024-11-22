@@ -4,7 +4,11 @@ import avatar from "/assets/images/office.png";
 import { Button } from "@material-tailwind/react";
 import { useNavigate } from "react-router-dom";
 import { useDispatch } from "react-redux";
-import { companySizeOptions, industyTypeOptions, preferredJobType } from "../../utils/constants";
+import {
+	companySizeOptions,
+	industyTypeOptions,
+	preferredJobType,
+} from "../../utils/constants";
 import { setUser } from "../../Redux/reducers/userReducer";
 import TextInput from "../../components/common/TextInput";
 import SelectInput from "../../components/common/SelectInput";
@@ -64,7 +68,7 @@ function EmployerInfo({ userData, onClose }) {
 					},
 				}
 			);
-
+			dispatch(setUser(response?.data?.data));
 			onClose();
 			navigate("/job-portal/employer");
 			showSuccess(response.data?.message);

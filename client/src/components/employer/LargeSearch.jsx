@@ -5,6 +5,7 @@ import { CiLocationOn } from "react-icons/ci";
 import { useDispatch, useSelector } from "react-redux";
 import { useNavigate } from "react-router-dom";
 import { getCandidates } from "../../apis/employerApi";
+import { showError } from "../../utils/toast";
 
 function LargeSearch() {
 	const [searchTerms, setSearchTerms] = useState({
@@ -16,10 +17,13 @@ function LargeSearch() {
 
 	const handleSubmit = (e) => {
 		e.preventDefault();
+		if (searchTerms.name === "" && searchTerms.location === "") {
+			showError("Please enter job location or candidate name");
+			return;
+		}
 		dispatch(getCandidates(searchTerms));
 		navigate("/job-portal/employer/candidates");
 	};
-
 
 	return (
 		<div className="hidden lg:block">

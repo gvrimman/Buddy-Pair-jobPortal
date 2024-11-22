@@ -37,7 +37,9 @@ const verifyJwt = asyncHandler(async (req, _, next) => {
 // protect routes by role middleware
 const authorize = (...roles) => {
 	return async (req, res, next) => {
-		const user = await User.findById(req.user._id).populate("apps.jobPortal")
+		const user = await User.findById(req.user._id).populate(
+			"apps.jobPortal"
+		);
 		if (!roles.includes(user?.apps?.jobPortal?.role)) {
 			throw new ApiError(401, "Unauthorized access");
 		}

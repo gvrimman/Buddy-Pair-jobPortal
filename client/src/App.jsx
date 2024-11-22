@@ -20,6 +20,14 @@ import Home from "./pages/employee/Home";
 import FindJobs from "./pages/employee/FindJobs";
 import HomeCompanies from "./pages/employee/HomeCompanies";
 import UpdateJob from "./components/employer/dashboard/manageJobs/UpdateJob";
+import SingleJob from "./pages/employee/SingleJob";
+import Saved from "./pages/employee/Saved";
+import EmployeeBookMarked from "./pages/employee/dashboard/EmployeeBookMarked";
+import EmployeeProfile from "./pages/employee/dashboard/EmployeeProfile";
+import EmployeeDashboard from "./pages/employee/dashboard/EmployeeDashboard";
+import EmployeeResume from "./pages/employee/dashboard/EmployeeResume";
+import EmployeeApplied from "./pages/employee/dashboard/EmployeeApplied";
+import EmployeeChangePassword from "./pages/employee/dashboard/EmployeeChangePassword";
 
 function App() {
 	return (
@@ -78,13 +86,13 @@ function App() {
 					<Route index element={<Home />} />
 					<Route path="jobs" element={<FindJobs />} />
 					<Route path="companies" element={<HomeCompanies />} />
-					{/* <Route path="saved-jobs" element={<Saved />} /> */}
+					<Route path="saved-jobs" element={<Saved />} />
 					{/* <Route path="notifications" element={<Notifications />} /> */}
 					{/* <Route
 						path="information-form"
 						element={<MultiInfoForm />}
 					/> */}
-					{/* <Route path="job/:id" element={<SingleJob />} /> */}
+					<Route path="job/:id" element={<SingleJob />} />
 					{/* <Route path="company/:id" element={<SingleCompany />} /> */}
 				</Route>
 
@@ -94,23 +102,23 @@ function App() {
 				<Route
 					path="/job-portal/employee/dashboard"
 					element={<EmployeeDashboardLayout />}>
-					{/* <Route index element={<EmployeeDashboard />} /> */}
-					{/* <Route path="profile" element={<EmployeeProfile />} /> */}
-					{/* <Route path="applied-jobs" element={<EmployeeApplied />} /> */}
-					{/* <Route
+					<Route index element={<EmployeeDashboard />} />
+					<Route path="profile" element={<EmployeeProfile />} />
+					<Route path="applied-jobs" element={<EmployeeApplied />} />
+					<Route
 						path="bookmarked-jobs"
 						element={<EmployeeBookMarked />}
-					/> */}
+					/>
 					{/* <Route path="resume" element={<EmployeeResume />} /> */}
 					{/* <Route path="messages" element={<EmployeeMessages />} /> */}
 					{/* <Route
 						path="notification"
 						element={<EmployeeNotification />}
 					/> */}
-					{/* <Route
+					<Route
 						path="change-password"
 						element={<EmployeeChangePassword />}
-					/> */}
+					/>
 				</Route>
 
 				{/* Job Portal Employee Dashboard End */}

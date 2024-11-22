@@ -1,5 +1,4 @@
 import React from 'react'
-import Preference from './Preference'
 
 function Resume() {
   return (

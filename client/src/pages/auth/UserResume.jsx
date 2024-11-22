@@ -45,6 +45,8 @@ function UserResume({ onClose, setUserData, userData }) {
 					},
 				}
 			);
+			console.log(response);
+			dispatch(setUser(response?.data?.data));
 			onClose();
 			navigate("/job-portal/employee");
 			showSuccess(response.data?.message);

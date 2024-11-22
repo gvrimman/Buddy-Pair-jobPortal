@@ -10,7 +10,7 @@ function SwitchSearch({ title, contents, setQuery }) {
 
 		setQuery((prev) => ({
 			...prev,
-			[title.toLowerCase()]: newValues,
+			[title.replace(/\s+/g, "").toLowerCase()]: newValues,
 		}));
 		setSelectedValues(newValues);
 	};

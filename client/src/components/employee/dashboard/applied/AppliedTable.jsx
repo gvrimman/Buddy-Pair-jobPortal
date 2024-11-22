@@ -1,35 +1,51 @@
 import React, { useEffect } from "react";
-import { useSelector } from "react-redux";
+import { useDispatch, useSelector } from "react-redux";
 
-import { resetEmployeeSuccess } from "../../../../../redux/employeeSlice";
 import TableBody from "../TableBody";
 import TableHead from "../TableHead";
+import { deleteAAppiedJob } from "../../../../apis/employeeApi";
+import { TbLoader2 } from "react-icons/tb";
 
 function AppliedTable() {
-  const { appliedJobs, success } = useSelector((state) => state.employee);
+  const { appliedJobs, isLoading } = useSelector((state) => state.employee);
 
-  useEffect(() => {
-    if (success) {
-      const timer = setTimeout(() => {
-        dispatch(resetEmployeeSuccess());
-      }, 5000);
-      return () => clearTimeout(timer);
-    }
-  }, [success]);
+   const dispatch = useDispatch();
+   const handleDelete = (id) => {
+		dispatch(deleteAAppiedJob(id));
+   };
+
+
+  
   return (
-    <div className="bg-white p-4 grid gap-4 rounded-md shadow">
-      <h1 className="text-xl font-semibold tracking-wider">Applied Jobs</h1>
-      <table>
-        <thead className="bg-blue-100 text-blue-500">
-            <TableHead />
-        </thead>
-        <tbody>
-          {appliedJobs?.map((job, index) => (
-            <TableBody key={index} job={job} />
-          ))}
-        </tbody>
-      </table>
-    </div>
+		<div className="bg-white p-4 grid gap-4 rounded-md shadow">
+			<h1 className="text-xl font-semibold tracking-wider">
+				Applied Jobs
+			</h1>
+			<table>
+				<div
+					className={`fixed inset-0  bg-gray-500 opacity-30 transition  ${
+						isLoading ? "block" : "hidden"
+					}`}></div>
+				<span
+					className={`text-purple-900 text-2xl fixed top-1/2 left-1/2 transform -translate-x-1/2 -translate-y-1/2  ${
+						isLoading ? "block" : "hidden"
+					} `}>
+					<TbLoader2 className="animate-spin" />
+				</span>
+				<thead className="bg-blue-100 text-blue-500">
+					<TableHead />
+				</thead>
+				<tbody>
+					{appliedJobs?.map((job, index) => (
+						<TableBody
+							key={index}
+							job={job}
+							handleDelete={handleDelete}
+						/>
+					))}
+				</tbody>
+			</table>
+		</div>
   );
 }
 

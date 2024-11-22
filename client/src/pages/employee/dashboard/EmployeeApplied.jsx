@@ -1,13 +1,14 @@
 import React, { useEffect } from 'react'
-import AppliedTable from '../../../../../components/job-portal/employee/dashboard/applied/AppliedTable'
 import { useDispatch } from 'react-redux'
-import { getAppliedJobs } from '../../../../../redux/employeeSlice';
+import { getAppiedJobs } from '../../../apis/employeeApi';
+import AppliedTable from '../../../components/employee/dashboard/applied/AppliedTable';
 
 function EmployeeApplied() {
     const dispatch = useDispatch();
 
     useEffect(() => {
-        dispatch(getAppliedJobs());
+        dispatch(getAppiedJobs());
+        
     }, [dispatch]);
   return (
     <>

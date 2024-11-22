@@ -1,12 +1,14 @@
 const express = require("express");
 const { upload } = require("../middlewares/multer");
 
-const { verifyJwt } = require("../middlewares/jwtAuth");
+const { verifyJwt, authorize } = require("../middlewares/jwtAuth");
 const {
 	signup,
 	employerSignup,
 	employeeSignup,
 	login,
+	updateProfileInfo,
+	updateAdditionalInfo,
 } = require("../controllers/auth/authController");
 
 const router = express.Router();
@@ -34,5 +36,15 @@ router.route("/employer-signup").post(
 
 // user sign in
 router.route("/login").post(login);
+
+// update user profile
+router
+	.route("/update-profile")
+	.put(
+		verifyJwt,
+		upload.any({ name: "profileImage", maxCount: 1 }),
+		authorize("employee"),
+		updateProfileInfo
+	);
 
 module.exports = router;

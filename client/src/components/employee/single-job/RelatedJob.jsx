@@ -3,7 +3,6 @@ import { useDispatch, useSelector } from "react-redux";
 import { useNavigate, useParams } from "react-router-dom";
 import { IoBookmarkOutline } from "react-icons/io5";
 
-import { getRelatedJobs, setJobBookMarked } from "../../../../redux/employeeSlice";
 import JobIconDetails from "../JobIconDetails";
 
 function RelatedJob() {
@@ -18,10 +17,7 @@ function RelatedJob() {
     dispatch(setJobBookMarked(id));
   };
 
-  useEffect(() => {
-    dispatch(getRelatedJobs(id));
-  }, [id, dispatch]);
-
+  
   return (
     <div className="max-w-4xl mx-auto py-10">
       <div className="px-3 grid gap-3">
