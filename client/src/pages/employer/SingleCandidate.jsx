@@ -6,6 +6,7 @@ import CandidateExperience from "../../components/employer/single-candidates/Can
 import CandidateEducation from "../../components/employer/single-candidates/CandidateEducation";
 import AboutCandidate from "../../components/employer/single-candidates/AboutCandidate";
 import SocialMedia from "../../components/employer/single-candidates/SocialMedia";
+import MessageMe from "../../components/employer/single-candidates/MessageMe";
 import SingleCandidateSide from "../../components/employer/single-candidates/SingleCandidateSide";
 import SingleCandidateHead from "../../components/employer/single-candidates/SingleCandidateHead";
 import { getCandidateById } from "../../apis/employerApi";
@@ -26,7 +27,7 @@ function SingleCandidate() {
         <div className="w-full lg:w-4/5 grid gap-4">
           <SingleCandidateSide />
           <SocialMedia />
-          <button className="px-4 py-2 bg-blue-600 hover:bg-blue-800 text-white text-base tracking-wider rounded-md">Message Me</button>
+          <MessageMe />
         </div>
 
         <div className="col-span-2 px-3 ">

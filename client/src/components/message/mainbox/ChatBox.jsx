@@ -9,13 +9,13 @@ function ChatBox({ userImg, userId, chat, receiver }) {
   const fromMe = chat.senderId === userId;
   const extractedTime = extractTime(chat.createdAt);
   const chatClass = fromMe ? "chat-end mr-2" : "chat-start ms-2";
-  const profilePic = fromMe ? userImg : receiver.profileImage;
+  const profilePic = fromMe ? userImg : receiver.user.profilePic;
   const shakeClass = chat.shouldShake ? "shake" : "";
   const dispatch = useDispatch();
 
   useEffect(() => {
-    if (chat.senderId === receiver._id) {
-      dispatch(markUserMessagesAsRead(receiver._id));
+    if (chat.senderId === receiver.userId) {
+      dispatch(markUserMessagesAsRead(receiver.userId));
     }
   }, [receiver]);
 

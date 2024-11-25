@@ -15,7 +15,7 @@ export const getOtherUsers = () => async (dispatch) => {
 	dispatch(fetchStart());
 
 	try {
-		const response = await axiosInstance.get("/message/other-users");
+		const response = await axiosInstance.get("/message/chat/all");
 		// console.log(response);
 		dispatch(fetchSuccess(response?.data?.data));
 	} catch (error) {
@@ -37,12 +37,13 @@ export const getChats = (id) => async (dispatch) => {
 };
 
 export const setSendChat = (data) => async (dispatch) => {
-	const { id, message } = data;
+	const { id, message, chatId } = data;
 	dispatch(fetchStart());
 	try {
 		const response = await axiosInstance.post(`/message/send/${id}`, {
-			message: message,
-		});
+      message: message,
+      chatId,
+    });
 		dispatch(setChat(response?.data?.data));
 	} catch (error) {
 		dispatch(fetchError(error.message));

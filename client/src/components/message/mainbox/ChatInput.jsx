@@ -8,7 +8,7 @@ import { setSendChat } from "../../../apis/messageApi";
 import { showError } from "../../../utils/toast";
 // import { setSendChat } from "../../../../redux/chatSlice";
 
-function ChatInput({ receiverId }) {
+function ChatInput({ receiver }) {
   const [chatValue, setChatValue] = useState("");
   const dispatch = useDispatch();
 
@@ -19,7 +19,13 @@ function ChatInput({ receiverId }) {
   const handleSendBtn = async () => {
     if (!chatValue) return;
     try {
-      dispatch(setSendChat({ id: receiverId.toString(), message: chatValue }));
+      dispatch(
+        setSendChat({
+          id: receiver.userId.toString(),
+          message: chatValue,
+          chatId: receiver.chatId.toString(),
+        })
+      );
       const audio = new Audio(messagePop);
       audio.play();
       setChatValue("");

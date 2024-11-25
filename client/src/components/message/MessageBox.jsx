@@ -6,6 +6,8 @@ import SearchBar from "./sidebar/SearchBar";
 import UsersList from "./sidebar/UsersList";
 import DefaultChatBox from "./DefaultChatBox";
 import SkeltonList from "./sidebar/SkeltonList";
+import { setSelectedUserById } from "../../Redux/reducers/chatReducer";
+import { setSelected } from "../../Redux/reducers/socketReducer";
 import { getOtherUsers } from "./../../apis/messageApi";
 
 function MessageBox() {
@@ -13,11 +15,18 @@ function MessageBox() {
   const { userLists } = useSelector((state) => state.chat);
   const { selected } = useSelector((state) => state.socket);
 
-
-
   useEffect(() => {
     dispatch(getOtherUsers());
   }, [dispatch]);
+
+  useEffect(() => {
+    const urlParams = new URLSearchParams(window.location.search);
+    const user = urlParams.get("user");
+    if (user && userLists) {
+      dispatch(setSelectedUserById(user));
+      dispatch(setSelected(true));
+    }
+  }, [dispatch, userLists]);
 
   return (
     <div className="w-full h-[90%] md:flex gap-2">

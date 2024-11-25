@@ -20,14 +20,14 @@ function MainBox() {
 	const lastChat = useRef(null);
 
 	useEffect(() => {
-		if (selectedUser?._id) {
-			dispatch(getChats(selectedUser?._id));
+		if (selectedUser?.userId) {
+			dispatch(getChats(selectedUser?.userId));
 		}
 	}, [selectedUser]);
 
 	useEffect(() => {
 		if (isAuthenticated) {
-			setUserId(userInfo._id);
+			setUserId(userInfo.userId);
 		}
 	}, []);
 
@@ -62,7 +62,7 @@ function MainBox() {
 					)}
 				</div>
 				<div className=" absolute bottom-56 w-full">
-					<ChatInput receiverId={selectedUser?.userId?._id} />
+					<ChatInput receiver={selectedUser} />
 				</div>
 			</div>
 		</div>
