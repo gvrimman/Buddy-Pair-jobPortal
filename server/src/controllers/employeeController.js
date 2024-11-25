@@ -14,7 +14,7 @@ const getJobs = asyncHandler(async (req, res) => {
 		jobtype = [],
 		datePosted = "",
 		page = Number(req.query.page) || 1,
-		limit = Number(req.query.limit) || 10,
+		limit = Number(req.query.limit) || 5,
 		sort = "newest",
 	} = req.query;
 
@@ -72,6 +72,9 @@ const getJobs = asyncHandler(async (req, res) => {
 		sortOrder.createdAt = 1;
 	}
 
+	// total count of results
+	const totalCount = await Job.countDocuments(query);
+
 	const jobs = await Job.aggregate([
 		{
 			$lookup: {
@@ -110,7 +113,9 @@ const getJobs = asyncHandler(async (req, res) => {
 		throw new ApiError(400, "jobs not found");
 	}
 
-	res.json(new ApiResponse(200, jobs, "jobs"));
+	const hasMore = page * limit < totalCount;
+
+	res.json(new ApiResponse(200, { jobs, hasMore }, "jobs"));
 });
 
 const getJob = asyncHandler(async (req, res) => {
@@ -280,8 +285,6 @@ const getAppliedJobs = asyncHandler(async (req, res) => {
 			},
 		},
 	]);
-
-	console.log(applied);
 
 	if (!applied) {
 		throw new ApiError(400, "employee not found");

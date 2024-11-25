@@ -2,7 +2,7 @@ import React, { useEffect, useState } from "react";
 import { CiSearch } from "react-icons/ci";
 import { CiLocationOn } from "react-icons/ci";
 
-function TextSearch({ firsttitle, secondtitle, setQuery }) {
+function TextSearch({ firsttitle, secondtitle, setQuery ,query }) {
 	const handleChange = (e) => {
 		setQuery((prev) => ({ ...prev, [e.target.name]: e.target.value }));
 	};
@@ -17,9 +17,9 @@ function TextSearch({ firsttitle, secondtitle, setQuery }) {
 				<input
 					className="w-fit outline-none"
 					type="text"
-					placeholder="job title"
+					placeholder="Keywords"
 					name="name"
-					// value={inputValue.title}
+					value={query?.name || ""}
 					onChange={handleChange}
 				/>
 			</div>
@@ -34,7 +34,7 @@ function TextSearch({ firsttitle, secondtitle, setQuery }) {
 					type="text"
 					placeholder="City "
 					name="location"
-					// value={inputValue.jobPlace}
+					value={query?.location || ""}
 					onChange={handleChange}
 				/>
 			</div>

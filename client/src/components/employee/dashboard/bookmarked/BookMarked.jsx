@@ -17,9 +17,16 @@ function BookMarked() {
 
 	return (
 		<div className="bg-white p-4 grid gap-4 rounded-md shadow">
-			<h1 className="text-xl font-semibold tracking-wider">
-				BookMarked Jobs
-			</h1>
+			<div className="flex items-center justify-between">
+				{" "}
+				<h1 className="text-xl font-semibold tracking-wider">
+					BookMarked Jobs
+				</h1>
+				<p className="font-semibold">
+					You have bookmarked {bookmarkedJobs?.length} jobs
+				</p>
+			</div>
+
 			<table>
 				<div
 					className={`fixed inset-0  bg-gray-500 opacity-30 transition  ${
@@ -35,7 +42,9 @@ function BookMarked() {
 					<TableHead />
 				</thead>
 				<tbody>
-					{bookmarkedJobs?.map((job, index) => (
+					{bookmarkedJobs?.length === 0 ? (
+						<p className="center font-semibold my-5 w-full">No bookmarked jobs</p>
+					) : bookmarkedJobs?.map((job, index) => (
 						<TableBody
 							key={index}
 							job={job}

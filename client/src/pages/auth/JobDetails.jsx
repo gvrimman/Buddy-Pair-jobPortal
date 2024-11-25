@@ -5,8 +5,10 @@ import SelectInput from "../../components/common/SelectInput";
 import useFormHandler from "../../hooks/ReactHookForm/Index";
 import { jobValidation } from "../../utils/yupValidations";
 import { experienceData } from "../../utils/constants";
+import { useNavigate } from 'react-router-dom';
 
 function JobDetails({ setUserData, onClose, openUserResumeModal }) {
+	const navigate = useNavigate()
 	const { register, handleSubmit, errors, reset, control, watch } =
 		useFormHandler(jobValidation);
 
@@ -74,7 +76,9 @@ function JobDetails({ setUserData, onClose, openUserResumeModal }) {
 					/>
 				</div>
 				<div className="text-end">
-					<Button className="rounded py-2 px-3 sm:py-3 sm:px-4 mx-1 bg-red-400">
+					<Button
+						onClick={() => navigate("/")}
+						className="rounded py-2 px-3 sm:py-3 sm:px-4 mx-1 bg-red-400">
 						Close
 					</Button>
 					<Button

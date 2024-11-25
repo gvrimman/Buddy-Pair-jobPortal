@@ -1,6 +1,5 @@
 import React, { useEffect, useState } from "react";
 import avatar from "/assets/images/office.png";
-
 import { Button } from "@material-tailwind/react";
 import { useNavigate } from "react-router-dom";
 import { useDispatch } from "react-redux";
@@ -16,8 +15,11 @@ import useFormHandler from "../../hooks/ReactHookForm/Index";
 import { emplyerInfoValidation } from "../../utils/yupValidations";
 import { showError, showSuccess } from "../../utils/toast";
 import axiosInstance from "../../utils/axios";
+import { RiLoader4Line } from "react-icons/ri";
 
 function EmployerInfo({ userData, onClose }) {
+	const [isLoading, setIsLoading] = useState(false);
+
 	const navigate = useNavigate();
 	const dispatch = useDispatch();
 	const [previewSrc, setPreviewSrc] = useState(null);
@@ -59,6 +61,7 @@ function EmployerInfo({ userData, onClose }) {
 				employmentType: data.employmentType,
 				companyLinkedin: data.companyLinkedin,
 			};
+			setIsLoading(true);
 			const response = await axiosInstance.post(
 				"/auth/employer-signup",
 				finalData,
@@ -69,11 +72,13 @@ function EmployerInfo({ userData, onClose }) {
 				}
 			);
 			dispatch(setUser(response?.data?.data));
+			setIsLoading(false);
 			onClose();
 			navigate("/job-portal/employer");
 			showSuccess(response.data?.message);
 		} catch (error) {
 			console.log(error);
+			setIsLoading(false);
 			showError(error.response?.data?.message);
 		}
 	};
@@ -81,7 +86,7 @@ function EmployerInfo({ userData, onClose }) {
 	return (
 		<div className=" flex flex-col gap-4 px-1">
 			<form onSubmit={handleSubmit(onSubmit)}>
-				<div className=" rounded-full w-20 sm:w-24 aspect-square overflow-hidden mx-auto relative">
+				<div className=" rounded-full w-20 sm:w-24 aspect-square overflow-hidden mx-auto relative mb-4">
 					<div className="absolute top-1/2 -translate-y-1/2 cursor-pointer opacity-0 scale-150">
 						<TextInput
 							type={"file"}
@@ -94,6 +99,7 @@ function EmployerInfo({ userData, onClose }) {
 						src={previewSrc ? previewSrc : avatar}
 						alt=""
 						className="w-full h-full object-contain"
+						loading="lazy"
 					/>
 				</div>
 				<div className="relative grid md:grid-cols-2 gap-3 md:gap-4 mb-3">
@@ -159,13 +165,20 @@ function EmployerInfo({ userData, onClose }) {
 					/>
 				</div>
 				<div className="text-end">
-					<Button className="rounded py-2 px-3 sm:py-3 sm:px-4 mx-1 bg-red-400">
+					<Button onClick={()=>navigate("/")} className="rounded py-2 px-3 sm:py-3 sm:px-4 mx-1 bg-red-400">
 						Close
 					</Button>
 					<Button
+						disabled={isLoading}
 						type="submit"
 						className="rounded py-2 px-3 sm:py-3 sm:px-4 mx-1 bg-customViolet">
-						Next
+						{isLoading ? (
+							<span>
+								<RiLoader4Line className="animate-spin text-xl" />
+							</span>
+						) : (
+							"Next"
+						)}
 					</Button>
 				</div>
 			</form>

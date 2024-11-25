@@ -8,8 +8,10 @@ import axiosInstance from "../../utils/axios";
 import { showError, showSuccess } from "../../utils/toast";
 import { setUser } from "../../Redux/reducers/userReducer";
 import TextInput from "../../components/common/TextInput";
+import { RiLoader4Line } from "react-icons/ri";
 
 function UserResume({ onClose, setUserData, userData }) {
+	const [isLoading, setIsLoading] = useState(false);
 	const navigate = useNavigate();
 	const dispatch = useDispatch();
 	const [pdfFile, setPdfFile] = useState(null);
@@ -35,6 +37,7 @@ function UserResume({ onClose, setUserData, userData }) {
 				...userData,
 				resume: pdfFile,
 			};
+			setIsLoading(true);
 
 			const response = await axiosInstance.post(
 				"/auth/employee-signup",
@@ -45,12 +48,13 @@ function UserResume({ onClose, setUserData, userData }) {
 					},
 				}
 			);
-			console.log(response);
 			dispatch(setUser(response?.data?.data));
+			setIsLoading(false);
 			onClose();
 			navigate("/job-portal/employee");
 			showSuccess(response.data?.message);
 		} catch (error) {
+			setIsLoading(false);
 			console.log(error);
 			showError(error.response?.data?.message);
 		}
@@ -66,7 +70,7 @@ function UserResume({ onClose, setUserData, userData }) {
 				</p>
 			</div>
 			{pdfPreviewUrl && (
-				<div className="h-[50vh] overflow-hidden">
+				<div className="h-[50vh] overflow-hidden pdf-scroll">
 					<Worker
 						workerUrl={`https://unpkg.com/pdfjs-dist@3.4.120/build/pdf.worker.min.js`}>
 						<Viewer
@@ -87,14 +91,23 @@ function UserResume({ onClose, setUserData, userData }) {
 			</div>
 
 			<div className="text-end">
-				<Button className="rounded py-2 px-3 sm:py-3 sm:px-4 mx-1 bg-red-400">
+				<Button
+					onClick={() => navigate("/")}
+					className="rounded py-2 px-3 sm:py-3 sm:px-4 mx-1 bg-red-400">
 					Close
 				</Button>
 				<Button
+					disabled={isLoading}
 					onClick={handleSubmit}
 					type="submit"
 					className="rounded py-2 px-3 sm:py-3 sm:px-4 mx-1 bg-customViolet">
-					Next
+					{isLoading ? (
+						<span>
+							<RiLoader4Line className="animate-spin text-xl" />
+						</span>
+					) : (
+						"Next"
+					)}
 				</Button>
 			</div>
 		</div>

@@ -79,6 +79,7 @@ function InformationForm() {
 								src={infoValues.companyLogo}
 								className="w-24 h-24  object-cover rounded-full"
 								alt="user-image"
+								loading="lazy"
 							/>
 						) : (
 							<div className="border-2 border-[#673ab7] text-[#673ab7] rounded-full p-4 text-5xl">

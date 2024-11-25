@@ -22,8 +22,14 @@ function ExperienceInfos() {
 	const { userInfo } = useSelector((state) => state.user);
 	// hook form validation
 	const { register, handleSubmit, errors, reset, control, watch } =
-		useFormHandler(profileJobValidation);
-
+		useFormHandler(profileJobValidation, {
+			defaultValues: {
+				profession: userInfo?.apps?.jobPortal?.profession || [],
+				skills: userInfo?.apps?.jobPortal?.skills || [],
+				preferredJobLocation:
+					userInfo?.apps?.jobPortal?.preferredJobLocation || [],
+			},
+		});
 	const onSubmit = async (data) => {
 		const formatedData = {
 			jobDetails: {
@@ -40,11 +46,17 @@ function ExperienceInfos() {
 				(loc) => loc.value
 			),
 			preferredJobType: data.preferredJobType,
+			resume: data.resume,
 		};
 		try {
 			const response = await axiosInstance.put(
 				`/auth/update-profile`,
-				formatedData
+				formatedData,
+				{
+					headers: {
+						"Content-Type": "multipart/form-data",
+					},
+				}
 			);
 			dispatch(updateUserInfo(response?.data?.data));
 			showSuccess(response?.data?.message);
@@ -65,7 +77,7 @@ function ExperienceInfos() {
 						control={control}
 						options={professions}
 						placeholder={"Professions"}
-						registering={register("profession")}
+						// registering={register("profession")}
 						errors={errors["profession"]}
 						value={userInfo?.apps?.jobPortal?.profession}
 					/>
@@ -123,7 +135,7 @@ function ExperienceInfos() {
 						control={control}
 						options={skillOptions}
 						placeholder={"Skills"}
-						registering={register("skills")}
+						// registering={register("skills")}
 						errors={errors["skills"]}
 						value={userInfo?.apps?.jobPortal?.skills}
 					/>
@@ -132,7 +144,7 @@ function ExperienceInfos() {
 						control={control}
 						options={locationOptions}
 						placeholder={"Preferred Job Location"}
-						registering={register("preferredJobLocation")}
+						// registering={register("preferredJobLocation")}
 						errors={errors["preferredJobLocation"]}
 						value={userInfo?.apps?.jobPortal?.preferredJobLocation}
 					/>
@@ -145,6 +157,23 @@ function ExperienceInfos() {
 						errors={errors.preferredJobType}
 						value={userInfo?.apps?.jobPortal?.preferredJobType}
 					/>
+					<div className="flex gap-3 items-center">
+						<TextInput
+							type={"file"}
+							label={"Update Resume"}
+							registering={register("resume")}
+							errors={errors["resume"]}
+						/>
+						{userInfo?.apps?.jobPortal?.resume ? (
+							<a href={userInfo?.apps?.jobPortal?.resume}>
+								<Button className="whitespace-nowrap bg-transparent text-black border border-black">
+									dowload resume
+								</Button>
+							</a>
+						) : (
+							""
+						)}
+					</div>
 				</div>
 				<Button type="submit" className="w-fit mt-3 text-end">
 					Update

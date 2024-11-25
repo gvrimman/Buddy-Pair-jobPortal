@@ -11,12 +11,8 @@ function EmployerLayout() {
   const [toggleSideBar, setToggleSideBar] = useState(true);
   const [hide, setHide] = useState(true);
   const { pathname } = useLocation();
-  // const { userId } = useAuthContext();
   const dispatch = useDispatch()
 
-  // useEffect(() => {
-  //   dispatch(getUnreadUserMessages(userId));
-  // }, [dispatch, userId]);
 
   useEffect(() => {
     if (pathname === "/employer/information-form") {

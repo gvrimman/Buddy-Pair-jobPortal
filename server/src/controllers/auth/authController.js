@@ -5,6 +5,47 @@ const ApiResponse = require("../../utils/apiResponse");
 const asyncHandler = require("../../utils/asyncHandler");
 const generateAccessAndRefreshToken = require("../../utils/generateAccessAndRefreshToken");
 
+const renewalOfAccessToken = asyncHandler(async (req, res) => {
+	const currentRefreshToken = req.cookies.refreshToken;
+	if (!currentRefreshToken) {
+		throw new ApiError(402, "Unauthorized request");
+	}
+
+	try {
+		const decodedToken = jwt.verify(
+			currentRefreshToken,
+			process.env.REFRESH_TOKEN_SECRET_KEY
+		);
+
+		const user = await User.findById(decodedToken._id);
+		if (!user) {
+			throw new ApiError(401, "No user found with the refreshToken");
+		}
+
+		const accessToken = await user.generateAccessToken();
+		res.cookie("accessToken", accessToken, {
+			httpOnly: true,
+			secure: true,
+		});
+
+		res.json(
+			new ApiResponse(
+				200,
+				null,
+				"Successfully generated new Access Token"
+			)
+		);
+	} catch (error) {
+		if (error instanceof jwt.TokenExpiredError) {
+			throw new ApiError(402, "RefreshToken expired");
+		} else if (error instanceof jwt.JsonWebTokenError) {
+			throw new ApiError(402, "Invalid RefreshToken");
+		} else {
+			throw new ApiError(500, "Internal server error", [error.message]);
+		}
+	}
+});
+
 const signup = asyncHandler(async (req, res) => {
 	const { name, email, contactNumber, password } = req.body;
 
@@ -348,6 +389,12 @@ const login = asyncHandler(async (req, res) => {
 		.json(new ApiResponse(200, loggedInUser, "Login Successful"));
 });
 
+const logout = asyncHandler(async (req, res) => {
+	res.clearCookie("accessToken");
+	res.clearCookie("refreshToken");
+	res.json(new ApiResponse(200, null, "Logout Successful"));
+});
+
 const updateProfileInfo = asyncHandler(async (req, res) => {
 	const {
 		username,
@@ -355,6 +402,7 @@ const updateProfileInfo = asyncHandler(async (req, res) => {
 		phone,
 		gender,
 		dob,
+		about,
 		qualification,
 		educationInstitute,
 		educationType,
@@ -365,9 +413,11 @@ const updateProfileInfo = asyncHandler(async (req, res) => {
 		preferredJobType,
 		socialLinks,
 	} = req.body;
-	const profileImage = req.files[0];
-	const userId = req.user._id;
+	const profileImage = req.files && req.files[0] ? req.files[0] : null;
+	const resume = req.files && req.files[0] ? req.files[0] : null;
 
+
+	const userId = req.user._id;
 
 	// check if email and phone already exist
 	const userExist = await User.findOne({ email: email });
@@ -400,6 +450,7 @@ const updateProfileInfo = asyncHandler(async (req, res) => {
 		{
 			gender,
 			dob,
+			about,
 			qualification,
 			educationInstitute,
 			educationType,
@@ -410,6 +461,7 @@ const updateProfileInfo = asyncHandler(async (req, res) => {
 			preferredJobType,
 			socialLinks,
 			profileImage: profileImage?.location,
+			resume: resume?.location,
 		},
 		{
 			new: true,
@@ -428,10 +480,102 @@ const updateProfileInfo = asyncHandler(async (req, res) => {
 	res.json(new ApiResponse(200, updatedUser, "profile updated"));
 });
 
+const updatePassword = asyncHandler(async (req, res) => {
+	const { oldPassword, newPassword } = req.body;
+	const userId = req.user._id;
+	const user = await User.findById(userId);
+	if (!user) {
+		throw new ApiError(400, "user not found");
+	}
+	const isPasswordCorrect = await user.isPasswordCorrect(oldPassword);
+	if (!isPasswordCorrect) {
+		throw new ApiError(400, "wrong old password");
+	}
+	user.password = newPassword;
+	await user.save();
+
+	res.json(new ApiResponse(200, user, "password updated"));
+});
+
+const updateEmployerProfileInfo = asyncHandler(async (req, res) => {
+	const {
+		companyName,
+		companyEmail,
+		companyWebSite,
+		companyAddress,
+		companyDescription,
+		companySize,
+		industryType,
+		employmentType,
+		phone,
+		companyLinkedin,
+	} = req.body;
+
+	const companyLogo = req.files && req.files[0] ? req.files[0] : null;
+
+	const userId = req.user._id;
+
+	// check if phone already exist
+	const userExist = await User.findById(userId);
+	if (userExist && userExist._id.toString() !== userId.toString()) {
+		throw new ApiError(409, "Contact number already exists..");
+	}
+
+	// update user data
+	const user = await User.findByIdAndUpdate(
+		userId,
+		{
+			phone,
+		},
+		{
+			new: true,
+		}
+	);
+
+	if (!user) {
+		throw new ApiError(400, "user not updated");
+	}
+
+	// update employer data
+	const employer = await JobPortal.findOneAndUpdate(
+		{ userId },
+		{
+			companyName,
+			companyEmail,
+			companyWebSite,
+			companyAddress,
+			companyDescription,
+			companySize,
+			industryType,
+			employmentType,
+			companyLinkedin,
+			companyLogo: companyLogo?.location,
+		},
+		{
+			new: true,
+		}
+	);
+	if (!employer) {
+		throw new ApiError(400, "employer not found");
+	}
+
+	const updatedUser = await User.findById(userId)
+		.select("-password -refreshToken")
+		.populate({
+			path: "apps.jobPortal",
+		});
+
+	res.json(new ApiResponse(200, updatedUser, "profile updated"));
+});
+
 module.exports = {
 	signup,
 	employeeSignup,
 	employerSignup,
 	login,
 	updateProfileInfo,
+	updatePassword,
+	renewalOfAccessToken,
+	logout,
+	updateEmployerProfileInfo,
 };

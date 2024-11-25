@@ -19,6 +19,10 @@ const jobPortalSchema = new mongoose.Schema(
 			type: String,
 			trim: true,
 		},
+		about: {
+			type: String,
+			trim: true,
+		},
 		qualification: {
 			type: String,
 			trim: true,
@@ -118,6 +122,9 @@ const jobPortalSchema = new mongoose.Schema(
 			enum: ["employee", "employer"],
 			required: true,
 		},
+		unreadMessages: [
+			{ type: mongoose.Schema.Types.ObjectId, ref: "Message" },
+		],
 	},
 	{ timestamps: true }
 );

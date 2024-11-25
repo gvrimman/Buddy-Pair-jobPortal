@@ -1,8 +1,8 @@
 import React from "react";
 import banner from "/assets/images/employeebanner.jpg";
 
-import LargeSearchInput from "./LargeSearchInput";
 import NormalSearchInput from "./NormalSearchInput";
+import LargeSearchInputut from './LargeSearchInput'
 
 function HomeBanner() {
   
@@ -20,7 +20,7 @@ function HomeBanner() {
         <p className="antialiased text-[#0000008a]  font-medium">
           Find Jobs, Employment & Career Opportunities
         </p>
-        <LargeSearchInput />
+        <LargeSearchInputut />
         <NormalSearchInput />
       </div>
     </div>

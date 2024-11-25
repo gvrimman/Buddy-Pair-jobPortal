@@ -1,6 +1,6 @@
 import React from "react";
 
-function RadioSearch({ title, contents, setQuery }) {
+function RadioSearch({ title, contents, setQuery, query }) {
 	const handleRadioValue = (e) => {
 		// setQuery({ datePosted: e.target.value});
 		setQuery((prev) => ({ ...prev, datePosted: e.target.value }));
@@ -17,9 +17,9 @@ function RadioSearch({ title, contents, setQuery }) {
 								type="radio"
 								name="postedDate"
 								value={item}
-								// checked={radioValue === item}
 								className="w-4 h-4"
 								onChange={handleRadioValue}
+								checked={query?.datePosted === item}
 							/>
 							<span className="text-sm">{item}</span>
 						</label>

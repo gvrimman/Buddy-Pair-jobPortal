@@ -1,7 +1,7 @@
 import React, { useEffect, useState } from "react";
 import { MdOutlineWorkOutline } from "react-icons/md";
 
-function OptionSearch({ title, contents, setQuery }) {
+function OptionSearch({ title, contents, setQuery, query }) {
 	const [optionValue, setOptionValue] = useState("");
 
 	const handleOptionValue = (e) => {
@@ -20,9 +20,9 @@ function OptionSearch({ title, contents, setQuery }) {
 				<select
 					name="category"
 					className="text-slate-950 outline-none px-3 py-1"
-					// value={optionValue}
+					value={query?.category ? query.category : contents?.[0]?.valueToDisplay || optionValue}
 					onChange={handleOptionValue}>
-					<option value="">Choose a category</option>
+					
 					{contents?.map((item, i) => (
 						<option value={item.value} key={i}>
 							{item.valueToDisplay}

@@ -2,7 +2,6 @@ import React from "react";
 import { Button } from "@material-tailwind/react";
 
 function SingleJob({ data, setJobViewModalOpen }) {
-	console.log(data);
 	return (
 		<div>
 			<h3 className="font-semibold text-xl mb-3 underline">

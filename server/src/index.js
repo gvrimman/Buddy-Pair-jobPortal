@@ -7,6 +7,7 @@ const { app, server } = require("./socket/socket");
 const gloabalErrorHandler = require("./utils/gloabalErrorHandler");
 const cookieParser = require("cookie-parser");
 const session = require("express-session");
+const passport = require("./config/passport");
 // port
 const PORT = process.env.PORT || 3000;
 
@@ -36,6 +37,10 @@ app.use(
 		},
 	})
 );
+
+// Passport middleware
+app.use(passport.initialize());
+app.use(passport.session());
 
 app.use("/api", apiRoutes);
 

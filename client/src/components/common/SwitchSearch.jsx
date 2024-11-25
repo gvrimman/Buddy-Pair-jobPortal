@@ -1,6 +1,6 @@
 import React, { useEffect, useState } from "react";
 
-function SwitchSearch({ title, contents, setQuery }) {
+function SwitchSearch({ title, contents, setQuery, query }) {
 	const [selectedValues, setSelectedValues] = useState([]);
 
 	const handleToggle = (value) => {
@@ -25,9 +25,10 @@ function SwitchSearch({ title, contents, setQuery }) {
 								type="checkbox"
 								value={item.value}
 								className="sr-only peer"
-								// checked={selectedValues.includes(item)}
+								checked={selectedValues.includes(item.value) && Object.keys(query).length > 0}
 								onChange={() => handleToggle(item)}
 							/>
+							
 							<div className="relative w-11 h-5 bg-slate-50 outline outline-1 outline-slate-500 rounded-full peer peer-checked:after:translate-x-full peer-checked:after:start-4 peer-checked:after:bg-white rtl:peer-checked:after:-translate-x-full peer-checked:after:border-white after:content-[''] after:absolute after:top-1 after:start-1 after:bg-slate-300 after:border-gray-300  after:rounded-full after:h-3 after:w-3 after:transition-all  peer-checked:bg-blue-600 "></div>
 							<span className="ms-3 text-sm">
 								{item.valueToDisplay}

@@ -28,6 +28,7 @@ function LandingPage() {
 							src={item.image}
 							alt={item.title}
 							className="w-28 h-28 object-cover rounded-full"
+							loading="lazy"
 						/>
 						<div className="flex flex-col justify-center gap-2 text-white antialiased">
 							<h1 className="text-xl font-medium">

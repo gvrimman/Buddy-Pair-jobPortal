@@ -14,6 +14,7 @@ function TableBody({ job, handleDelete }) {
 				<img
 					src={job?.owner?.apps?.jobPortal?.companyLogo}
 					alt={job?.owner?.apps?.jobPortal?.companyName}
+					loading="lazy"
 					className="w-12 h-12 object-cover rounded-lg"
 				/>
 				<div className="grid">

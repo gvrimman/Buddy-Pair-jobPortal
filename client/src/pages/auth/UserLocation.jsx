@@ -1,10 +1,11 @@
 import { Button } from "@material-tailwind/react";
-import React, { useEffect, useState } from "react";
-import { GoogleMap, LoadScript, Marker } from "@react-google-maps/api";
-import axiosInstance from "../../utils/axios";
-import { useDispatch, useSelector } from "react-redux";
-import { setUser } from "../../Redux/reducers/userReducer";
-import { showError, showSuccess } from "../../utils/toast";
+import React, { useCallback, useEffect, useRef, useState } from "react";
+import {
+	GoogleMap,
+	Marker,
+	useJsApiLoader,
+} from "@react-google-maps/api";
+import { useNavigate } from "react-router-dom";
 
 function UserLocation({
 	onClose,
@@ -13,11 +14,21 @@ function UserLocation({
 	openUserAdditionInfoModal,
 	openEmployerInfoModal,
 }) {
+	const navigate = useNavigate()
+	const { isLoaded } = useJsApiLoader({
+		id: "google-map-script",
+		googleMapsApiKey: import.meta.env.VITE_GOOGLE_MAPS_API_KEY,
+	});
+
 	const [location, setLocation] = useState(null);
 	const [loading, setLoading] = useState(true);
 	const [zoom, setZoom] = useState(13);
 	const [watchId, setWatchId] = useState(null);
 	const [placeName, setPlaceName] = useState("");
+
+	// Use refs to track the last update time and position
+	const lastUpdateTime = useRef(0);
+	const lastPosition = useRef(null);
 	// Google Maps container style
 	const mapContainerStyle = {
 		width: "100%",
@@ -25,102 +36,150 @@ function UserLocation({
 	};
 
 	// Function to get place name from coordinates using Google Geocoding
-	const getPlaceName = async (latitude, longitude) => {
-		try {
-			const geocoder = new window.google.maps.Geocoder();
-			const latlng = { lat: latitude, lng: longitude };
-
-			const response = await new Promise((resolve, reject) => {
-				geocoder.geocode({ location: latlng }, (results, status) => {
-					if (status === "OK") {
-						resolve(results);
-					} else {
-						reject(status);
-					}
-				});
-			});
-
-			if (response[0]) {
-				const addressComponents = response[0].address_components;
-				const formattedAddress = [
-					addressComponents.find((c) =>
-						c.types.includes("sublocality")
-					)?.long_name,
-					addressComponents.find((c) => c.types.includes("locality"))
-						?.long_name,
-					addressComponents.find((c) =>
-						c.types.includes("administrative_area_level_1")
-					)?.long_name,
-					addressComponents.find((c) => c.types.includes("country"))
-						?.long_name,
-				]
-					.filter(Boolean)
-					.join(", ");
-
-				setPlaceName(formattedAddress);
+	const getPlaceName = useCallback(
+		async (latitude, longitude) => {
+			if (!isLoaded || !window.google?.maps) {
+				return;
 			}
-		} catch (error) {
-			console.error("Error getting place name:", error);
-			setPlaceName("Location name not available");
-		}
-	};
+
+			try {
+				const geocoder = new window.google.maps.Geocoder();
+				const latlng = { lat: latitude, lng: longitude };
+
+				const response = await new Promise((resolve, reject) => {
+					geocoder.geocode(
+						{ location: latlng },
+						(results, status) => {
+							if (status === "OK") {
+								resolve(results);
+							} else {
+								reject(status);
+							}
+						}
+					);
+				});
+
+				if (response[0]) {
+					const addressComponents = response[0].address_components;
+					const formattedAddress = [
+						addressComponents.find((c) =>
+							c.types.includes("sublocality")
+						)?.long_name,
+						addressComponents.find((c) =>
+							c.types.includes("locality")
+						)?.long_name,
+						addressComponents.find((c) =>
+							c.types.includes("administrative_area_level_1")
+						)?.long_name,
+						addressComponents.find((c) =>
+							c.types.includes("country")
+						)?.long_name,
+					]
+						.filter(Boolean)
+						.join(", ");
+
+					setPlaceName(formattedAddress);
+				}
+			} catch (error) {
+				console.error("Error getting place name:", error);
+				setPlaceName("Location name not available");
+			}
+		},
+		[isLoaded]
+	);
+
+	// Function to check if position has significantly changed
+	const hasPositionChanged = useCallback((newPos, oldPos) => {
+		if (!oldPos) return true;
+
+		// Check if position has changed by more than 10 meters (roughly)
+		const THRESHOLD = 0.0001; // approximately 10 meters
+		return (
+			Math.abs(newPos.lat - oldPos.lat) > THRESHOLD ||
+			Math.abs(newPos.lng - oldPos.lng) > THRESHOLD
+		);
+	}, []);
 
 	// Function to get the user's location
-	const getLocation = () => {
+	const getLocation = useCallback(() => {
 		setLoading(true);
 		if (navigator.geolocation) {
 			const id = navigator.geolocation.watchPosition(
-				async (position) => {
-					const lat = position.coords.latitude;
-					const lng = position.coords.longitude;
+				(position) => {
+					const currentTime = Date.now();
+					const newLocation = {
+						lat: position.coords.latitude,
+						lng: position.coords.longitude,
+					};
 
+					// Only update if:
+					// 1. At least 5 seconds have passed since last update, or
+					// 2. Position has changed significantly, or
+					// 3. This is the first position update
 					if (
-						!location ||
-						location.lat !== lat ||
-						location.lng !== lng
+						currentTime - lastUpdateTime.current > 5000 ||
+						hasPositionChanged(newLocation, lastPosition.current) ||
+						!lastPosition.current
 					) {
-						setLocation({ lat, lng });
-						console.log("Current location:", { lat, lng });
+						setLocation(newLocation);
+						lastPosition.current = newLocation;
+						lastUpdateTime.current = currentTime;
+
+						if (isLoaded) {
+							getPlaceName(newLocation.lat, newLocation.lng);
+						}
+
+						setLoading(false);
+						setZoom(position.coords.accuracy < 100 ? 15 : 13);
 					}
-
-					setLoading(false);
-					setZoom(position.coords.accuracy < 100 ? 15 : 13);
-
-					await getPlaceName(lat, lng);
 				},
 				(error) => {
-					console.error(error);
+					console.error("Geolocation error:", error);
 					setLoading(false);
 				},
-				{ enableHighAccuracy: true, maximumAge: 0, timeout: 10000 }
+				{
+					enableHighAccuracy: true,
+					maximumAge: 5000, // Use cached position if less than 5 seconds old
+					timeout: 10000,
+				}
 			);
 
 			setWatchId(id);
+
+			// Cleanup function
+			return () => {
+				if (id !== null) {
+					navigator.geolocation.clearWatch(id);
+				}
+			};
 		} else {
 			console.error("Geolocation is not supported by this browser.");
 			setLoading(false);
 		}
-	};
+	}, [isLoaded, getPlaceName, hasPositionChanged]);
 
 	useEffect(() => {
-		getLocation();
+		const cleanup = getLocation();
 
 		return () => {
+			if (cleanup) cleanup();
 			if (watchId !== null) {
 				navigator.geolocation.clearWatch(watchId);
+				setWatchId(null);
 			}
 		};
-	}, []);
+	}, [getLocation]);
 
 	const handleRetry = () => {
 		if (watchId !== null) {
 			navigator.geolocation.clearWatch(watchId);
+			setWatchId(null);
 		}
 		getLocation();
 	};
 
 	const handleSubmit = () => {
-		if (location !== undefined) {
+		if (location) {
 			setUserData((prev) => ({
 				...prev,
 				location: [location.lat, location.lng],
@@ -136,6 +195,23 @@ function UserLocation({
 			}, 300);
 		}
 	};
+	const renderMap = () => {
+		return (
+			<GoogleMap
+				mapContainerStyle={mapContainerStyle}
+				center={location}
+				zoom={zoom}
+				options={{
+					zoomControl: true,
+					streetViewControl: false,
+					mapTypeControl: false,
+					fullscreenControl: false,
+				}}>
+				{location && <Marker position={location} />}
+			</GoogleMap>
+		);
+	};
+
 	return (
 		<div>
 			<>
@@ -154,65 +230,35 @@ function UserLocation({
 								{placeName}
 							</p>
 						)}
-						<LoadScript
-							googleMapsApiKey={
-								"AIzaSyDB89qC8JKw5ITuXdNQ8hKelDKN0pL1bYE"
-							}>
-							<GoogleMap
-								mapContainerStyle={mapContainerStyle}
-								center={location}
-								zoom={zoom}
-								options={{
-									zoomControl: true,
-									streetViewControl: false,
-									mapTypeControl: false,
-									fullscreenControl: false,
-								}}>
-								<Marker
-									position={location}
-									// onClick={() => setShowInfoWindow(true)}
-								>
-									{/* {showInfoWindow && (
-                      <InfoWindow
-                        position={location}
-                        onCloseClick={() => setShowInfoWindow(false)}
-                      >
-                        <div>
-                          <p>{placeName || "You are here"}</p>
-                          <p>Accuracy: {accuracy ? `${accuracy} meters` : "N/A"}</p>
-                        </div>
-                      </InfoWindow>
-                    )} */}
-								</Marker>
-							</GoogleMap>
-						</LoadScript>
+						{isLoaded ? renderMap() : <div>Loading Maps...</div>}
 						<div className="flex justify-end mt-4">
 							{!location && (
-								<button
-									className="underline font-medium"
-									onClick={handleRetry}>
-									Retry
-								</button>
+								<Button onClick={handleRetry}>Retry</Button>
 							)}
+							<div>
+								{/* <CustomButton
+									onClick={handleSubmit}
+									value={"Next"}
+								/>
+								<CustomButton
+									classAtbt={"bg-red-500 ml-6"}
+									onClick={onClose}
+									value={"Close"}
+								/> */}
+							</div>
 						</div>
 					</>
 				) : (
-					<div className="flex flex-col gap-4 items-center">
-						<p>
-							Unable to get your location. Make sure your{" "}
-							<span className="font-bold">Location</span> is turn
-							on.
-						</p>
-						<button
-							className="underline font-medium"
-							onClick={handleRetry}>
-							Retry
-						</button>
+					<div>
+						<p>Unable to get your location.</p>
+						<Button onClick={handleRetry}>Retry</Button>
 					</div>
 				)}
 			</>
 			<div className="text-end">
-				<Button className="rounded py-2 px-3 sm:py-3 sm:px-4 mx-1 bg-red-400">
+				<Button
+					onClick={() => navigate("/")}
+					className="rounded py-2 px-3 sm:py-3 sm:px-4 mx-1 bg-red-400">
 					Close
 				</Button>
 				<Button

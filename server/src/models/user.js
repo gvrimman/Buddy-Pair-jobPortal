@@ -4,10 +4,16 @@ const jwt = require("jsonwebtoken");
 
 const userSchema = new mongoose.Schema(
 	{
+		googleId: { type: String, unique: true, sparse: true },
 		username: { type: String, required: true },
 		email: { type: String, required: true, unique: true, index: true },
 		phone: { type: String, required: true, unique: true, index: true },
-		password: { type: String, required: true },
+		password: {
+			type: String,
+			required: function () {
+				return !this.googleId;
+			},
+		},
 		apps: {
 			jobPortal: {
 				type: mongoose.Schema.Types.ObjectId,

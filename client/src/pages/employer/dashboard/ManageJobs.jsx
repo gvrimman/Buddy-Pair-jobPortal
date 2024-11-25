@@ -4,9 +4,9 @@ import JobManaging from "../../../components/employer/dashboard/manageJobs/JobMa
 function ManageJobs() {
 
   return (
-    <>
+    <div className="h-screen">
       <JobManaging />
-    </>
+    </div>
   );
 }
 

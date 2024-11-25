@@ -1,5 +1,5 @@
 import { Button } from "@material-tailwind/react";
-import React from "react";
+import React, { useState } from "react";
 import { AiOutlineHome } from "react-icons/ai";
 import { FcGoogle, FcPhoneAndroid } from "react-icons/fc";
 import { Link } from "react-router-dom";
@@ -9,20 +9,23 @@ import { signupValidations } from "../../utils/yupValidations";
 import { showError, showSuccess } from "./../../utils/toast";
 import axiosInstance from "./../../utils/axios";
 import { setUser } from "../../Redux/reducers/userReducer";
-import { useDispatch } from 'react-redux';
+import { useDispatch } from "react-redux";
+import handleGoogleAuthentication from "./../../Services/googleAuth";
+import { RiLoader4Line } from "react-icons/ri";
 
 function SignUp({ onClose, openSignInModal, openUserInfoModal }) {
+	const [isLoading, setIsLoading] = useState(false);
 
-	const dispatch = useDispatch()
+	const dispatch = useDispatch();
 	// validate inputs
 	const { register, handleSubmit, errors, reset } =
 		useFormHandler(signupValidations);
 
 	const onSubmit = async (data) => {
-		console.log(data)
 		try {
+			setIsLoading(true);
 			const response = await axiosInstance.post("/auth/signup", data);
-
+			setIsLoading(false);
 			dispatch(setUser(response?.data?.data));
 			reset();
 			onClose();
@@ -33,6 +36,7 @@ function SignUp({ onClose, openSignInModal, openUserInfoModal }) {
 			}, 300);
 		} catch (error) {
 			console.log(error);
+			setIsLoading(false);
 			showError(error.response?.data?.message);
 		}
 	};
@@ -88,9 +92,16 @@ function SignUp({ onClose, openSignInModal, openUserInfoModal }) {
 				</div>
 
 				<Button
+					disabled={isLoading}
 					type="submit"
-					className="bg-customViolet w-full py-2 md:py-3 rounded capitalize font-normal text-sm">
-					Sign up
+					className="bg-customViolet w-full py-2 md:py-3 rounded capitalize font-normal text-sm flex justify-center">
+					{isLoading ? (
+						<span>
+							<RiLoader4Line className="animate-spin text-xl" />
+						</span>
+					) : (
+						"Sign up"
+					)}
 				</Button>
 
 				<p className="mt-2 subpixel-antialiased text-center text-sm font-semibold">
@@ -111,7 +122,9 @@ function SignUp({ onClose, openSignInModal, openUserInfoModal }) {
 			</div>
 
 			<div className="flex flex-col md:flex-row gap-2">
-				<Button className="bg-transparent text-[#000000c5] text-sm border border-gray-400 capitalize flex items-center gap-2 justify-center md:flex-1 py-2 md:py-3 rounded font-normal">
+				<Button
+					onClick={() => handleGoogleAuthentication()}
+					className="bg-transparent text-[#000000c5] text-sm border border-gray-400 capitalize flex items-center gap-2 justify-center md:flex-1 py-2 md:py-3 rounded font-normal">
 					<span className="text-lg md:text-xl">
 						<FcGoogle />
 					</span>

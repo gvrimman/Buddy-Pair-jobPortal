@@ -6,11 +6,12 @@ import { IoMdNotificationsOutline } from "react-icons/io";
 import { IoBookmarkOutline } from "react-icons/io5";
 import MessageNotification from "../employer/MessageNotification";
 import ProfileMenu from "../employer/ProfileMenu";
+import { useSelector } from "react-redux";
 
 function LargeHeader() {
 	const [dropMenu, setDropMenu] = useState(false);
+	const { bookmarkedJobs } = useSelector((state) => state.employee);
 
-	const bookMarkedJobs = null;
 
 	return (
 		<div className="relative">
@@ -35,12 +36,14 @@ function LargeHeader() {
 					</div>
 					<div className="flex items-center gap-3">
 						<NavLink
-							to={"/job-portal/employee/saved-jobs"}
+							to={
+								"/job-portal/employee/dashboard/bookmarked-jobs"
+							}
 							className="relative p-1 rounded-md text-2xl bg-[#ede7f6] text-[#673ab7] hover:bg-[#673ab7] hover:text-[#ffffff] hover:scale-105">
 							<IoBookmarkOutline />
-							{bookMarkedJobs?.length === 0 ? null : (
+							{bookmarkedJobs?.length === 0 ? null : (
 								<span className="absolute -top-3 -right-3 min-w-6 min-h-6 flex items-center justify-center bg-customViolet text-white text-sm rounded-full ">
-									{bookMarkedJobs?.length}
+									{bookmarkedJobs?.length}
 								</span>
 							)}
 						</NavLink>

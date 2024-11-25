@@ -9,6 +9,7 @@ import { profileInfoValidation } from "../../../../utils/yupValidations";
 import axiosInstance from "./../../../../utils/axios";
 import { showError, showSuccess } from "../../../../utils/toast";
 import { updateUserInfo } from "../../../../Redux/reducers/userReducer";
+import TextAreaInput from "./../../../common/TextAreaInput";
 
 function PersonalInfos() {
 	const dispatch = useDispatch();
@@ -40,6 +41,7 @@ function PersonalInfos() {
 	// ----------------------------------------------------------------
 
 	const onSubmit = async (data) => {
+
 		try {
 			const response = await axiosInstance.put(
 				`/auth/update-profile`,
@@ -79,10 +81,11 @@ function PersonalInfos() {
 								: userInfo?.apps?.jobPortal?.profileImage
 						}
 						alt=""
+						loading="lazy"
 						className="w-full h-full object-contain"
 					/>
 				</div>
-				<div className="mt-5 grid lg:grid-cols-2 gap-3">
+				<div className="mt-5 grid lg:grid-cols-2 gap-3 mb-3">
 					<TextInput
 						label={"Name"}
 						type={"text"}
@@ -120,6 +123,12 @@ function PersonalInfos() {
 						value={userInfo?.apps?.jobPortal?.gender}
 					/>
 				</div>
+				<TextAreaInput
+					label={"About Me"}
+					value={userInfo?.apps?.jobPortal?.about}
+					registering={register("about")}
+					errors={errors.about}
+				/>
 				<Button type="submit" className="w-fit mt-3 text-end">
 					Update
 				</Button>

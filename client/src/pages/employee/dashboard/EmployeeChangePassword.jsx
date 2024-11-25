@@ -3,9 +3,9 @@ import PasswordChanging from '../../../components/employee/dashboard/password/Pa
 
 function EmployeeChangePassword() {
   return (
-    <>
+    <div className='h-screen'>
       <PasswordChanging />
-    </>
+    </div>
   )
 }
 

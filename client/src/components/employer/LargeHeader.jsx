@@ -8,6 +8,7 @@ import ProfileMenu from "./ProfileMenu";
 import MessageNotification from "./MessageNotification";
 
 function LargeHeader() {
+	
 	const [dropMenu, setDropMenu] = useState(false);
 	return (
 		<div className="relative">

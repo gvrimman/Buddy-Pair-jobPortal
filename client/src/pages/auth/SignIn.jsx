@@ -2,7 +2,7 @@ import React, { useEffect, useState } from "react";
 import { Link, useNavigate } from "react-router-dom";
 import { AiOutlineHome } from "react-icons/ai";
 import { FcGoogle, FcPhoneAndroid } from "react-icons/fc";
-import { useDispatch } from "react-redux";
+import { useDispatch, useSelector } from "react-redux";
 import { Button } from "@material-tailwind/react";
 import TextInput from "../../components/common/TextInput";
 import useFormHandler from "../../hooks/ReactHookForm/Index";
@@ -10,8 +10,10 @@ import { loginValidations } from "../../utils/yupValidations";
 import { showError, showSuccess } from "../../utils/toast";
 import { setUser } from "../../Redux/reducers/userReducer";
 import axiosInstance from "../../utils/axios";
+import { RiLoader4Line } from "react-icons/ri";
 
 function SignIn({ openSignUpModal }) {
+	const [isLoading, setIsLoading] = useState(false);
 	const navigate = useNavigate();
 	const dispatch = useDispatch();
 	// validate inputs
@@ -20,11 +22,19 @@ function SignIn({ openSignUpModal }) {
 
 	const onSubmit = async (data) => {
 		try {
+			setIsLoading(true);
 			const response = await axiosInstance.post("/auth/login", data);
+			const userData = response?.data?.data;
+			setIsLoading(false);
 			dispatch(setUser(response?.data?.data));
-			// navigate("/home");
 			showSuccess(response?.data?.message);
+			if (userData?.apps?.jobPortal?.role === "employee") {
+				navigate("/job-portal/employee");
+			} else if (userData?.apps?.jobPortal?.role === "employer") {
+				navigate("/job-portal/employer");
+			}
 		} catch (error) {
+			setIsLoading(false);
 			console.error("Login Error:", error);
 			showError(error?.response?.data?.message);
 		}
@@ -67,9 +77,16 @@ function SignIn({ openSignUpModal }) {
 				</p>
 
 				<Button
+					disabled={isLoading}
 					type="submit"
-					className="bg-customViolet w-full py-2 md:py-3 rounded capitalize font-normal text-sm">
-					Sign in
+					className="bg-customViolet w-full py-2 md:py-3 rounded capitalize font-normal text-sm flex justify-center">
+					{isLoading ? (
+						<span>
+							<RiLoader4Line className="animate-spin text-xl" />
+						</span>
+					) : (
+						"Sign in"
+					)}
 				</Button>
 
 				<p className="mt-2 subpixel-antialiased text-center text-sm font-semibold">
@@ -77,7 +94,6 @@ function SignIn({ openSignUpModal }) {
 					<span
 						className="cursor-pointer underline"
 						onClick={openSignUpModal}>
-						{" "}
 						Sign Up
 					</span>
 				</p>

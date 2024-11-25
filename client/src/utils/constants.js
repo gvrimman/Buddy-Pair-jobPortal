@@ -38,6 +38,7 @@ export const educationType = [
 	{ value: "distance", valueToDisplay: "Distance" },
 ];
 export const preferredJobType = [
+	{ value: "", valueToDisplay: "Choose a category" },
 	{ value: "On-site", valueToDisplay: "On-site" },
 	{ value: "W-F-H", valueToDisplay: "W-F-H" },
 	{ value: "Hybrid", valueToDisplay: "Hybrid" },
@@ -237,6 +238,7 @@ export const professions = [
 	{ value: "musician", label: "Musician" },
 	{ value: "actor", label: "Actor" },
 	{ value: "entrepreneur", label: "Entrepreneur" },
+	{ value: "student", label: "Student" },
 ];
 // job portal data
 export const categoryData = [

@@ -17,10 +17,10 @@ function LargeSearchInput() {
 
 	const handleSubmit = (e) => {
 		e.preventDefault();
-		// if (searchTerms.name === "" && searchTerms.location === "") {
-		// 	showError("Please enter job title or location");
-		// 	return;
-		// }
+		if (searchTerms.name === "" && searchTerms.location === "") {
+			showError("Please enter job title or location");
+			return;
+		}
 
 		dispatch(getJobs(searchTerms));
 		navigate("/job-portal/employee/jobs");

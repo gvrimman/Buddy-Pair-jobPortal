@@ -5,10 +5,20 @@ import { PiExclamationMarkBold } from "react-icons/pi";
 import Select from "react-select";
 
 function MultiSelect({ options, placeholder, name, control, errors, value }) {
-	const formattedValue = value?.map((val) => {
-		const matchedOption = options.find((option) => option.value === val);
-		return { value: val, label: val } || matchedOption;
-	});
+	const formattedValue = React.useMemo(() => {
+		if (!value) return [];
+		return value.map((val) => {
+			const matchedOption = options.find(
+				(option) => option.label === val || option.value === val
+			);
+			return (
+				matchedOption || {
+					value: val.replace(/\s+/g, "_").toLowerCase(),
+					label: val,
+				}
+			);
+		});
+	}, [value, options]);
 
 	return (
 		<Controller
@@ -19,11 +29,14 @@ function MultiSelect({ options, placeholder, name, control, errors, value }) {
 				<div className="relative">
 					<Select
 						{...field}
-						placeholder=""
 						isMulti
-						name="colors"
 						options={options}
-						// value={formattedValue || field.value }
+						value={field.value || formattedValue}
+						onChange={(selectedOptions) => {
+							field.onChange(selectedOptions || []);
+						}}
+						onBlur={field.onBlur}
+						placeholder=""
 						className="basic-multi-select border-black text-xs py-1"
 						classNamePrefix="select"
 					/>

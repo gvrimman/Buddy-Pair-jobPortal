@@ -22,8 +22,10 @@ import TextInput from "../../components/common/TextInput";
 import SelectInput from "../../components/common/SelectInput";
 import MultiSelect from "../../components/common/MultiSelect";
 import { showError } from "../../utils/toast";
+import { useNavigate } from "react-router-dom";
 
 function UserInfo({ onClose, setUserData, openUserLocationModal }) {
+	const navigate = useNavigate()
 	const [previewSrc, setPreviewSrc] = useState(null);
 
 	// hook form validation
@@ -55,7 +57,7 @@ function UserInfo({ onClose, setUserData, openUserLocationModal }) {
 
 	// form sumbission
 	const onSubmit = (data) => {
-		if(selectedOption === undefined){
+		if(selectedOption === ""){
 			
 			showError("Please select your status");
 			return;
@@ -103,6 +105,7 @@ function UserInfo({ onClose, setUserData, openUserLocationModal }) {
 						src={previewSrc ? previewSrc : avatar}
 						alt=""
 						className="w-full h-full object-contain"
+						loading="lazy"
 					/>
 				</div>
 				<div className="relative grid md:grid-cols-2 gap-3 md:gap-4 mb-3">
@@ -215,7 +218,9 @@ function UserInfo({ onClose, setUserData, openUserLocationModal }) {
 					</List>
 				</div>
 				<div className="text-end">
-					<Button className="rounded py-2 px-3 sm:py-3 sm:px-4 mx-1 bg-red-400">
+					<Button
+						onClick={() => navigate("/")}
+						className="rounded py-2 px-3 sm:py-3 sm:px-4 mx-1 bg-red-400">
 						Close
 					</Button>
 					<Button

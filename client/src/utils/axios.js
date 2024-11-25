@@ -1,4 +1,7 @@
 import axios from "axios";
+import { showError } from "./toast";
+import { Navigate } from "react-router-dom";
+import { history } from "./history";
 // import RefreshTokenErrorRedirection from "../hooks/RefreshTokenErrorRedirecting";
 
 const axiosInstance = axios.create({
@@ -30,8 +33,11 @@ axiosInstance.interceptors.response.use(
 		) {
 			originalRequest._retry = true;
 			if (error.response?.status === 402) {
+				// history.push("/");
 				return Promise.reject(
-					new Error("Session expired. Please login again.")
+					new Error(
+						"Session expired or token not found. Redirecting to login."
+					)
 				);
 			}
 			try {
@@ -44,13 +50,15 @@ axiosInstance.interceptors.response.use(
 				}
 			} catch (retryError) {
 				console.error("Failed in retrying request ERROR:", retryError);
+				// history.push("/");
 				return Promise.reject({
-					message: "Refresh token failed. Please login again.",
+					message: "Refresh token failed. Redirecting to login.",
 					status: 401,
 				});
 			}
 		}
 
+		// history.push("/");
 		return Promise.reject(error);
 	}
 );

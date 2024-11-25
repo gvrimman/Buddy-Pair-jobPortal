@@ -8,10 +8,20 @@ const {
 	employeeSignup,
 	login,
 	updateProfileInfo,
-	updateAdditionalInfo,
+	updatePassword,
+	renewalOfAccessToken,
+	logout,
+	updateEmployerProfileInfo,
 } = require("../controllers/auth/authController");
+const {
+	googleAuth,
+	googleAuthCallback,
+} = require("../controllers/auth/googleAuth");
 
 const router = express.Router();
+
+// refresh-token renewal
+router.route("/refresh-token").post(renewalOfAccessToken);
 
 // user sign up
 router.route("/signup").post(signup);
@@ -37,14 +47,35 @@ router.route("/employer-signup").post(
 // user sign in
 router.route("/login").post(login);
 
-// update user profile
+// update user profile [employee]
+router.route("/update-profile").put(
+	verifyJwt,
+	upload.any([
+		{ name: "resume", maxCount: 1 },
+		{ name: "profileImage", maxCount: 1 },
+	]),
+	authorize("employee"),
+	updateProfileInfo
+);
+
+// update user profile [employer]
 router
-	.route("/update-profile")
+	.route("/update-employer-profile")
 	.put(
 		verifyJwt,
 		upload.any({ name: "profileImage", maxCount: 1 }),
-		authorize("employee"),
-		updateProfileInfo
+		authorize("employer"),
+		updateEmployerProfileInfo
 	);
+
+// user logout
+router.route("/logout").post(verifyJwt, logout);
+
+// update user password
+router.route("/password").put(verifyJwt, authorize("employee"), updatePassword);
+
+// google authentication
+router.route("/google").get(googleAuth);
+router.route("/google/callback").get(googleAuthCallback);
 
 module.exports = router;

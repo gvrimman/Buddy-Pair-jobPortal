@@ -8,12 +8,13 @@ import { ToastContainer } from "react-toastify";
 import store, { persistor } from "./Redux/store/store";
 import { Provider } from "react-redux";
 import { PersistGate } from "redux-persist/integration/react";
+import { history } from "./utils/history";
 createRoot(document.getElementById("root")).render(
 	<StrictMode>
 		<Provider store={store}>
 			<PersistGate loading={null} persistor={persistor}>
 				<ThemeProvider>
-					<Router>
+					<Router history={history}>
 						<App />
 						<ToastContainer />
 					</Router>

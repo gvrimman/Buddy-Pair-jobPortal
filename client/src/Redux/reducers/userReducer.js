@@ -22,14 +22,21 @@ const userSlice = createSlice({
 			state.isAuthenticated = false;
 			state.isLoading = false;
 		},
-		updateUserInfo:(state, action) => {
+		updateUserInfo:(state, action) => { // employee
+			state.isLoading = true;
+			state.userInfo = action.payload
+			state.isLoading = false
+		},
+		updateEmployerInfo: (state, action) => { // employer
 			state.isLoading = true;
 			state.userInfo = action.payload
 			state.isLoading = false
 		}
+
 	},
 });
 
-export const { setUser, clearUser, updateUserInfo } = userSlice.actions;
+export const { setUser, clearUser, updateUserInfo, updateEmployerInfo } =
+	userSlice.actions;
 
 export default userSlice.reducer;

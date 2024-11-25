@@ -4,19 +4,17 @@ import { useDispatch } from "react-redux";
 import { getCandidates } from "../../../apis/employerApi";
 import { Button } from "@material-tailwind/react";
 
-function CandidatesSectionHeader({ setToggleValue, setQuery, query }) {
+function CandidatesSectionHeader({
+	setToggleValue,
+	setQuery,
+	query,
+	handleSearchCandidate,
+	handleClearFilter,
+}) {
 	const dispatch = useDispatch();
-
-	const handleClearFilter = () => {
-		dispatch(getCandidates());
-	};
 
 	const handleSortChange = (e) => {
 		setQuery((prev) => ({ ...prev, sort: e.target.value }));
-		dispatch(getCandidates(query));
-	};
-
-	const handleSearchCandidate = () => {
 		dispatch(getCandidates(query));
 	};
 
@@ -39,8 +37,7 @@ function CandidatesSectionHeader({ setToggleValue, setQuery, query }) {
 				<select
 					className="text-sm bg-white outline outline-1 outline-slate-300 px-2 py-2 rounded-md"
 					onChange={handleSortChange}
-					// value={sortValue.sort}
-				>
+					value={query.sort}>
 					<option value="default">Sort by (Default)</option>
 					<option value="newest">Newest</option>
 					<option value="oldest">Oldest</option>

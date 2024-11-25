@@ -4,14 +4,6 @@ import Profile from '../../../components/employee/dashboard/profile/Profile';
 
 function EmployeeProfile() {
   const dispatch = useDispatch()
-
-  // useEffect(() => {
-  //   dispatch(getProfileInfos());
-  //   dispatch(getEducationInfos());
-  //   dispatch(getExperienceInfos());
-  //   dispatch(getProjectInfos());
-  //   dispatch(getCertificateInfos());
-  // }, [dispatch])
   
   return (
     <>

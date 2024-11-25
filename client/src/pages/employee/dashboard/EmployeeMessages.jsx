@@ -1,5 +1,5 @@
 import React from 'react'
-import MessageBox from '../../../../../components/job-portal/message/MessageBox'
+import MessageBox from '../../../components/message/MessageBox'
 
 function EmployeeMessages() {
   return (

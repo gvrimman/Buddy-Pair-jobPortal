@@ -2,28 +2,55 @@ import React, { useState } from "react";
 import InputForms from "../../../common/InputForms";
 import { Button } from "@material-tailwind/react";
 import TextInput from "../../../common/TextInput";
-import { emplyerInfoValidation } from "../../../../utils/yupValidations";
+import {
+	employerLinkedinValidation,
+	emplyerInfoValidation,
+} from "../../../../utils/yupValidations";
 import useFormHandler from "../../../../hooks/ReactHookForm/Index";
+import { useDispatch, useSelector } from "react-redux";
+import axiosInstance from "../../../../utils/axios";
+import { showError, showSuccess } from "../../../../utils/toast";
+import { updateEmployerInfo } from "../../../../Redux/reducers/userReducer";
 
-function SocialProfileForm({ infos }) {
+function SocialProfileForm() {
+	const { userInfo } = useSelector((state) => state.user);
+	const dispatch = useDispatch();
 	// hook form validation
 	const { register, handleSubmit, errors, reset, control, watch } =
-		useFormHandler(emplyerInfoValidation);
+		useFormHandler(employerLinkedinValidation);
+
+	const onSubmit = async (data) => {
+		try {
+			const response = await axiosInstance.put(
+				`/auth/update-employer-profile`,
+				data
+			);
+			showSuccess(response?.data?.message);
+			dispatch(updateEmployerInfo(response?.data?.data));
+		} catch (error) {
+			showError(error?.response?.data?.message);
+		}
+	};
+
 	return (
 		<div className="grid bg-white mx-2 p-4 rounded-md shadow">
 			<h2 className="py-2 text-lg tracking-wide font-semibold">
 				Social Network
 			</h2>
-			<div className="mt-4 grid lg:grid-cols-2 gap-3">
-				<TextInput
-					type={"text"}
-					label={"LinkedIn"}
-					registering={register("companyLinkedin")}
-					errors={errors.companyLinkedin}
-				/>
-			</div>
-			<Button className="my-3">Save</Button>
-			{/* <FormButton text={"Save"} saveParentValue={handleSocialProfileSave} /> */}
+			<form onSubmit={handleSubmit(onSubmit)}>
+				<div className="mt-4 grid lg:grid-cols-2 gap-3">
+					<TextInput
+						type={"text"}
+						label={"LinkedIn"}
+						registering={register("companyLinkedin")}
+						errors={errors.companyLinkedin}
+						value={userInfo?.apps?.jobPortal?.companyLinkedin}
+					/>
+				</div>
+				<Button type="submit" className="my-3 w-fit">
+					update
+				</Button>
+			</form>
 		</div>
 	);
 }

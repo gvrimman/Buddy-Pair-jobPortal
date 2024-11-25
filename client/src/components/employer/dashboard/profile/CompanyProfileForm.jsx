@@ -9,9 +9,9 @@ function CompanyProfileForm() {
 
   return (
     <div className="grid gap-5">
-      <ProfileForm infos={""} />
-      <SocialProfileForm infos={""} />
-      <ContactForm infos={""} />
+      <ProfileForm  />
+      <SocialProfileForm />
+      {/* <ContactForm  /> */}
     </div>
   );
 }

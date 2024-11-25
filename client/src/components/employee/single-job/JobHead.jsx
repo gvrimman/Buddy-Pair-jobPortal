@@ -31,6 +31,7 @@ function JobHead() {
 								: upwork
 						}
 						className="w-12 h-12 object-cover rounded-lg"
+						loading="lazy"
 					/>
 				</div>
 

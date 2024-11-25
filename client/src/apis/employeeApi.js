@@ -11,6 +11,8 @@ import {
 	getAppliedJobs,
 	setApplyJob,
 	deleteAppliedJobs,
+	fetchCompanies,
+	fetchCompany,
 } from "../Redux/reducers/employeeReducer";
 
 export const getJobs = (query) => async (dispatch) => {
@@ -94,6 +96,7 @@ export const getAppiedJobs = () => async (dispatch) => {
 	dispatch(fetchStart());
 	try {
 		const response = await axiosInstance.get("/employee/applied-jobs");
+		console.log(response?.data?.data);
 		dispatch(getAppliedJobs(response?.data?.data[0]?.appliedJobs));
 	} catch (error) {
 		dispatch(fetchError(error.message));
@@ -114,3 +117,27 @@ export const deleteAAppiedJob = (id) => async (dispatch) => {
 		showError(error?.response?.data?.message);
 	}
 }
+
+export const getAllCompaniesEmployee = (query) => async (dispatch) => {
+	dispatch(fetchStart());
+	try {
+		const response = await axiosInstance.get("/employer/companies", {
+			params: { ...query },
+		});
+		dispatch(fetchCompanies(response?.data?.data));
+	} catch (error) {
+		dispatch(fetchError(error.message));
+		showError(error?.response?.data?.message);
+	}
+};
+
+export const getCompanyEmployee = (id) => async (dispatch) => {
+	dispatch(fetchStart());
+	try {
+		const response = await axiosInstance.get(`/employer/company/${id}`);
+		dispatch(fetchCompany(response?.data?.data));
+	} catch (error) {
+		dispatch(fetchError(error.message));
+		showError(error?.response?.data?.message);
+	}
+};

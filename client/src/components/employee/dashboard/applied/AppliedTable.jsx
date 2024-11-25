@@ -7,20 +7,23 @@ import { deleteAAppiedJob } from "../../../../apis/employeeApi";
 import { TbLoader2 } from "react-icons/tb";
 
 function AppliedTable() {
-  const { appliedJobs, isLoading } = useSelector((state) => state.employee);
+	const { appliedJobs, isLoading } = useSelector((state) => state.employee);
 
-   const dispatch = useDispatch();
-   const handleDelete = (id) => {
+	const dispatch = useDispatch();
+	const handleDelete = (id) => {
 		dispatch(deleteAAppiedJob(id));
-   };
+	};
 
-
-  
-  return (
+	return (
 		<div className="bg-white p-4 grid gap-4 rounded-md shadow">
-			<h1 className="text-xl font-semibold tracking-wider">
-				Applied Jobs
-			</h1>
+			<div className="flex items-center justify-between">
+				<h1 className="text-xl font-semibold tracking-wider">
+					Applied Jobs
+				</h1>
+				<p className="font-semibold">
+					You have applied for {appliedJobs?.length} jobs
+				</p>
+			</div>
 			<table>
 				<div
 					className={`fixed inset-0  bg-gray-500 opacity-30 transition  ${
@@ -36,17 +39,21 @@ function AppliedTable() {
 					<TableHead />
 				</thead>
 				<tbody>
-					{appliedJobs?.map((job, index) => (
-						<TableBody
-							key={index}
-							job={job}
-							handleDelete={handleDelete}
-						/>
-					))}
+					{appliedJobs?.length === 0 ? (
+						<p className="center font-semibold my-5 w-full">No jobs applied yet</p>
+					) : (
+						appliedJobs?.map((job, index) => (
+							<TableBody
+								key={index}
+								job={job}
+								handleDelete={handleDelete}
+							/>
+						))
+					)}
 				</tbody>
 			</table>
 		</div>
-  );
+	);
 }
 
 export default AppliedTable;

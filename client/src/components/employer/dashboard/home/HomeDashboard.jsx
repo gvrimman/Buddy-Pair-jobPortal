@@ -14,8 +14,11 @@ import CandidateCards from "../CandidateCards";
 import { viewsStatusData } from "../../../../utils/graph-data";
 import { notifyData } from "../../../../utils/jobs-data";
 import StatusBox from "../../../common/StatusBox";
+import { useSelector } from "react-redux";
 
 function HomeDashboard() {
+	const { jobs, applicants } = useSelector((state) => state.employer);
+
 	const userData = null;
 	return (
 		<div>
@@ -24,14 +27,14 @@ function HomeDashboard() {
 					text={"posted jobs"}
 					textColor={"blue-500"}
 					bgColor={"blue-100"}
-					count={22}
+					count={jobs?.length}
 					icon={<IoBriefcaseOutline />}
 				/>
 				<StatusBox
 					text={"application"}
 					textColor={"red-500"}
 					bgColor={"red-100"}
-					count={22}
+					count={applicants?.length}
 					icon={<FaRegFileAlt />}
 				/>
 				<StatusBox

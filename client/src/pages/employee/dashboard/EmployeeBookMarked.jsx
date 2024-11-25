@@ -12,9 +12,9 @@ function EmployeeBookMarked() {
   }, [dispatch])
 
   return (
-    <>
+    <div className='h-screen'>
       <BookMarked />
-    </>
+    </div>
   )
 }
 

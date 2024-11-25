@@ -51,6 +51,7 @@ const userInfoValidation = Yup.object().shape({
 	qualification: Yup.string().required("Qualification is required"),
 
 	profileImage: Yup.mixed()
+		.notRequired()
 		.test("fileType", "Only image files are allowed", (value) => {
 			return value && value[0] && value[0].type.startsWith("image/");
 		})
@@ -109,6 +110,37 @@ const emplyerInfoValidation = Yup.object().shape({
 	contactNumber: Yup.string().min(10, "Minimum 10 characters"),
 });
 
+// update employer profile
+const employerProfileValidation = Yup.object().shape({
+	companyLogo: Yup.mixed()
+		.notRequired(true)
+		.test("fileType", "Only image files are allowed", (value) => {
+			return value && value[0] && value[0].type.startsWith("image/");
+		})
+		.test("fileSize", "File is too large, max size is 20MB", (value) => {
+			return value && value[0] && value[0].size <= 5 * 1024 * 1024;
+		}),
+	companyName: Yup.string().required("Please Enter your company name"),
+	companyEmail: Yup.string()
+		.email("Invalid email format")
+		.required("Email is required"),
+	companyWebSite: Yup.string().required("Please Enter your company website"),
+	companyAddress: Yup.string().required("Please Enter your company address"),
+	companyDescription: Yup.string().required(
+		"Please Enter your company description"
+	),
+	companySize: Yup.string().required("Please Select your company size"),
+	industryType: Yup.string().required("Please Select your company type"),
+	employmentType: Yup.string().required("Please Select your employment type"),
+	phone: Yup.string().min(10, "Minimum 10 characters"),
+});
+
+const employerLinkedinValidation = Yup.object().shape({
+	companyLinkedin: Yup.string().required(
+		"Please Enter your company linkedin"
+	),
+});
+
 // job posting validation
 const jobPostValidation = Yup.object().shape({
 	jobTitle: Yup.string().required("Please Enter your job title"),
@@ -129,11 +161,14 @@ const jobPostValidation = Yup.object().shape({
 // update employee profile
 const profileInfoValidation = Yup.object().shape({
 	profileImage: Yup.mixed()
+		.notRequired()
 		.test("fileType", "Only image files are allowed", (value) => {
-			return value && value[0] && value[0].type.startsWith("image/");
+			if (!value || value.length === 0) return true;
+			return value[0]?.type.startsWith("image/");
 		})
 		.test("fileSize", "File is too large, max size is 20MB", (value) => {
-			return value && value[0] && value[0].size <= 5 * 1024 * 1024;
+			if (!value || value.length === 0) return true;
+			return value[0]?.size <= 5 * 1024 * 1024;
 		}),
 	username: Yup.string().required("Name is Required"),
 	email: Yup.string()
@@ -160,6 +195,7 @@ const profileInfoValidation = Yup.object().shape({
 			const currentDate = new Date();
 			return value && value <= currentDate;
 		}),
+	about: Yup.string().required("About is required"),
 });
 
 const profileEducationValidation = Yup.object().shape({
@@ -172,15 +208,19 @@ const profileEducationValidation = Yup.object().shape({
 
 const profileJobValidation = Yup.object().shape({
 	profession: Yup.array().required("Please select your profession"),
-	jobTitle: Yup.string().required("Please Enter your job title"),
-	companyName: Yup.string().required("Please Enter your company name"),
-	location: Yup.string().required("Please Enter your job location"),
+	jobTitle: Yup.string(),
+	companyName: Yup.string(),
+	location: Yup.string(),
 	workExperience: Yup.string().required("Please Enter your work experience"),
-	ctc: Yup.number().required("Enter your current CTC"),
-	eCtc: Yup.number().required("Enter your expected CTC"),
+	ctc: Yup.string(),
+	eCtc: Yup.string(),
 	skills: Yup.array().required("Atleast one skill is required"),
 	preferredJobLocation: Yup.array().required("Please select your location"),
 	preferredJobType: Yup.string().required("Please select your job type"),
+	resume: Yup.mixed().test("fileType", "Only pdf files are allowed", (value) => {
+		if (!value || value.length === 0) return true;
+		return value[0]?.type === "application/pdf";
+	}),
 });
 
 const profileSocialValidation = Yup.object().shape({
@@ -188,6 +228,18 @@ const profileSocialValidation = Yup.object().shape({
 	linkedin: Yup.string().required("Please Enter your linkedin url"),
 	github: Yup.string(),
 	behance: Yup.string(),
+});
+
+const passwordValidations = Yup.object().shape({
+	oldPassword: Yup.string()
+		.required("Password is required")
+		.min(3, "Minimum 8 characters"),
+	newPassword: Yup.string()
+		.required("Password is required")
+		.min(3, "Minimum 8 characters"),
+	confirmPassword: Yup.string()
+		.required("Confirm Password is required")
+		.oneOf([Yup.ref("newPassword"), null], "Passwords must match"),
 });
 
 export {
@@ -202,4 +254,7 @@ export {
 	profileEducationValidation,
 	profileJobValidation,
 	profileSocialValidation,
+	passwordValidations,
+	employerProfileValidation,
+	employerLinkedinValidation,
 };

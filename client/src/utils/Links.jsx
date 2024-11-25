@@ -113,11 +113,7 @@ export const employeeDashboardLinks = [
 		text: "profile",
 		icon: <FiUsers />,
 	},
-	{
-		path: "/job-portal/employee/dashboard/resume",
-		text: "resume",
-		icon: <FaRegFileArchive />,
-	},
+	
 	{
 		path: "/job-portal/employee/dashboard/applied-jobs",
 		text: "applied jobs",

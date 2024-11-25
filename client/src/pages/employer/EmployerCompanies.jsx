@@ -7,24 +7,25 @@ import CompaniesSection from '../../components/employer/companies/CompaniesSecti
 
 function EmployerCompanies() {
   const [toggleJobSection, setToggleJobSection] = useState(false);
+  const [query, setQuery] = useState({});
   const dispatch = useDispatch();
 
-  useEffect(() => {
-    // dispatch(getOtherCompanies());
-  }, [dispatch]);
-
   return (
-    <div className="max-w-[1440px] py-8 mx-auto px-7 grid lg:grid-cols-4">
-      <CompaniesSideSection />
-      <CompaniesSideBar
-        toggleValue={toggleJobSection}
-        setToggleValue={setToggleJobSection}
-      />
-      <CompaniesSection
-        toggleValue={toggleJobSection}
-        setToggleValue={setToggleJobSection}
-      />
-    </div>
+		<div className="max-w-[1440px] py-8 mx-auto px-7 grid lg:grid-cols-4">
+			<CompaniesSideSection setQuery={setQuery} query={query} />
+			<CompaniesSideBar
+				toggleValue={toggleJobSection}
+				setToggleValue={setToggleJobSection}
+				setQuery={setQuery}
+				query={query}
+			/>
+			<CompaniesSection
+				query={query}
+				setQuery={setQuery}
+				toggleValue={toggleJobSection}
+				setToggleValue={setToggleJobSection}
+			/>
+		</div>
   );
 }
 

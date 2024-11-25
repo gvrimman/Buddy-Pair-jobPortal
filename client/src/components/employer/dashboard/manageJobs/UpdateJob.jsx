@@ -23,26 +23,21 @@ import { getJobById, updateAJob } from "../../../../apis/employerApi";
 function UpdateJob() {
 	const { id } = useParams();
 	const dispatch = useDispatch();
+
 	const { job, isLoading } = useSelector((state) => state.employer);
 
-	// get job by id
-	useEffect(() => {
-		dispatch(getJobById(id));
-	}, [dispatch]);
-
-
-	console.log(job)
-	// format date
-	const dateValue = new Date(job?.deadline);
-	const formatedDate = dateValue?.toISOString().slice(0, 10);
+	console.log(job);
 
 	// hook form validation
 	const { register, handleSubmit, errors, reset, control, watch } =
 		useFormHandler(jobPostValidation);
 
-		// console.log(watch())
+	// get job by id
+	useEffect(() => {
+		dispatch(getJobById(id));
+	}, [dispatch, id]);
+
 	const onSubmit = (data) => {
-		console.log(data)
 		dispatch(updateAJob(id, data));
 	};
 	return (
@@ -151,7 +146,11 @@ function UpdateJob() {
 					<TextInput
 						label={"Application Deadline Date"}
 						type={"date"}
-						value={formatedDate}
+						value={
+							job?.deadline
+								? new Date(job.deadline).toISOString().split("T")[0]
+								: ""
+						}
 						placeText={"20-04-2024"}
 						registering={register("deadline")}
 						errors={errors.deadline}

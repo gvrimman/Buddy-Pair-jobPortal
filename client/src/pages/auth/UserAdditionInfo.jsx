@@ -10,6 +10,7 @@ import SelectInput from "../../components/common/SelectInput";
 import TextInput from "../../components/common/TextInput";
 import MultiSelect from "../../components/common/MultiSelect";
 import { userAdditionInfoValidation } from "../../utils/yupValidations";
+import { useNavigate } from "react-router-dom";
 
 function UserAdditionInfo({
 	onClose,
@@ -18,6 +19,8 @@ function UserAdditionInfo({
 	openJobDetailsModal,
 	openUserResumeModal,
 }) {
+
+	const navigate = useNavigate()
 	// hook form validation
 	const { register, handleSubmit, errors, reset, control, watch } =
 		useFormHandler(userAdditionInfoValidation);
@@ -138,7 +141,9 @@ function UserAdditionInfo({
 					/>
 				</div>
 				<div className="text-end">
-					<Button className="rounded py-2 px-3 sm:py-3 sm:px-4 mx-1 bg-red-400">
+					<Button
+						onClick={() => navigate("/")}
+						className="rounded py-2 px-3 sm:py-3 sm:px-4 mx-1 bg-red-400">
 						Close
 					</Button>
 					<Button

@@ -4,9 +4,30 @@ import { NavLink, useLocation, useNavigate } from "react-router-dom";
 import { IoMdClose } from "react-icons/io";
 import { CiLogout } from "react-icons/ci";
 import { employeeLinks } from "../../utils/Links";
+import axiosInstance from "../../utils/axios";
+import { showError, showSuccess } from "../../utils/toast";
+import { clearUser } from "../../Redux/reducers/userReducer";
+import { persistor } from "../../Redux/store/store";
+import { useDispatch } from "react-redux";
 
 function SideBar({ value, setValue }) {
 	const pathname = null;
+	const navigate = useNavigate()
+	const dispatch = useDispatch();
+
+	
+	const handleLogout = async () => {
+		try {
+			const response = await axiosInstance.post("/auth/logout");
+			showSuccess(response?.data?.message);
+			dispatch(clearUser());
+			persistor.purge();
+			navigate("/");
+		} catch (error) {
+			console.log(error);
+			showError(error?.response?.data?.message);
+		}
+	};
 
 	return (
 		<div
@@ -42,12 +63,15 @@ function SideBar({ value, setValue }) {
 				<NavLink
 					className="mt-2 flex items-center gap-4 px-3 py-2 font-semibold  
             hover:scale-105 hover:translate-x-1 border-1 
-            transition ease-in-out duration-300 hover:bg-[#ede7f6] hover:text-[#673ab7] hover:font-semibold rounded-md"
-					>
+            transition ease-in-out duration-300 hover:bg-[#ede7f6] hover:text-[#673ab7] hover:font-semibold rounded-md">
 					<span className="text-lg">
 						<CiLogout />
 					</span>
-					<p className="capitalize antialiased text-md">Logout</p>
+					<p
+						onClick={handleLogout}
+						className="capitalize antialiased text-md">
+						Logout
+					</p>
 				</NavLink>
 			</div>
 		</div>

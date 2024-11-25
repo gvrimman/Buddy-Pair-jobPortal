@@ -156,69 +156,7 @@ function SplashScreen() {
 						/>
 					</DialogModal>
 
-					{/* ============================FREHER MODALS======================================== */}
-					{/* fresher info modal */}
-					{/* <DialogModal scale={""} isOpen={isFresherInfoModalOpen}>
-						<FresherInfo
-							onClose={() => setIsFresherInfoModalOpen(false)}
-							setUserData={setUserData}
-							openFresherLocationModal={() => {
-								setIsFresherInfoModalOpen(false);
-								setIsUserLocationModalOpen(true);
-							}}
-						/>
-					</DialogModal> */}
-
-					{/* fresher skill modal */}
-					{/* <DialogModal scale={""} isOpen={isFresherSkillModal}>
-						<FresherSkill
-							onClose={() => setIsFresherSkillModal(false)}
-							setUserData={setUserData}
-							onenFrehserResumModal={() => {
-								setIsFresherSkillModal(false);
-								setIsFresherResumModalOpen(true);
-							}}
-						/>
-					</DialogModal> */}
-
-					{/* fresher resume modal */}
-					{/* <DialogModal scale={""} isOpen={isFresherResumModalOpen}>
-						<FresherResume
-							onClose={() => setIsFresherResumModalOpen(false)}
-							setUserData={setUserData}
-							userData={userData}
-						/>
-					</DialogModal> */}
-
-					{/* ============================EMPLOYEE MODALS======================================== */}
-
-					{/* employee location modal */}
-					{/* <DialogModal
-						scale={""}
-						isOpen={isEmployeeLocationModalOpen}>
-						<EmployeeLocation
-							onClose={() =>
-								setIsEmployeeLocationModalOpen(false)
-							}
-							setUserData={setUserData}
-							openEmployeeSkillModal={() => {
-								setIsEmployeeLocationModalOpen(false);
-								setIsEmployeeSkillModalOpen(true);
-							}}
-						/>
-					</DialogModal> */}
-
-					{/* employee skill modal */}
-					{/* <DialogModal scale={""} isOpen={isEmployeeSkillModalOpen}>
-						<EmployeeSkill
-							onClose={() => setIsEmployeeSkillModalOpen(false)}
-							setUserData={setUserData}
-							openEmployeeResumeModel={() => {
-								setIsEmployeeSkillModalOpen(false);
-								setIsUserResumeModalOpen(true);
-							}}
-						/>
-					</DialogModal> */}
+					
 
 					{/* ============================EMPLOYER MODALS======================================== */}
 				</>

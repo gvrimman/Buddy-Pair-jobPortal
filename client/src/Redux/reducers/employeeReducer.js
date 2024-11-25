@@ -5,8 +5,11 @@ const initialState = {
 	job: null,
 	bookmarkedJobs: [],
 	appliedJobs: [],
+	companies: [],
+	company: null,
 	isLoading: false,
 	error: null,
+	hasMore: true,
 };
 
 const employeeSlice = createSlice({
@@ -20,7 +23,9 @@ const employeeSlice = createSlice({
 			(state.isLoading = false), (state.error = action.payload);
 		},
 		fetchJobs: (state, action) => {
-			(state.jobs = action.payload), (state.isLoading = false);
+			state.isLoading = false;
+			(state.jobs = action.payload.jobs),
+				(state.hasMore = action.payload.hasMore);
 		},
 		fetchJob: (state, action) => {
 			(state.job = action.payload), (state.isLoading = false);
@@ -44,14 +49,22 @@ const employeeSlice = createSlice({
 		setApplyJob: (state, action) => {
 			state.appliedJobs.push(action.payload);
 			state.isLoading = false;
-		},	
+		},
 		deleteAppliedJobs: (state, action) => {
 			state.appliedJobs = state.appliedJobs.filter(
 				(job) => job._id !== action.payload
 			);
 			state.isLoading = false;
-		}
-
+		},
+		fetchCompanies(state, action) {
+			state.isLoading = false;
+			state.companies = action.payload.companies;
+			state.hasMore = action.payload.hasMore;
+		},
+		fetchCompany(state, action) {
+			state.company = action.payload;
+			state.isLoading = false;
+		},
 	},
 });
 
@@ -66,6 +79,8 @@ export const {
 	getAppliedJobs,
 	setApplyJob,
 	deleteAppliedJobs,
+	fetchCompanies,
+	fetchCompany,
 } = employeeSlice.actions;
 
 export default employeeSlice.reducer;

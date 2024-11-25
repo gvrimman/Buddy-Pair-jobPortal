@@ -4,6 +4,8 @@ import storage from "redux-persist/lib/storage";
 import userReducer from "../reducers/userReducer";
 import employerReducer from "../reducers/employerReducer";
 import employeeReducer from "../reducers/employeeReducer"
+import chatReducer from '../reducers/chatReducer'
+import socketReducer from '../reducers/socketReducer'
 
 const userPersistConfig = {
 	key: "user",
@@ -35,7 +37,9 @@ const store = configureStore({
 	reducer: {
 		user: persistedUserReducer,
 		employer: persistedEmployerReducer,
-		employee: persistedEmployeeReducer
+		employee: persistedEmployeeReducer,
+		chat: chatReducer,
+		socket: socketReducer
 	},
 
 	middleware: (getDefaultMiddleware) =>

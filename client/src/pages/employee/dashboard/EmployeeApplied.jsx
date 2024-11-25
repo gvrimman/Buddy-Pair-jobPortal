@@ -11,9 +11,9 @@ function EmployeeApplied() {
         
     }, [dispatch]);
   return (
-    <>
+    <div className='h-screen'>
         <AppliedTable />
-    </>
+    </div>
   )
 }
 

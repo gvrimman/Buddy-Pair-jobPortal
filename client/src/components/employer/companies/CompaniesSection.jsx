@@ -1,31 +1,42 @@
-import React, { useEffect } from "react";
+import React, { useEffect, useState } from "react";
 import { useDispatch, useSelector } from "react-redux";
 import CompaniesHead from "./CompaniesHead";
 import BodySection from "./BodySection";
+import { getAllCompanies } from "../../../apis/employerApi";
 
-function CompaniesSection({ toggleValue, setToggleValue }) {
-  // const { success } = useSelector((state) => state.employee);
-  // const dispatch = useDispatch();
+function CompaniesSection({ toggleValue, setToggleValue, setQuery, query }) {
+	const [data, setData] = useState([]);
 
-  // useEffect(() => {
-  //   if (success) {
-  //     const timer = setTimeout(() => {
-  //       dispatch(resetEmployeeSuccess())
-  //     }, 5000);
-  //     return () => clearTimeout(timer);
-  //   }
-  // }, [success]);
+	const dispatch = useDispatch();
+	const handleClearFilter = () => {
+		dispatch(getAllCompanies());
+		setQuery({});
+	};
 
-  return (
-    <div
-      className={`h-screen col-span-3 py-5 ms-8 mr-2 ${
-        toggleValue && "blur-md overflow-hidden"
-      }`}
-    >
-      <CompaniesHead setToggleValue={setToggleValue} />
-      <BodySection />
-    </div>
-  );
+	const handleSearchCandidate = () => {
+		setData([]);
+		dispatch(getAllCompanies(query));
+	};
+	return (
+		<div
+			className={`h-screen col-span-3 py-5 ms-8 mr-2 ${
+				toggleValue && "blur-md overflow-hidden"
+			}`}>
+			<CompaniesHead
+				handleClearFilter={handleClearFilter}
+				handleSearchCandidate={handleSearchCandidate}
+				query={query}
+				setQuery={setQuery}
+				setToggleValue={setToggleValue}
+			/>
+			<BodySection
+				setQuery={setQuery}
+				query={query}
+				data={data}
+				setData={setData}
+			/>
+		</div>
+	);
 }
 
 export default CompaniesSection;
