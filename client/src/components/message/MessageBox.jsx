@@ -9,9 +9,11 @@ import SkeltonList from "./sidebar/SkeltonList";
 import { setSelectedUserById } from "../../Redux/reducers/chatReducer";
 import { setSelected } from "../../Redux/reducers/socketReducer";
 import { getOtherUsers } from "./../../apis/messageApi";
+import { useSocket } from "./../../hooks/useSocket"; 
 
 function MessageBox() {
   const dispatch = useDispatch();
+  const { socket } = useSocket();
   const { userLists } = useSelector((state) => state.chat);
   const { selected } = useSelector((state) => state.socket);
 

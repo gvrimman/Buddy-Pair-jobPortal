@@ -54,10 +54,12 @@ const chatSlice = createSlice({
       state.messages = [];
     },
     setSelectedUserById: (state, action) => {
-		const selectedUser = state.userLists?.find(user => user.userId === action.payload);
-      	state.selectedUser = state.userLists?.find(
-          (user) => user.userId === action.payload
-        );
+      const selectedUser = state.userLists?.find(
+        (user) => user.userId === action.payload
+      );
+      state.selectedUser = state.userLists?.find(
+        (user) => user.userId === action.payload
+      );
     },
     setSelectedUser: (state, action) => {
       state.isLoading = false;

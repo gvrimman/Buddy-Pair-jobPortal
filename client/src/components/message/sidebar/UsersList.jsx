@@ -1,23 +1,16 @@
-import React, { useEffect, useState } from "react";
+import React, { useEffect, useState, useCallback } from "react";
 import { useDispatch, useSelector } from "react-redux";
 
 import { FaRegUser } from "react-icons/fa6";
 import { setSelected } from "../../../Redux/reducers/socketReducer";
 import { setSelectedUser } from "../../../Redux/reducers/chatReducer";
 import useListenMessage from "../../../hooks/useListenMessage";
-import { useSocket } from "../../../hooks/useSocket";
-
-
-
 
 function UsersList({ user }) {
   const { onlineUsers } = useSelector((state) => state.socket);
   const [unreadCount, setUnreadCount] = useState(null);
-  const { selectedUser, messages } = useSelector((state) => state.chat);
+  const { selectedUser, chats } = useSelector((state) => state.chat);
   const dispatch = useDispatch();
-
-  const { findEachUserUnreadMessages } = useSocket();
-
 
   const isUserOnline = onlineUsers.includes(user.userId);
 
@@ -28,10 +21,10 @@ function UsersList({ user }) {
     dispatch(setSelected(true));
   };
 
-  useEffect(() => {
-    const unread = findEachUserUnreadMessages(user.userId, messages);
-    setUnreadCount(unread.length);
-  }, [user, messages]);
+  // useEffect(() => {
+  //   const unread = chats.filter((m) => m.senderId === user.userId);
+  //   setUnreadCount(unread.length);
+  // }, [user, chats]);
 
   return (
     <div
