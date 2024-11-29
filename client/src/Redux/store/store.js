@@ -34,21 +34,22 @@ const persistedEmployeeReducer = persistReducer(
 
 
 const store = configureStore({
-	reducer: {
-		user: persistedUserReducer,
-		employer: persistedEmployerReducer,
-		employee: persistedEmployeeReducer,
-		chat: chatReducer,
-		socket: socketReducer
-	},
+  reducer: {
+    user: persistedUserReducer,
+    employer: persistedEmployerReducer,
+    employee: persistedEmployeeReducer,
+    chat: chatReducer,
+    socket: socketReducer,
+  },
 
-	middleware: (getDefaultMiddleware) =>
-		getDefaultMiddleware({
-			serializableCheck: {
-				ignoredActions: ["persist/PERSIST", "persist/REHYDRATE"],
-			},
-			devTools: import.meta.env.NODE_ENV !== "production",
-		}),
+  middleware: (getDefaultMiddleware) =>
+    getDefaultMiddleware({
+      serializableCheck: {
+        ignoredActions: ["persist/PERSIST", "persist/REHYDRATE", "socket/setSocket"],
+        ignoredPaths: ["socket.socket"],
+      },
+      devTools: import.meta.env.NODE_ENV !== "production",
+    }),
 });
 
 export const persistor = persistStore(store);

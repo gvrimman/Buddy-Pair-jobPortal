@@ -15,7 +15,7 @@ export const getOtherUsers = () => async (dispatch) => {
 	dispatch(fetchStart());
 
 	try {
-		const response = await axiosInstance.get("/message/other-users");
+		const response = await axiosInstance.get("/message/chat/all");
 		// console.log(response);
 		dispatch(fetchSuccess(response?.data?.data));
 	} catch (error) {
@@ -37,13 +37,18 @@ export const getChats = (id) => async (dispatch) => {
 };
 
 export const setSendChat = (data) => async (dispatch) => {
-	const { id, message } = data;
+	const { id, message, chatId, socket, user } = data;
 	dispatch(fetchStart());
 	try {
-		const response = await axiosInstance.post(`/message/send/${id}`, {
-			message: message,
-		});
-		dispatch(setChat(response?.data?.data));
+		socket.emit("sendMessage", { receiverId: id, chatId, content: message.trim() });
+		dispatch(
+      setChat({
+        receiverId: id,
+        senderId: user,
+        chatRoom: chatId,
+        message,
+      })
+    );
 	} catch (error) {
 		dispatch(fetchError(error.message));
 		showError(error?.response?.data?.message);
@@ -64,7 +69,7 @@ export const getUnreadUserMessages = (id) => async (dispatch) => {
 export const markUserMessagesAsRead = (id) => async (dispatch) => {
 	dispatch(fetchStart());
 	try {
-		const response = await axiosInstance.get(`/message/${id}/read`);
+		const response = await axiosInstance.post(`/message/${id}/read`);
 		dispatch(markMessageAsRead(response?.data?.data));
 	} catch (error) {
 		dispatch(fetchError(error.message));
@@ -75,7 +80,7 @@ export const markUserMessagesAsRead = (id) => async (dispatch) => {
 export const markAllUnreadMessages = () => async (dispatch) => {
 	dispatch(fetchStart());
 	try {
-		const response = await axiosInstance.get(`/message/read`);
+		const response = await axiosInstance.post(`/message/read`);
 		dispatch(markAllMessageAsRead(response?.data?.data));
 	} catch (error) {
 		dispatch(fetchError(error.message));

@@ -5,7 +5,7 @@ const conversationSchema = new mongoose.Schema(
 		participants: [
 			{
 				type: mongoose.Schema.Types.ObjectId,
-				ref: "User",
+				ref: "User", 
 			},
 		],
 		messages: [
@@ -15,6 +15,10 @@ const conversationSchema = new mongoose.Schema(
 				default: [],
 			},
 		],
+		initiated: {
+			type: mongoose.Schema.Types.Boolean,
+			default: false
+		},
 	},
 	{ timestamps: true }
 );
