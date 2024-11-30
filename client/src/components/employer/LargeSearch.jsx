@@ -6,6 +6,7 @@ import { useDispatch, useSelector } from "react-redux";
 import { useNavigate } from "react-router-dom";
 import { getCandidates } from "../../apis/employerApi";
 import { showError } from "../../utils/toast";
+import { clearCandidates, setQuery } from "../../Redux/reducers/employerReducer";
 
 function LargeSearch() {
 	const [searchTerms, setSearchTerms] = useState({
@@ -21,7 +22,9 @@ function LargeSearch() {
 			showError("Please enter job location or candidate name");
 			return;
 		}
+		dispatch(clearCandidates());
 		dispatch(getCandidates(searchTerms));
+		dispatch(setQuery(searchTerms));
 		navigate("/job-portal/employer/candidates");
 	};
 

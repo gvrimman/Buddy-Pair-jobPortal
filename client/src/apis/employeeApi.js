@@ -39,16 +39,26 @@ export const getJobById = (id) => async (dispatch) => {
 	}
 };
 
-export const getBookmarkedJobs = () => async (dispatch) => {
-	dispatch(fetchStart());
-	try {
-		const response = await axiosInstance.get("/employee/bookmarked-jobs");
-		dispatch(fetchBookmarkedJobs(response?.data?.data?.bookmarkedJobs));
-	} catch (error) {
-		dispatch(fetchError(error.message));
-		showError(error?.response?.data?.message);
-	}
-};
+export const getBookmarkedJobs =
+	(page = 1, limit = 5) =>
+	async (dispatch) => {
+		dispatch(fetchStart());
+		try {
+			const response = await axiosInstance.get(
+				`/employee/bookmarked-jobs?page=${page}&limit=${limit}"`
+			);
+			dispatch(
+				fetchBookmarkedJobs({
+					bookmarkedJobs:
+						response?.data?.data?.bookmarked?.bookmarkedJobs,
+					pagination: response?.data?.data?.pagination,
+				})
+			);
+		} catch (error) {
+			dispatch(fetchError(error.message));
+			showError(error?.response?.data?.message);
+		}
+	};
 
 export const bookmarkAJob = (id) => async (dispatch) => {
 	dispatch(fetchStart());
@@ -64,7 +74,6 @@ export const bookmarkAJob = (id) => async (dispatch) => {
 		showError(error?.response?.data?.message);
 	}
 };
-
 
 export const deleteBookmarkedJob = (id) => async (dispatch) => {
 	dispatch(fetchStart());
@@ -90,19 +99,28 @@ export const applyAjob = (id) => async (dispatch) => {
 		dispatch(fetchError(error.message));
 		showError(error?.response?.data?.message);
 	}
-}
-
-export const getAppiedJobs = () => async (dispatch) => {
-	dispatch(fetchStart());
-	try {
-		const response = await axiosInstance.get("/employee/applied-jobs");
-		console.log(response?.data?.data);
-		dispatch(getAppliedJobs(response?.data?.data[0]?.appliedJobs));
-	} catch (error) {
-		dispatch(fetchError(error.message));
-		showError(error?.response?.data?.message);
-	}
 };
+
+export const getAppiedJobs =
+	(page = 1, limit = 5) =>
+	async (dispatch) => {
+		dispatch(fetchStart());
+		try {
+			const response = await axiosInstance.get(
+				`/employee/applied-jobs?page=${page}&limit=${limit}`
+			);
+			console.log(response?.data?.data);
+			dispatch(
+				getAppliedJobs({
+					appliedJobs: response?.data?.data?.applied?.appliedJobs,
+					pagination: response?.data?.data?.pagination,
+				})
+			);
+		} catch (error) {
+			dispatch(fetchError(error.message));
+			showError(error?.response?.data?.message);
+		}
+	};
 
 export const deleteAAppiedJob = (id) => async (dispatch) => {
 	dispatch(fetchStart());
@@ -116,7 +134,7 @@ export const deleteAAppiedJob = (id) => async (dispatch) => {
 		dispatch(fetchError(error.message));
 		showError(error?.response?.data?.message);
 	}
-}
+};
 
 export const getAllCompaniesEmployee = (query) => async (dispatch) => {
 	dispatch(fetchStart());

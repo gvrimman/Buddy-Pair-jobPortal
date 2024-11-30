@@ -7,12 +7,12 @@ const asyncHandler = require("../utils/asyncHandler");
 
 const getJobs = asyncHandler(async (req, res) => {
 	const {
-		name = "",
-		location = "",
-		category = "",
-		experience = [],
-		jobtype = [],
-		datePosted = "",
+		name,
+		location,
+		category,
+		experience,
+		jobtype,
+		datePosted,
 		page = Number(req.query.page) || 1,
 		limit = Number(req.query.limit) || 5,
 		sort = "newest",
@@ -23,8 +23,8 @@ const getJobs = asyncHandler(async (req, res) => {
 	if (name) query.jobTitle = { $regex: name, $options: "i" };
 	if (location) query.jobPlace = { $regex: location, $options: "i" };
 	if (category) query.employmentType = category;
-	if (experience.length) query.experience = { $in: experience };
-	if (jobtype.length) query.jobType = { $in: jobtype };
+	if (experience?.length) query.experience = { $in: experience };
+	if (jobtype?.length) query.jobType = { $in: jobtype };
 
 	if (datePosted) {
 		switch (datePosted) {
@@ -59,6 +59,14 @@ const getJobs = asyncHandler(async (req, res) => {
 				};
 				break;
 		}
+	}
+
+	// Prevent fetching all data if no filters are applied
+	if (Object.keys(query).length === 0) {
+		return res.status(400).json({
+			status: 400,
+			message: "Please provide at least one filter to search jobs.",
+		});
 	}
 
 	// paginate
@@ -161,10 +169,23 @@ const bookmarkJob = asyncHandler(async (req, res) => {
 
 const getBookmarkedJobs = asyncHandler(async (req, res) => {
 	const userId = req.user._id;
+	const page = parseInt(req.query.page) || 1;
+	const limit = parseInt(req.query.limit) || 5;
+	const skip = (page - 1) * limit;
+
+	// get total cont of all bookmarked jobs
+	const jobPortal = await JobPortal.findOne({ userId: userId });
+	const totalBookmarked = jobPortal?.bookmarkedJobs?.length || 0;
+
 	const bookmarked = await JobPortal.findOne({ userId })
 		.select("bookmarkedJobs")
 		.populate({
 			path: "bookmarkedJobs",
+			options: {
+				skip: skip,
+				limit: limit,
+				sort: { createdAt: -1 },
+			},
 			populate: {
 				path: "owner",
 				select: "apps.jobPortal",
@@ -177,7 +198,26 @@ const getBookmarkedJobs = asyncHandler(async (req, res) => {
 	if (!bookmarked) {
 		throw new ApiError(400, "employee not found");
 	}
-	res.json(new ApiResponse(200, bookmarked, "bookmarked jobs"));
+
+	// get total count for pagination
+	const totalPages = Math.ceil(totalBookmarked / limit);
+
+	res.json(
+		new ApiResponse(
+			200,
+			{
+				bookmarked,
+				pagination: {
+					currentPage: page,
+					totalPages,
+					totalBookmarked,
+					hasNext: page < totalPages,
+					hasPrev: page > 1,
+				},
+			},
+			"bookmarked jobs"
+		)
+	);
 });
 
 const deleteBookmarkedJob = asyncHandler(async (req, res) => {
@@ -240,56 +280,56 @@ const applyJob = asyncHandler(async (req, res) => {
 
 const getAppliedJobs = asyncHandler(async (req, res) => {
 	const userId = req.user._id;
-	const applied = await JobPortal.aggregate([
-		{
-			$match: { userId },
-		},
-		{
-			$lookup: {
-				from: "jobs",
-				localField: "appliedJobs",
-				foreignField: "_id",
-				as: "appliedJobs",
+
+	const page = parseInt(req.query.page) || 1;
+	const limit = parseInt(req.query.limit) || 5;
+	const skip = (page - 1) * limit;
+
+	// get total count of applied jobs
+	const jobPortal = await JobPortal.findOne({ userId: userId });
+	const totalApplied = jobPortal?.appliedJobs?.length || 0;
+
+	const applied = await JobPortal.findOne({ userId })
+		.select("appliedJobs")
+		.populate({
+			path: "appliedJobs",
+			options: {
+				skip: skip,
+				limit: limit,
+				sort: { createdAt: -1 },
 			},
-		},
-		{
-			$unwind: {
-				path: "$appliedJobs",
-				preserveNullAndEmptyArrays: true,
+			populate: {
+				path: "owner",
+				select: "apps.jobPortal",
+				populate: {
+					path: "apps.jobPortal",
+				},
 			},
-		},
-		{
-			$lookup: {
-				from: "jobportals",
-				localField: "appliedJobs.owner",
-				foreignField: "userId",
-				as: "appliedJobs.owner.apps.jobPortal",
-			},
-		},
-		{
-			$unwind: {
-				path: "$appliedJobs.owner.apps.jobPortal",
-				preserveNullAndEmptyArrays: true,
-			},
-		},
-		{
-			$group: {
-				_id: "$_id",
-				appliedJobs: { $push: "$appliedJobs" },
-			},
-		},
-		{
-			$project: {
-				_id: 0,
-				appliedJobs: 1,
-			},
-		},
-	]);
+		});
 
 	if (!applied) {
 		throw new ApiError(400, "employee not found");
 	}
-	res.json(new ApiResponse(200, applied, "applied jobs"));
+
+	// get total count for pagination
+	const totalPages = Math.ceil(totalApplied / limit);
+
+	res.json(
+		new ApiResponse(
+			200,
+			{
+				applied,
+				pagination: {
+					currentPage: page,
+					totalPages,
+					totalApplied,
+					hasNext: page < totalPages,
+					hasPrev: page > 1,
+				},
+			},
+			"applied jobs"
+		)
+	);
 });
 
 const deleteAppliedJob = asyncHandler(async (req, res) => {

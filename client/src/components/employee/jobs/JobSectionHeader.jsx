@@ -2,6 +2,7 @@ import React, { useState } from "react";
 import { IoFilterOutline } from "react-icons/io5";
 import { useDispatch } from "react-redux";
 import { getJobs } from "../../../apis/employeeApi";
+import { clearJobs } from "../../../Redux/reducers/employeeReducer";
 
 function JobSectionHeader({
 	setToggleValue,
@@ -9,12 +10,14 @@ function JobSectionHeader({
 	query,
 	handleSearchJob,
 	handleClearFilter,
+	setPage
 }) {
 	const dispatch = useDispatch();
-	const [sortValue, setSortValue] = useState({});
 
 	const handleSortChange = (e) => {
 		setQuery((prev) => ({ ...prev, sort: e.target.value }));
+		setPage(1);
+		dispatch(clearJobs())
 		dispatch(getJobs(query));
 	};
 

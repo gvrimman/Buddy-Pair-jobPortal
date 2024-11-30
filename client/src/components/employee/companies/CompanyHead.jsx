@@ -2,6 +2,7 @@ import React, { useState } from "react";
 import { IoFilterOutline } from "react-icons/io5";
 import { useDispatch } from "react-redux";
 import { getAllCompaniesEmployee } from "../../../apis/employeeApi";
+import { clearCompanies } from "../../../Redux/reducers/employeeReducer";
 
 
 function CompanyHead({
@@ -10,11 +11,14 @@ function CompanyHead({
 	query,
 	handleClearFilter,
 	handleSearchCandidate,
+	setPage
 }) {
 
   const dispatch = useDispatch();
   	const handleSortChange = (e) => {
 		setQuery((prev) => ({ ...prev, sort: e.target.value }));
+		setPage(1);
+		dispatch(clearCompanies())
 		dispatch(getAllCompaniesEmployee(query));
 	};
 

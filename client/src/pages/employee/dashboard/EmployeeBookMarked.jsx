@@ -7,9 +7,9 @@ function EmployeeBookMarked() {
 
   const dispatch = useDispatch()
 
-  useEffect(() => {
-    dispatch(getBookmarkedJobs());
-  }, [dispatch])
+  // useEffect(() => {
+  //   dispatch(getBookmarkedJobs());
+  // }, [dispatch])
 
   return (
     <div className='h-screen'>

@@ -3,6 +3,7 @@ import { IoFilterOutline } from "react-icons/io5";
 
 import { useDispatch } from "react-redux";
 import { getAllCompanies } from "../../../apis/employerApi";
+import { clearCompanies } from "../../../Redux/reducers/employerReducer";
 
 function CompaniesHead({
 	setToggleValue,
@@ -10,11 +11,14 @@ function CompaniesHead({
 	query,
 	handleClearFilter,
 	handleSearchCandidate,
+	setPage
 }) {
 	const dispatch = useDispatch();
 
 	const handleSortChange = (e) => {
 		setQuery((prev) => ({ ...prev, sort: e.target.value }));
+		setPage(1);
+		dispatch(clearCompanies());
 		dispatch(getAllCompanies(query));
 	};
 

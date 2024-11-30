@@ -1,5 +1,5 @@
 import React, { useState } from "react";
-import { Link, NavLink } from "react-router-dom";
+import { Link, NavLink, useNavigate } from "react-router-dom";
 
 import { CgProfile } from "react-icons/cg";
 import { IoMdNotificationsOutline } from "react-icons/io";
@@ -8,8 +8,8 @@ import ProfileMenu from "./ProfileMenu";
 import MessageNotification from "./MessageNotification";
 
 function LargeHeader() {
-	
 	const [dropMenu, setDropMenu] = useState(false);
+	const navigate = useNavigate();
 	return (
 		<div className="relative">
 			<header className="hidden lg:block  bg-[#f7f7f8] text-black shadow-md">
@@ -32,12 +32,19 @@ function LargeHeader() {
 						</div>
 					</div>
 					<div className="flex items-center gap-3">
-						<NavLink
+						{/* <NavLink
 							to={"/job-portal/saved-jobs"}
 							className="p-1 rounded-md text-2xl bg-[#ede7f6] text-[#673ab7] hover:bg-[#673ab7] hover:text-[#ffffff] hover:scale-105">
 							<IoBookmarkOutline />
-						</NavLink>
-						<MessageNotification />
+						</NavLink> */}
+						<div
+							onClick={() =>
+								navigate(
+									"/job-portal/employer/dashboard/messages"
+								)
+							}>
+							<MessageNotification />
+						</div>
 						<NavLink
 							to={"/notifications"}
 							className="p-1 rounded-md text-2xl bg-[#ede7f6] text-[#673ab7] hover:bg-[#673ab7] hover:text-[#ffffff] hover:scale-105">

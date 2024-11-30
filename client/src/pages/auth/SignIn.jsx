@@ -12,7 +12,7 @@ import { setUser } from "../../Redux/reducers/userReducer";
 import axiosInstance from "../../utils/axios";
 import { RiLoader4Line } from "react-icons/ri";
 
-function SignIn({ openSignUpModal }) {
+function SignIn({ openSignUpModal, openUserInfoModal }) {
 	const [isLoading, setIsLoading] = useState(false);
 	const navigate = useNavigate();
 	const dispatch = useDispatch();
@@ -28,6 +28,13 @@ function SignIn({ openSignUpModal }) {
 			setIsLoading(false);
 			dispatch(setUser(response?.data?.data));
 			showSuccess(response?.data?.message);
+
+			// if user hasn't complete total registration redirect to user info modal
+			if (!userData?.apps?.jobPortal) {
+				setTimeout(() => {
+					openUserInfoModal();
+				}, 300);
+			}
 			if (userData?.apps?.jobPortal?.role === "employee") {
 				navigate("/job-portal/employee");
 			} else if (userData?.apps?.jobPortal?.role === "employer") {

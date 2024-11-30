@@ -1,5 +1,5 @@
 import React, { useEffect, useState } from "react";
-import { Link, NavLink } from "react-router-dom";
+import { Link, NavLink, useNavigate } from "react-router-dom";
 
 import { CgProfile } from "react-icons/cg";
 import { IoMdNotificationsOutline } from "react-icons/io";
@@ -11,7 +11,7 @@ import { useSelector } from "react-redux";
 function LargeHeader() {
 	const [dropMenu, setDropMenu] = useState(false);
 	const { bookmarkedJobs } = useSelector((state) => state.employee);
-
+	const navigate = useNavigate()
 
 	return (
 		<div className="relative">
@@ -48,7 +48,9 @@ function LargeHeader() {
 							)}
 						</NavLink>
 
-						<MessageNotification />
+						<NavLink to={"/job-portal/employee/dashboard/messages"}>
+							<MessageNotification />
+						</NavLink>
 
 						<NavLink
 							to={"/job-portal/employee/notifications"}

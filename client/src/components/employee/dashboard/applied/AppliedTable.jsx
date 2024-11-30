@@ -1,18 +1,30 @@
-import React, { useEffect } from "react";
+import React, { useEffect, useState } from "react";
 import { useDispatch, useSelector } from "react-redux";
 
 import TableBody from "../TableBody";
 import TableHead from "../TableHead";
 import { deleteAAppiedJob } from "../../../../apis/employeeApi";
 import { TbLoader2 } from "react-icons/tb";
+import { getAppliedJobs } from "../../../../Redux/reducers/employeeReducer";
+import Pagination from "../../../common/Pagination";
 
 function AppliedTable() {
-	const { appliedJobs, isLoading } = useSelector((state) => state.employee);
-
+	const { appliedJobs, isLoading, pagination } = useSelector(
+		(state) => state.employee
+	);
 	const dispatch = useDispatch();
+
 	const handleDelete = (id) => {
 		dispatch(deleteAAppiedJob(id));
 	};
+
+	const [currentPage, setCurrentPage] = useState(1);
+	const [itemsPerPage] = useState(5);
+
+
+	useEffect(() => {
+		dispatch(getAppliedJobs(currentPage, itemsPerPage));
+	}, [dispatch, currentPage, itemsPerPage]);
 
 	return (
 		<div className="bg-white p-4 grid gap-4 rounded-md shadow">
@@ -21,7 +33,7 @@ function AppliedTable() {
 					Applied Jobs
 				</h1>
 				<p className="font-semibold">
-					You have applied for {appliedJobs?.length} jobs
+					You have applied for {pagination?.totalApplied} jobs
 				</p>
 			</div>
 			<table>
@@ -40,7 +52,9 @@ function AppliedTable() {
 				</thead>
 				<tbody>
 					{appliedJobs?.length === 0 ? (
-						<p className="center font-semibold my-5 w-full">No jobs applied yet</p>
+						<p className="center font-semibold my-5 w-full">
+							No jobs applied yet
+						</p>
 					) : (
 						appliedJobs?.map((job, index) => (
 							<TableBody
@@ -52,6 +66,10 @@ function AppliedTable() {
 					)}
 				</tbody>
 			</table>
+			<Pagination
+				pagination={pagination}
+				setCurrentPage={setCurrentPage}
+			/>
 		</div>
 	);
 }

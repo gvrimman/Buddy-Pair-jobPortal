@@ -9,14 +9,12 @@ import { getAllCompanies } from "../../../apis/employerApi";
 import InfiniteScroll from "react-infinite-scroll-component";
 import { TbLoader2 } from "react-icons/tb";
 
-function BodySection({ setQuery, query, data, setData }) {
+function BodySection({ query, page, setPage }) {
 	const navigate = useNavigate();
 	const dispatch = useDispatch();
 	const { companies, hasMore, isLoading } = useSelector(
 		(state) => state.employer
 	);
-
-	const [page, setPage] = useState(1);
 
 	const fetchMoreData = () => {
 		if (!hasMore || isLoading) return;
@@ -26,15 +24,6 @@ function BodySection({ setQuery, query, data, setData }) {
 		dispatch(getAllCompanies({ ...query, page: nextPage }));
 	};
 
-	useEffect(() => {
-		setData((prevData) => {
-			const newCompanies = companies.filter(
-				(company) =>
-					!prevData.some((dataItem) => dataItem._id === company._id)
-			);
-			return [...prevData, ...newCompanies];
-		});
-	}, [companies]);
 
 	return (
 		<div className="grid gap-4 my-5 tracking-wide">
@@ -49,7 +38,7 @@ function BodySection({ setQuery, query, data, setData }) {
 				<TbLoader2 className="animate-spin" />
 			</span>
 			<InfiniteScroll
-				dataLength={data?.length}
+				dataLength={companies?.length}
 				next={fetchMoreData}
 				hasMore={hasMore}
 				loader={<h4>Loading...</h4>}
@@ -58,7 +47,7 @@ function BodySection({ setQuery, query, data, setData }) {
 						No more users
 					</p>
 				}>
-				{data?.map((company, index) => (
+				{companies?.map((company, index) => (
 					<div
 						key={index}
 						className="bg-white flex justify-between items-start p-4 border rounded-lg ">

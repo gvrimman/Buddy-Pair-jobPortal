@@ -1,5 +1,5 @@
 import React, { useEffect, useState } from "react";
-import { useLocation } from "react-router-dom";
+import { useLocation, useSearchParams } from "react-router-dom";
 import TitleRendering from "./TitleRendering";
 import DialogModal from "../../components/common/DialogModal";
 import UserLocation from "../auth/UserLocation";
@@ -12,6 +12,16 @@ import UserAdditionInfo from "../auth/UserAdditionInfo";
 import UserResume from "../auth/userResume";
 
 function SplashScreen() {
+	const [searchParams] = useSearchParams();
+	const modal = searchParams.get("modal");
+
+	const params = new URLSearchParams(window.location.search);
+	const error = params.get("error");
+	if (error) {
+		// Display the error message to the user
+		alert(`Error: ${error}`);
+	}
+	
 	const location = useLocation().state;
 	const [isTitleRender, setIsTitleRender] = useState(false);
 
@@ -28,14 +38,11 @@ function SplashScreen() {
 		useState(false);
 	const [isJobDetailsModalOpen, setIsJobDetailsModalOpen] = useState(false);
 
-	const [isUserResumeModalOpen, setIsUserResumeModalOpen] =
-		useState(false);
+	const [isUserResumeModalOpen, setIsUserResumeModalOpen] = useState(false);
 	// ====================================================================
 
 	const [isEmployerInfoModalOpen, setIsEmployerInfoModalOpen] =
 		useState(false);
-
-	// console.log(userData);
 
 	useEffect(() => {
 		if (location?.landValue) {
@@ -49,6 +56,12 @@ function SplashScreen() {
 		}
 	}, [location?.landValue]);
 
+	useEffect(() => {
+		if (modal === "userinfo") {
+			setIsUserInfoModal(true);
+		}
+	}, [modal]);
+
 	return (
 		<article>
 			{isTitleRender ? (
@@ -61,6 +74,10 @@ function SplashScreen() {
 							openSignUpModal={() => {
 								setIsSignInModalOpen(false);
 								setIsSignUpModalOpen(true);
+							}}
+							openUserInfoModal={() => {
+								setIsSignInModalOpen(false);
+								setIsUserInfoModal(true);
 							}}
 						/>
 					</DialogModal>
@@ -110,9 +127,13 @@ function SplashScreen() {
 					</DialogModal>
 
 					{/* user addition info modal */}
-					<DialogModal scale={""} isOpen={isUserAdditionInfoModalOpen}>
+					<DialogModal
+						scale={""}
+						isOpen={isUserAdditionInfoModalOpen}>
 						<UserAdditionInfo
-							onClose={() => setIsUserAdditionInfoModalOpen(false)}
+							onClose={() =>
+								setIsUserAdditionInfoModalOpen(false)
+							}
 							setUserData={setUserData}
 							userData={userData}
 							openJobDetailsModal={() => {
@@ -155,8 +176,6 @@ function SplashScreen() {
 							userData={userData}
 						/>
 					</DialogModal>
-
-					
 
 					{/* ============================EMPLOYER MODALS======================================== */}
 				</>

@@ -1,6 +1,4 @@
 import React from "react";
-
-import { categoryData, jobTypeData } from "../../../utils/job-search.js";
 import TextSearch from "../../common/TextSearch.jsx";
 import OptionSearch from "../../common/OptionSearch.jsx";
 import SwitchSearch from "../../common/SwitchSearch.jsx";

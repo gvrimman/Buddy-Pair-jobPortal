@@ -1,3 +1,4 @@
+import { useDispatch } from 'react-redux';
 import React, { useEffect, useState } from "react";
 import { GrView } from "react-icons/gr";
 import { GrLocation } from "react-icons/gr";
@@ -8,12 +9,12 @@ import { useSelector } from "react-redux";
 import { getAllCompaniesEmployee } from "../../../apis/employeeApi";
 import { useNavigate } from "react-router-dom";
 
-function CompanyBody({ setQuery, query, data, setData }) {
+function CompanyBody({  query, page, setPage }) {
 	const { companies, hasMore, isLoading } = useSelector(
 		(state) => state.employee
 	);
+	const dispatch = useDispatch();
 	const navigate = useNavigate()
-	const [page, setPage] = useState(1);
 
 	const fetchMoreData = () => {
 		if (!hasMore || isLoading) return;
@@ -22,16 +23,6 @@ function CompanyBody({ setQuery, query, data, setData }) {
 		setPage(nextPage);
 		dispatch(getAllCompaniesEmployee({ ...query, page: nextPage }));
 	};
-
-	useEffect(() => {
-		setData((prevData) => {
-			const newCompanies = companies.filter(
-				(company) =>
-					!prevData.some((dataItem) => dataItem._id === company._id)
-			);
-			return [...prevData, ...newCompanies];
-		});
-	}, [companies]);
 
 	return (
 		<div className="grid gap-4 my-5">
@@ -47,7 +38,7 @@ function CompanyBody({ setQuery, query, data, setData }) {
 			</span>
 
 			<InfiniteScroll
-				dataLength={data?.length}
+				dataLength={companies?.length}
 				next={fetchMoreData}
 				hasMore={hasMore}
 				loader={<h4>Loading...</h4>}
@@ -56,6 +47,14 @@ function CompanyBody({ setQuery, query, data, setData }) {
 						No more companies
 					</p>
 				}>
+				<div className="mt-10">
+					{companies?.length === 0 && (
+						<p className="text-center font-semibold text-2xl">
+							No companies found! Try searching by company name or
+							location
+						</p>
+					)}
+				</div>
 				{companies?.map((company, index) => (
 					<div
 						key={index}

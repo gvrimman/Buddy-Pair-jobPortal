@@ -209,7 +209,7 @@ const employeeSignup = asyncHandler(async (req, res) => {
 		socialLinks,
 		skills,
 		jobDetails: jobDetails ? jobDetails : { workExperience: "fresher" },
-		profileImage: profileImage[0]?.location,
+		profileImage: profileImage ? profileImage[0]?.location : "",
 		resume: resume[0]?.location,
 		role: "employee",
 	});
@@ -306,8 +306,8 @@ const employerSignup = asyncHandler(async (req, res) => {
 		industryType,
 		employmentType,
 		companyLinkedin,
-		companyLogo: companyLogo[0]?.location,
-		profileImage: profileImage[0]?.location,
+		companyLogo: companyLogo ? companyLogo[0]?.location : "",
+		profileImage: profileImage ? profileImage[0]?.location : "",
 		dob,
 		age,
 		gender,
@@ -415,7 +415,6 @@ const updateProfileInfo = asyncHandler(async (req, res) => {
 	} = req.body;
 	const profileImage = req.files && req.files[0] ? req.files[0] : null;
 	const resume = req.files && req.files[0] ? req.files[0] : null;
-
 
 	const userId = req.user._id;
 
