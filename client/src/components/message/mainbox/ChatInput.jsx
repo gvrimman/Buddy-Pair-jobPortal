@@ -1,16 +1,18 @@
 import React, { useState } from "react";
 import { IoMdSend } from "react-icons/io";
-import { useDispatch } from "react-redux";
-import { toast } from "react-toastify";
+import { useDispatch, useSelector } from "react-redux";
+import { toast } from "react-toastify"; 
 
 import messagePop from "/assets/sounds/message-pop-alert.mp3";
 import { setSendChat } from "../../../apis/messageApi";
 import { showError } from "../../../utils/toast";
 // import { setSendChat } from "../../../../redux/chatSlice";
 
-function ChatInput({ receiverId }) {
+function ChatInput({ receiver }) {
   const [chatValue, setChatValue] = useState("");
   const dispatch = useDispatch();
+  const { socket } = useSelector((state) => state.socket);
+  const { userInfo } = useSelector((state) => state.user);
 
   const handleChangeValue = (e) => {
     setChatValue(e.target.value);
@@ -19,7 +21,15 @@ function ChatInput({ receiverId }) {
   const handleSendBtn = async () => {
     if (!chatValue) return;
     try {
-      dispatch(setSendChat({ id: receiverId.toString(), message: chatValue }));
+      dispatch(
+        setSendChat({
+          user: userInfo._id,
+          id: receiver.userId.toString(),
+          message: chatValue,
+          chatId: receiver.chatId.toString(),
+          socket
+        })
+      );
       const audio = new Audio(messagePop);
       audio.play();
       setChatValue("");

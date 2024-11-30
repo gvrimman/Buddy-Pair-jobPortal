@@ -2,12 +2,15 @@ const express = require("express");
 
 const { verifyJwt, authorize } = require("../middlewares/jwtAuth");
 const {
-	getMessages,
-	sendMessage,
-	getUserUnreadMessages,
-	markMessageAsRead,
-	markAllMessageAsRead,
-	getOtherUsers,
+  getMessages,
+  sendMessage,
+  getUserUnreadMessages,
+  markMessageAsRead,
+  markAllMessageAsRead,
+  getOtherUsers,
+  createConversation,
+  getConversation,
+  getAllConversation,
 } = require("../controllers/messageController");
 
 const router = express.Router();
@@ -19,6 +22,11 @@ router.route("/:id/unread").get(verifyJwt, getUserUnreadMessages);
 
 router.route("/:id/read").post(verifyJwt, markMessageAsRead);
 router.route("/read").post(verifyJwt, markAllMessageAsRead);
+
+//Chat updated routes
+router.route("/create").post(verifyJwt, createConversation);
+router.route("/chat/all").get(verifyJwt, getAllConversation);
+router.route("/chat/:id").get(verifyJwt, getConversation);
 
 /* 
 router.get("/:id", getMessages);

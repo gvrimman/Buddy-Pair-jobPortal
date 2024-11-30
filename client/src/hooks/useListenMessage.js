@@ -2,7 +2,7 @@ import { useEffect } from "react";
 import { useDispatch, useSelector } from "react-redux";
 
 import notificationSound from "/assets/sounds/positive-notification.wav";
-import { setSendChatMessage, setUnreadMessages } from "../Redux/reducers/chatReducer";
+import { setChat, setUnreadMessages } from "../Redux/reducers/chatReducer";
 
 function useListenMessage() {
   const socket = useSelector((state) => state.socket.socket);
@@ -15,10 +15,16 @@ function useListenMessage() {
       newMessage.shouldShake = true;
       const audio = new Audio(notificationSound);
       audio.play();
+      console.log(
+        selectedUser.userId === newMessage.senderId,
+        selectedUser.userId,
+        newMessage.senderId,
+        newMessage.receiverId
+      );
       const isChatOpen =
-        selectedUser._id === newMessage.senderId ? true : false;
+        selectedUser.userId === newMessage.senderId ? true : false;
       if (isChatOpen) {
-        dispatch(setSendChatMessage([...chats, newMessage]));
+        dispatch(setChat(newMessage));
       }
     });
 
