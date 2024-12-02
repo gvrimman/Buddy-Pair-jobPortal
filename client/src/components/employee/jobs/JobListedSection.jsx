@@ -1,4 +1,4 @@
-import React, { useEffect, useState } from "react";
+import React from "react";
 import { CiLocationOn } from "react-icons/ci";
 import { IoBagHandleOutline } from "react-icons/io5";
 import { FaMoneyBill1Wave } from "react-icons/fa6";
@@ -11,13 +11,13 @@ import { bookmarkAJob, getJobs } from "../../../apis/employeeApi";
 import { MdBookmarkAdded } from "react-icons/md";
 import InfiniteScroll from "react-infinite-scroll-component";
 
-function JobListedSection({ query, page, setPage }) {
+function JobListedSection({ page, setPage }) {
+
 	const navigate = useNavigate();
 	const dispatch = useDispatch();
-	const { jobs, isLoading, bookmarkedJobs, hasMore } = useSelector(
+	const { jobs, isLoading, bookmarkedJobs, hasMore, query } = useSelector(
 		(state) => state.employee
 	);
-
 
 	const fetchMoreData = () => {
 		if (!hasMore || isLoading) return;

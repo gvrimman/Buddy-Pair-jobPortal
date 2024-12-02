@@ -1,12 +1,17 @@
 import React, { useEffect, useState } from "react";
 import { MdOutlineWorkOutline } from "react-icons/md";
+import { useDispatch, useSelector } from "react-redux";
+import { setQuery } from "../../Redux/reducers/employeeReducer";
 
-function OptionSearch({ title, contents, setQuery, query }) {
+function OptionSearch({ title, contents }) {
+		const { query } = useSelector((state) => state.employee);
+		const dispatch = useDispatch()
+
 	const [optionValue, setOptionValue] = useState("");
 
 	const handleOptionValue = (e) => {
 		setOptionValue(e.target.value);
-		setQuery((prev) => ({ ...prev, [e.target.name]: e.target.value }));
+		dispatch(setQuery({ ...query, [e.target.name]: e.target.value }));
 	};
 
 	return (

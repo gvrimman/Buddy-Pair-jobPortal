@@ -6,6 +6,10 @@ import Messages from "./pages/employer/dashboard/Messages";
 import SingleCompany from "./pages/employee/SingleCompany";
 import PublicRoute from "./router/PublicRoute";
 import PageLoader from "./pages/shared/PageLoader";
+import EmployeeNotification from "./pages/employee/dashboard/EmployeeNotification";
+import useListenNotification from "./hooks/useListenNotification";
+import { useSocket } from "./hooks/useSocket";
+import EmployerNotification from "./pages/employer/dashboard/EmployerNotification";
 const Layout = lazy(() => import("./components/layout/Layout"));
 const SplashScreen = lazy(() => import("./pages/shared/SplashScreen"));
 const EmployerHome = lazy(() => import("./pages/employer/EmployerHome"));
@@ -65,6 +69,9 @@ const SingleEmployerCompany = lazy(() =>
 );
 
 function App() {
+	useSocket(); // Initializes the socket
+	useListenNotification(); // Listens for notifications globally
+
 	return (
 		<div>
 			<Suspense fallback={<PageLoader />}>
@@ -132,7 +139,12 @@ function App() {
 							/>
 
 							<Route path="messages" element={<Messages />} />
-							{/* <Route path="notifications" element={<Notification />} /> */}
+							{
+								<Route
+									path="notifications"
+									element={<EmployerNotification />}
+								/>
+							}
 						</Route>
 					</Route>
 
@@ -149,7 +161,12 @@ function App() {
 								element={<HomeCompanies />}
 							/>
 							<Route path="saved-jobs" element={<Saved />} />
-							{/* <Route path="notifications" element={<Notifications />} /> */}
+							{/* {
+								<Route
+									path="notifications"
+									element={<Notifications />}
+								/>
+							} */}
 							{/* <Route
 						path="information-form"
 						element={<MultiInfoForm />}
@@ -185,10 +202,10 @@ function App() {
 								path="messages"
 								element={<EmployeeMessages />}
 							/>
-							{/* <Route
-						path="notification"
-						element={<EmployeeNotification />}
-					/> */}
+							<Route
+								path="notification"
+								element={<EmployeeNotification />}
+							/>
 							<Route
 								path="change-password"
 								element={<EmployeeChangePassword />}

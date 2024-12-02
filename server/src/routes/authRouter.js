@@ -12,6 +12,8 @@ const {
 	renewalOfAccessToken,
 	logout,
 	updateEmployerProfileInfo,
+	forgotPassword,
+	resetPassword,
 } = require("../controllers/auth/authController");
 const {
 	googleAuth,
@@ -73,6 +75,10 @@ router.route("/logout").post(verifyJwt, logout);
 
 // update user password
 router.route("/password").put(verifyJwt, authorize("employee"), updatePassword);
+
+// forgot password
+router.route("/forgot-password").post(forgotPassword);
+router.route("/reset-password").post(resetPassword);
 
 // google authentication
 router.route("/google").get(googleAuth);

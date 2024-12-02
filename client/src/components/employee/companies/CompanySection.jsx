@@ -1,11 +1,13 @@
 import React, { useEffect, useState } from "react";
 import CompanyHead from "./CompanyHead";
 import CompanyBody from "./CompanyBody";
-import { useDispatch } from "react-redux";
+import { useDispatch, useSelector } from "react-redux";
 import { getAllCompaniesEmployee } from "../../../apis/employeeApi";
-import { clearCompanies } from "../../../Redux/reducers/employeeReducer";
+import { clearCompanies, clearQuery } from "../../../Redux/reducers/employeeReducer";
 
-function CompanySection({ toggleValue, setToggleValue, setQuery, query }) {
+function CompanySection({ toggleValue, setToggleValue }) {
+	const { query } = useSelector((state) => state.employee);
+
 	const dispatch = useDispatch();
 	const [page, setPage] = useState(1);
 
@@ -18,7 +20,7 @@ function CompanySection({ toggleValue, setToggleValue, setQuery, query }) {
 	const handleClearFilter = () => {
 		setPage(1);
 		dispatch(clearCompanies());
-		setQuery({});
+		dispatch(clearQuery());
 	};
 
 	return (
@@ -30,11 +32,9 @@ function CompanySection({ toggleValue, setToggleValue, setQuery, query }) {
 				setToggleValue={setToggleValue}
 				handleClearFilter={handleClearFilter}
 				handleSearchCandidate={handleSearchCandidate}
-				query={query}
-				setQuery={setQuery}
 				setPage={setPage}
 			/>
-			<CompanyBody query={query} page={page} setPage={setPage} />
+			<CompanyBody page={page} setPage={setPage} />
 		</div>
 	);
 }

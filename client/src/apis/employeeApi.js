@@ -109,7 +109,6 @@ export const getAppiedJobs =
 			const response = await axiosInstance.get(
 				`/employee/applied-jobs?page=${page}&limit=${limit}`
 			);
-			console.log(response?.data?.data);
 			dispatch(
 				getAppliedJobs({
 					appliedJobs: response?.data?.data?.applied?.appliedJobs,

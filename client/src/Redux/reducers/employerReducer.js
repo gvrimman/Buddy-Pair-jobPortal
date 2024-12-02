@@ -14,7 +14,7 @@ const initialState = {
 	error: null,
 	hasMore: true,
 	pagination: null,
-	queries: null,
+	// query: null,
 };
 
 const employerSlice = createSlice({
@@ -122,12 +122,12 @@ const employerSlice = createSlice({
 		fetchError(state, action) {
 			(state.isLoading = false), (state.error = action.payload);
 		},
-		setQuery: (state, action) => {
-			state.queries = action.payload;
-		},
-		clearQuery: (state, action) => {
-			state.queries = null;
-		},
+		// setQuery: (state, action) => {
+		// 	state.query = action.payload;
+		// },
+		// clearQuery: (state, action) => {
+		// 	state.query = null;
+		// },
 	},
 });
 
@@ -151,8 +151,8 @@ export const {
 	clearCandidates,
 	clearCompanies,
 	clearApplicants,
-	setQuery,
-	clearQuery,
+	// setQuery,
+	// clearQuery,
 } = employerSlice.actions;
 
 export default employerSlice.reducer;

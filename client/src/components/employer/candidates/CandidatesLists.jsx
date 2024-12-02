@@ -10,11 +10,12 @@ import { useDispatch, useSelector } from "react-redux";
 import InfiniteScroll from "react-infinite-scroll-component";
 import { getCandidates } from "../../../apis/employerApi";
 
-function CandidatesLists({ query, page, setPage }) {
+function CandidatesLists({ page, setPage }) {
 	const dispatch = useDispatch();
 	const { candidates, hasMore, isLoading } = useSelector(
 		(state) => state.employer
 	);
+	const { query } = useSelector((state) => state.employee);
 
 	const [hoveredIndex, setHoveredIndex] = useState(null);
 	

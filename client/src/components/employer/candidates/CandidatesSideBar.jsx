@@ -6,7 +6,7 @@ import TextSearch from "../../common/TextSearch.jsx";
 import OptionSearch from "../../common/OptionSearch.jsx";
 import SwitchSearch from "../../common/SwitchSearch.jsx";
 
-function CandidatesSideBar({ toggleValue, setToggleValue, setQuery }) {
+function CandidatesSideBar({ toggleValue, setToggleValue }) {
 	return (
 		<div
 			className={`bg-customBgColor h-screen py-5 absolute grid gap-5 ps-6 pr-2 transition-all ease-in-out duration-500 z-10 overflow-y-auto scroll-smooth ${
@@ -14,7 +14,6 @@ function CandidatesSideBar({ toggleValue, setToggleValue, setQuery }) {
 			}`}>
 			<div className="relative flex ">
 				<TextSearch
-					setQuery={setQuery}
 					firsttitle={"Search by keywords"}
 					secondtitle={"Location"}
 				/>
@@ -25,18 +24,14 @@ function CandidatesSideBar({ toggleValue, setToggleValue, setQuery }) {
 				</div>
 			</div>
 			<OptionSearch
-				setQuery={setQuery}
 				title={"Category"}
 				contents={preferredJobType}
 			/>
 			<SwitchSearch
-				setQuery={setQuery}
 				title={"Experience"}
 				contents={experienceData}
 			/>
-			{/* <RadioSearch title={"Date Posted"} contents={postedDateData} /> */}
 			<SwitchSearch
-				setQuery={setQuery}
 				title={"Gender"}
 				contents={genderOptions}
 			/>

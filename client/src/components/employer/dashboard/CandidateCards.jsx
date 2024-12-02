@@ -15,20 +15,46 @@ import {
 } from "../../../apis/employerApi";
 import { useNavigate } from "react-router-dom";
 import InfiniteScroll from "react-infinite-scroll-component";
+import useListenNotification from "../../../hooks/useListenNotification";
+import { useSocket } from "../../../hooks/useSocket";
 
 function CandidateCards({ maleImg, femaleImg, fetchMoreData }) {
 	const dispatch = useDispatch();
 	const navigate = useNavigate();
 	const { applicants, acceptedApplicants, rejected, isLoading, hasMore } =
 		useSelector((state) => state.employer);
+	useSocket();
+
+	const { sendNotifications } = useListenNotification();
+
 	const handleApprove = async (jobId, userId) => {
-		await dispatch(acceptAJob(jobId, userId));
-		await dispatch(getAcceptedJobs());
+		try {
+			await dispatch(acceptAJob(jobId, userId));
+			await dispatch(getAcceptedJobs());
+			sendNotifications(
+				userId,
+				"accept", 
+				"You have been accepted for this job",
+				`employee/job/${jobId}`
+			);
+		} catch (error) {
+			console.error("Error approving job:", error);
+		}
 	};
 
 	const handleReject = async (jobId, userId) => {
-		await dispatch(rejectAJob(jobId, userId));
-		await dispatch(getRejectedJobs());
+		try {
+			await dispatch(rejectAJob(jobId, userId));
+			await dispatch(getRejectedJobs());
+			sendNotifications(
+				userId,
+				"reject", 
+				"Your Job application has been rejected",
+				`employee/job/${jobId}`
+			);
+		} catch (error) {
+			console.error("Error rejecting job:", error);
+		}
 	};
 
 	return (

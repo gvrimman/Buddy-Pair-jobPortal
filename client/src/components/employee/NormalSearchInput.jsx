@@ -5,7 +5,7 @@ import { CiLocationOn } from "react-icons/ci";
 import { useDispatch } from "react-redux";
 import { useNavigate } from "react-router-dom";
 import { getJobs } from "../../apis/employeeApi";
-import { setQuery } from "../../Redux/reducers/employeeReducer";
+import { clearQuery, setQuery } from "../../Redux/reducers/employeeReducer";
 
 function NormalSearchInput() {
 	const [searchTerms, setSearchTerms] = useState({
@@ -24,6 +24,8 @@ function NormalSearchInput() {
 		}
 
 		dispatch(clearJobs());
+		dispatch(clearQuery());
+
 		dispatch(getJobs(searchTerms));
 		dispatch(setQuery(searchTerms));
 		navigate("/job-portal/employee/jobs");

@@ -6,7 +6,8 @@ import { useDispatch, useSelector } from "react-redux";
 import { useNavigate } from "react-router-dom";
 import { getCandidates } from "../../apis/employerApi";
 import { showError } from "../../utils/toast";
-import { clearCandidates, setQuery } from "../../Redux/reducers/employerReducer";
+import { clearCandidates } from "../../Redux/reducers/employerReducer";
+import { clearQuery, setQuery } from "../../Redux/reducers/employeeReducer";
 
 function LargeSearch() {
 	const [searchTerms, setSearchTerms] = useState({
@@ -24,6 +25,7 @@ function LargeSearch() {
 		}
 		dispatch(clearCandidates());
 		dispatch(getCandidates(searchTerms));
+		dispatch(clearQuery())
 		dispatch(setQuery(searchTerms));
 		navigate("/job-portal/employer/candidates");
 	};

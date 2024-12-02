@@ -125,6 +125,15 @@ const jobPortalSchema = new mongoose.Schema(
 		unreadMessages: [
 			{ type: mongoose.Schema.Types.ObjectId, ref: "Message" },
 		],
+		notifications: [
+			{ type: mongoose.Schema.Types.ObjectId, ref: "Notification" },
+		],
+		resetPasswordOtp: {
+			type: String,
+		},
+		resetPasswordExpire: {
+			type: Date,
+		},
 	},
 	{ timestamps: true }
 );

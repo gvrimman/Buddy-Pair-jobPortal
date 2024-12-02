@@ -1,10 +1,15 @@
 import React, { useEffect, useState } from "react";
 import { CiSearch } from "react-icons/ci";
 import { CiLocationOn } from "react-icons/ci";
+import { useDispatch, useSelector } from "react-redux";
+import { setQuery } from "../../Redux/reducers/employeeReducer";
 
-function TextSearch({ firsttitle, secondtitle, setQuery ,query }) {
+function TextSearch({ firsttitle, secondtitle  }) {
+		const { query } = useSelector((state) => state.employee);
+		const dispatch = useDispatch()
+
 	const handleChange = (e) => {
-		setQuery((prev) => ({ ...prev, [e.target.name]: e.target.value }));
+		dispatch(setQuery({ ...query, [e.target.name]: e.target.value }));
 	};
 
 	return (

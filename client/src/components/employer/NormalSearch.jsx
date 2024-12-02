@@ -6,7 +6,8 @@ import { useDispatch } from "react-redux";
 import { useNavigate } from "react-router-dom";
 import { showError } from "../../utils/toast";
 import { getCandidates } from "../../apis/employerApi";
-import { clearCandidates, setQuery } from "../../Redux/reducers/employerReducer";
+import { clearCandidates } from "../../Redux/reducers/employerReducer";
+import { clearQuery, setQuery } from "../../Redux/reducers/employeeReducer";
 
 function NormalSearch() {
 	const [searchTerms, setSearchTerms] = useState({
@@ -23,6 +24,7 @@ function NormalSearch() {
 			return;
 		}
 		dispatch(clearCandidates())
+		dispatch(clearQuery());
 		dispatch(getCandidates(searchTerms));
 		dispatch(setQuery(searchTerms));
 		navigate("/job-portal/employer/candidates");

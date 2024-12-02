@@ -8,6 +8,7 @@ import {
 } from "../../../../apis/employeeApi";
 import { TbLoader2 } from "react-icons/tb";
 import Pagination from "../../../common/Pagination";
+import SkeltonList from "../../../message/sidebar/SkeltonList";
 
 function BookMarked() {
 	const { bookmarkedJobs, isLoading, pagination } = useSelector(
@@ -18,7 +19,7 @@ function BookMarked() {
 	const [currentPage, setCurrentPage] = useState(1);
 	const [itemsPerPage] = useState(5);
 
-	const handleDelete =async (id) => {
+	const handleDelete = async (id) => {
 		await dispatch(deleteBookmarkedJob(id));
 		await dispatch(getBookmarkedJobs(currentPage, itemsPerPage));
 	};
@@ -40,23 +41,19 @@ function BookMarked() {
 				</p>
 			</div>
 
-			<div
-				className={`fixed inset-0  bg-gray-500 opacity-30 transition  ${
-					isLoading ? "block" : "hidden"
-				}`}></div>
-			<span
-				className={`text-purple-900 text-2xl fixed top-1/2 left-1/2 transform -translate-x-1/2 -translate-y-1/2  ${
-					isLoading ? "block" : "hidden"
-				} `}>
-				<TbLoader2 className="animate-spin" />
-			</span>
 			<table>
 				<thead className="bg-blue-100 text-blue-500">
 					<TableHead />
 				</thead>
 
 				<tbody>
-					{bookmarkedJobs?.length === 0 ? (
+					{isLoading ? (
+						<tr>
+							<td colSpan="100%">
+								<SkeltonList />
+							</td>
+						</tr>
+					) : bookmarkedJobs?.length === 0 ? (
 						<p className="center font-semibold my-5 w-full">
 							No bookmarked jobs
 						</p>

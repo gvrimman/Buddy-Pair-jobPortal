@@ -3,9 +3,12 @@ import CandidatesSectionHeader from "./CandidatesSectionHeader";
 import CandidatesLists from "./CandidatesLists";
 import { useDispatch, useSelector } from "react-redux";
 import { getCandidates } from "../../../apis/employerApi";
-import { clearCandidates, clearQuery } from "../../../Redux/reducers/employerReducer";
+import { clearCandidates } from "../../../Redux/reducers/employerReducer";
+import { clearQuery } from "../../../Redux/reducers/employeeReducer";
 
-function CandidatesSection({ toggleValue, setToggleValue, setQuery, query }) {
+function CandidatesSection({ toggleValue, setToggleValue }) {
+		const { query } = useSelector((state) => state.employee);
+
 	const dispatch = useDispatch();
 	const [page, setPage] = useState(1);
 	const handleSearchCandidate = async () => {
@@ -17,7 +20,6 @@ function CandidatesSection({ toggleValue, setToggleValue, setQuery, query }) {
 	const handleClearFilter = () => {
 		setPage(1);
 		dispatch(clearCandidates());
-		setQuery({});
 		dispatch(clearQuery());
 	};
 
@@ -29,12 +31,10 @@ function CandidatesSection({ toggleValue, setToggleValue, setQuery, query }) {
 			<CandidatesSectionHeader
 				handleSearchCandidate={handleSearchCandidate}
 				handleClearFilter={handleClearFilter}
-				query={query}
-				setQuery={setQuery}
 				setToggleValue={setToggleValue}
 				setPage={setPage}
 			/>
-			<CandidatesLists query={query} page={page} setPage={setPage} />
+			<CandidatesLists page={page} setPage={setPage} />
 		</div>
 	);
 }

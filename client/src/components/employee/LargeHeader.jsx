@@ -11,7 +11,8 @@ import { useSelector } from "react-redux";
 function LargeHeader() {
 	const [dropMenu, setDropMenu] = useState(false);
 	const { bookmarkedJobs } = useSelector((state) => state.employee);
-	const navigate = useNavigate()
+	const { unreadCount } = useSelector((state) => state.notification);
+	const navigate = useNavigate();
 
 	return (
 		<div className="relative">
@@ -53,9 +54,14 @@ function LargeHeader() {
 						</NavLink>
 
 						<NavLink
-							to={"/job-portal/employee/notifications"}
-							className="p-1 rounded-md text-2xl bg-[#ede7f6] text-[#673ab7] hover:bg-[#673ab7] hover:text-[#ffffff] hover:scale-105">
+							to={"/job-portal/employee/dashboard/notification"}
+							className="relative p-1 rounded-md text-2xl bg-[#ede7f6] text-[#673ab7] hover:bg-[#673ab7] hover:text-[#ffffff] hover:scale-105">
 							<IoMdNotificationsOutline />
+							{unreadCount === 0 ? null : (
+								<span className="absolute -top-3 -right-3 min-w-6 min-h-6 flex items-center justify-center bg-customViolet text-white text-sm rounded-full ">
+									{unreadCount}
+								</span>
+							)}
 						</NavLink>
 
 						<NavLink

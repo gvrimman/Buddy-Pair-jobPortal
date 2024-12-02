@@ -13,6 +13,7 @@ import { useNavigate } from "react-router-dom";
 import { deleteAJob, getPostedJobs } from "../../../../apis/employerApi";
 import { useDispatch, useSelector } from "react-redux";
 import Pagination from "../../../common/Pagination";
+import SkeltonList from "../../../message/sidebar/SkeltonList";
 
 function ManageTable() {
 	const navigate = useNavigate();
@@ -45,9 +46,6 @@ function ManageTable() {
 		await dispatch(getPostedJobs(currentPage, itemsPerPage));
 	};
 
-	if (isLoading) {
-		return <div className="text-center py-4">Loading...</div>;
-	}
 
 	return (
 		<>
@@ -66,7 +64,13 @@ function ManageTable() {
 					</tr>
 				</thead>
 				<tbody className="overflow-x-auto custom-scrollbar">
-					{jobs?.length === 0 ? (
+					{isLoading ? (
+						<tr>
+							<td colSpan="100%">
+								<SkeltonList/>
+							</td>
+						</tr>
+					) : jobs?.length === 0 ? (
 						<tr>
 							<td colSpan={6} className="text-center py-4">
 								No jobs found

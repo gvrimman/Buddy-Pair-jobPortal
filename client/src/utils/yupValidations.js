@@ -247,6 +247,24 @@ const passwordValidations = Yup.object().shape({
 		.oneOf([Yup.ref("newPassword"), null], "Passwords must match"),
 });
 
+// forgot password validation
+const forgotPasswordValidation = Yup.object().shape({
+	email: Yup.string()
+		.email("Invalid email format")
+		.required("Email is required"),
+});
+
+// reset password validation
+const resetPasswordValidation = Yup.object().shape({
+	otp: Yup.string().required("OTP is required"),
+	password: Yup.string()
+		.required("Password is required")
+		.min(3, "Minimum 8 characters"),
+	confirmPassword: Yup.string()
+		.required("Confirm Password is required")
+		.oneOf([Yup.ref("password"), null], "Passwords must match"),
+});
+
 export {
 	signupValidations,
 	loginValidations,
@@ -262,4 +280,6 @@ export {
 	passwordValidations,
 	employerProfileValidation,
 	employerLinkedinValidation,
+	forgotPasswordValidation,
+	resetPasswordValidation,
 };

@@ -24,6 +24,7 @@ const googleAuthCallback = (req, res, next) => {
 				"http://localhost:5173/auth?error=Authentication failed"
 			);
 		}
+
 		req.logIn(user, async (loginErr) => {
 			if (loginErr) {
 				return res.redirect(
@@ -34,45 +35,77 @@ const googleAuthCallback = (req, res, next) => {
 			}
 
 			try {
+				console.log('user',user);
 				const existingUser = await User.findOne({
-					googleId: user.id,
-				});
-
-				// console.log(user);
-				// console.log(existingUser);
-
+					googleId: user.id || user.googleId,
+				}).populate("apps.jobPortal");
+				console.log('ex',existingUser)
 				if (existingUser) {
-					if (existingUser?.apps?.jobPortal?.role === "employee") {
-						return res.redirect("http://localhost:5173/employee");
-					} else if (
-						existingUser?.apps?.jobPortal?.role === "employer"
-					) {
-						return res.redirect("http://localhost:5173/employer");
+					try {
+						const { accessToken, refreshToken } =
+							await generateAccessAndRefreshToken(
+								existingUser._id
+							);
+
+						const options = {
+							httpOnly: true,
+							secure: true,
+							maxAge: 7 * 24 * 60 * 60 * 1000,
+						};
+
+						res.cookie("accessToken", accessToken, options);
+						res.cookie("refreshToken", refreshToken, options);
+
+						return res.redirect(
+							`http://localhost:5173/auth?user=${encodeURIComponent(
+								JSON.stringify(existingUser)
+							)}`
+						);
+					} catch (tokenError) {
+						console.error("Token generation error:", tokenError);
+						return res.redirect(
+							`http://localhost:5173/auth?error=${encodeURIComponent(
+								"Failed to generate authentication tokens"
+							)}`
+						);
 					}
 				} else {
-					const uewUser = new User({
-						googleId: user.id,
+					const newUser = new User({
+						googleId: user.googleId,
 						username: user.username,
 						email: user.email,
 						phone: user.phone || null,
 					});
-					await uewUser.save();
 
-					const { accessToken, refreshToken } =
-						await generateAccessAndRefreshToken(uewUser._id);
-					const options = {
-						httpOnly: true,
-						secure: true,
-						maxAge: 7 * 24 * 60 * 60 * 1000,
-					};
-					res.cookie("accessToken", accessToken, options);
-					res.cookie("refreshToken", refreshToken, options);
+					await newUser.save();
 
-					return res.redirect(
-						"http://localhost:5173/auth?modal=userinfo"
-					);
+					try {
+						const { accessToken, refreshToken } =
+							await generateAccessAndRefreshToken(newUser._id);
+
+						const options = {
+							httpOnly: true,
+							secure: true,
+							maxAge: 7 * 24 * 60 * 60 * 1000,
+						};
+
+						res.cookie("accessToken", accessToken, options);
+						res.cookie("refreshToken", refreshToken, options);
+
+						return res.redirect(
+							"http://localhost:5173/auth?modal=userinfo"
+						);
+					} catch (tokenError) {
+						console.error("Token generation error:", tokenError);
+						return res.redirect(
+							`http://localhost:5173/auth?error=${encodeURIComponent(
+								"Failed to generate authentication tokens"
+							)}`
+						);
+					}
 				}
 			} catch (error) {
+				console.error("Authentication error:", error);
 				return res.redirect(
 					`http://localhost:5173/auth?error=${encodeURIComponent(
 						error.message
@@ -82,5 +115,4 @@ const googleAuthCallback = (req, res, next) => {
 		});
 	})(req, res, next);
 };
-
 module.exports = { googleAuth, googleAuthCallback };

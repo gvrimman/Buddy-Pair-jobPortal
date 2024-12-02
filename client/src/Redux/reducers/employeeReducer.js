@@ -11,7 +11,7 @@ const initialState = {
 	error: null,
 	hasMore: true,
 	pagination: null,
-	queries: null,
+	query: null,
 };
 
 const employeeSlice = createSlice({
@@ -94,10 +94,10 @@ const employeeSlice = createSlice({
 			state.isLoading = false;
 		},
 		setQuery: (state, action) => {
-			state.queries = action.payload;
+			state.query = action.payload;
 		},
 		clearQuery: (state, action) => {			
-			state.queries = null;
+			state.query = null;
 		},
 	},
 });

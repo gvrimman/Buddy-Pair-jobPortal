@@ -7,13 +7,12 @@ import { useNavigate } from "react-router-dom";
 
 function OpenJobs({ openJobs }) {
   const navigate = useNavigate();
-  console.log(openJobs);
   return (
 		<div className="mt-5">
 			<h1 className="text-xl font-semibold tracking-wider">
 				Available Jobs
 			</h1>
-			{openJobs.length === 0 ? (
+			{openJobs?.length === 0 ? (
 				<h2 className="mx-2 my-4 text-sm text-slate-700 font-semibold tracking-wider">
 					Currently, there are no job openings at this company. Please
 					check back later for future opportunities.

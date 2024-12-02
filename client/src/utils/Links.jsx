@@ -95,11 +95,11 @@ export const employerDashboardLinks = [
 		text: "messages",
 		icon: <RiMessage2Line />,
 	},
-	// {
-	//   path: "/employer/dashboard/notifications",
-	//   text: "notifications",
-	//   icon: <IoMdNotificationsOutline />,
-	// },
+	{
+		path: "/job-portal/employer/dashboard/notifications",
+		text: "notifications",
+		icon: <IoMdNotificationsOutline />,
+	},
 ];
 
 export const employeeDashboardLinks = [

@@ -1,5 +1,5 @@
 import React, { useEffect, useState } from "react";
-import { useLocation, useSearchParams } from "react-router-dom";
+import { useLocation, useNavigate, useSearchParams } from "react-router-dom";
 import TitleRendering from "./TitleRendering";
 import DialogModal from "../../components/common/DialogModal";
 import UserLocation from "../auth/UserLocation";
@@ -10,18 +10,16 @@ import JobDetails from "../auth/JobDetails";
 import UserInfo from "../auth/userInfo";
 import UserAdditionInfo from "../auth/UserAdditionInfo";
 import UserResume from "../auth/userResume";
+import { setUser } from "../../Redux/reducers/userReducer";
+import { useDispatch } from "react-redux";
+import { showError } from "../../utils/toast";
+import ForgotPassword from "../auth/ForgotPassword";
+import ResetPassword from "../auth/ResetPassword";
 
 function SplashScreen() {
-	const [searchParams] = useSearchParams();
-	const modal = searchParams.get("modal");
-
-	const params = new URLSearchParams(window.location.search);
-	const error = params.get("error");
-	if (error) {
-		// Display the error message to the user
-		alert(`Error: ${error}`);
-	}
-	
+	const dispatch = useDispatch();
+	const navigate = useNavigate();
+	// ====================================================================
 	const location = useLocation().state;
 	const [isTitleRender, setIsTitleRender] = useState(false);
 
@@ -29,20 +27,61 @@ function SplashScreen() {
 
 	const [isSignInModalOpen, setIsSignInModalOpen] = useState(false);
 	const [isSignUpModalOpen, setIsSignUpModalOpen] = useState(false);
+	const [isForgotPasswordOpen, setIsForgotPasswordOpen] = useState(false);
+	const [mail, setMail] = useState("");
+	const [isResetPassword, setIsResetPassword] = useState(false);
 	const [isUserInfoModal, setIsUserInfoModal] = useState(false);
 	const [isUserLocationModalOpen, setIsUserLocationModalOpen] =
 		useState(false);
 
-	// ====================================================================
 	const [isUserAdditionInfoModalOpen, setIsUserAdditionInfoModalOpen] =
 		useState(false);
 	const [isJobDetailsModalOpen, setIsJobDetailsModalOpen] = useState(false);
 
 	const [isUserResumeModalOpen, setIsUserResumeModalOpen] = useState(false);
-	// ====================================================================
 
 	const [isEmployerInfoModalOpen, setIsEmployerInfoModalOpen] =
 		useState(false);
+	// ====================================================================
+
+	const [searchParams] = useSearchParams();
+	const params = new URLSearchParams(window.location.search);
+
+	const modal = searchParams.get("modal");
+
+	const user = params.get("user");
+
+	const error = params.get("error");
+	if (error) {
+		// Display the error message to the user
+		showError(`Error: ${error}`);
+		setTimeout(() => {
+			navigate("/");
+		}, 100);
+	}
+
+	useEffect(() => {
+		if (modal === "userinfo") {
+			setIsUserInfoModal(true);
+		}
+	}, [modal]);
+
+	if (user) {
+		const parsedUser = JSON.parse(decodeURIComponent(user));
+		dispatch(setUser(parsedUser));
+
+		// if user hasn't complete total registration redirect to user info modal
+		if (!parsedUser?.apps?.jobPortal) {
+			setTimeout(() => {
+				setIsUserInfoModal(true);
+			}, 300);
+		}
+		if (parsedUser?.apps?.jobPortal?.role === "employee") {
+			navigate("/job-portal/employee");
+		} else if (parsedUser?.apps?.jobPortal?.role === "employer") {
+			navigate("/job-portal/employer");
+		}
+	}
 
 	useEffect(() => {
 		if (location?.landValue) {
@@ -55,12 +94,6 @@ function SplashScreen() {
 			return () => clearTimeout(timeout);
 		}
 	}, [location?.landValue]);
-
-	useEffect(() => {
-		if (modal === "userinfo") {
-			setIsUserInfoModal(true);
-		}
-	}, [modal]);
 
 	return (
 		<article>
@@ -78,6 +111,10 @@ function SplashScreen() {
 							openUserInfoModal={() => {
 								setIsSignInModalOpen(false);
 								setIsUserInfoModal(true);
+							}}
+							openForgotPasswordModal={() => {
+								setIsSignInModalOpen(false);
+								setIsForgotPasswordOpen(true);
 							}}
 						/>
 					</DialogModal>
@@ -97,6 +134,29 @@ function SplashScreen() {
 						/>
 					</DialogModal>
 
+					{/* forgot password modal */}
+					<DialogModal scale={""} isOpen={isForgotPasswordOpen}>
+						<ForgotPassword
+							onClose={() => setIsForgotPasswordOpen(false)}
+							openResetPasswordModal={() => {
+								setIsForgotPasswordOpen(false);
+								setIsResetPassword(true);
+							}}
+							setMail={setMail}
+						/>
+					</DialogModal>
+
+					{/* reset password modal */}
+					<DialogModal scale={""} isOpen={isResetPassword}>
+						<ResetPassword
+							onClose={() => setIsResetPassword(false)}
+							openSignInModal={() => {
+								setIsResetPassword(false);
+								setIsSignInModalOpen(true);
+							}}
+							mail={mail}
+						/>
+					</DialogModal>
 					{/* user info modal */}
 					<DialogModal scale={""} isOpen={isUserInfoModal}>
 						<UserInfo

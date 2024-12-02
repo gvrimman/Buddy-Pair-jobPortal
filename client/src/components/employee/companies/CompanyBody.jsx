@@ -1,16 +1,15 @@
-import { useDispatch } from 'react-redux';
-import React, { useEffect, useState } from "react";
+import { useDispatch, useSelector } from 'react-redux';
+import React from "react";
 import { GrView } from "react-icons/gr";
 import { GrLocation } from "react-icons/gr";
 import { MdOutlineEmail } from "react-icons/md";
 import { TbLoader2 } from "react-icons/tb";
 import InfiniteScroll from "react-infinite-scroll-component";
-import { useSelector } from "react-redux";
 import { getAllCompaniesEmployee } from "../../../apis/employeeApi";
 import { useNavigate } from "react-router-dom";
 
-function CompanyBody({  query, page, setPage }) {
-	const { companies, hasMore, isLoading } = useSelector(
+function CompanyBody({  page, setPage }) {
+	const { companies, hasMore, isLoading, query } = useSelector(
 		(state) => state.employee
 	);
 	const dispatch = useDispatch();

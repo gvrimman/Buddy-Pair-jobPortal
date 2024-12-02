@@ -4,8 +4,10 @@ import storage from "redux-persist/lib/storage";
 import userReducer from "../reducers/userReducer";
 import employerReducer from "../reducers/employerReducer";
 import employeeReducer from "../reducers/employeeReducer"
-import chatReducer from '../reducers/chatReducer'
 import socketReducer from '../reducers/socketReducer'
+import chatReducer from '../reducers/chatReducer'
+import notificationReducer from '../reducers/notificationReducer'
+
 
 const userPersistConfig = {
 	key: "user",
@@ -34,22 +36,27 @@ const persistedEmployeeReducer = persistReducer(
 
 
 const store = configureStore({
-  reducer: {
-    user: persistedUserReducer,
-    employer: persistedEmployerReducer,
-    employee: persistedEmployeeReducer,
-    chat: chatReducer,
-    socket: socketReducer,
-  },
+	reducer: {
+		user: persistedUserReducer,
+		employer: persistedEmployerReducer,
+		employee: persistedEmployeeReducer,
+		chat: chatReducer,
+		socket: socketReducer,
+		notification: notificationReducer
+	},
 
-  middleware: (getDefaultMiddleware) =>
-    getDefaultMiddleware({
-      serializableCheck: {
-        ignoredActions: ["persist/PERSIST", "persist/REHYDRATE", "socket/setSocket"],
-        ignoredPaths: ["socket.socket"],
-      },
-      devTools: import.meta.env.NODE_ENV !== "production",
-    }),
+	middleware: (getDefaultMiddleware) =>
+		getDefaultMiddleware({
+			serializableCheck: {
+				ignoredActions: [
+					"persist/PERSIST",
+					"persist/REHYDRATE",
+					"socket/setSocket",
+				],
+				ignoredPaths: ["socket.socket"],
+			},
+			devTools: import.meta.env.NODE_ENV !== "production",
+		}),
 });
 
 export const persistor = persistStore(store);
