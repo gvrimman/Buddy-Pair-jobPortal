@@ -18,14 +18,14 @@ const { appliedJobs, bookmarkedJobs } = useSelector((state) => state.employee);
 					text={"applied jobs"}
 					textColor={"blue-500"}
 					bgColor={"blue-100"}
-					count={appliedJobs.length}
+					count={appliedJobs?.length}
 					icon={<IoBriefcaseOutline />}
 				/>
 				<StatusBox
 					text={"bookmarks"}
 					textColor={"blue-500"}
 					bgColor={"blue-100"}
-					count={bookmarkedJobs.length}
+					count={bookmarkedJobs?.length}
 					icon={<IoBookmarkOutline />}
 				/>
 				<StatusBox

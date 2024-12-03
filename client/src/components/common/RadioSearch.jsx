@@ -1,9 +1,12 @@
+import { useDispatch, useSelector } from 'react-redux';
 import React from "react";
+import { setQuery } from '../../Redux/reducers/employeeReducer';
 
-function RadioSearch({ title, contents, setQuery, query }) {
+function RadioSearch({ title, contents }) {
+		const { query } = useSelector((state) => state.employee);
+		const dispatch = useDispatch();
 	const handleRadioValue = (e) => {
-		// setQuery({ datePosted: e.target.value});
-		setQuery((prev) => ({ ...prev, datePosted: e.target.value }));
+		dispatch(setQuery({ ...query, datePosted: e.target.value }));
 	};
 
 	return (

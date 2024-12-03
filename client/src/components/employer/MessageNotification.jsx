@@ -5,7 +5,6 @@ import { useDispatch, useSelector } from "react-redux";
 import { RiMessage3Line } from "react-icons/ri";
 
 // import { useSocketContext } from "../../../context/SocketContext";
-// import useListenMessage from "../../../hooks/useListenMessage";
 // import { markAllUnreadMessages } from "../../../redux/chatSlice";
 
 function MessageNotification() {
@@ -14,7 +13,6 @@ function MessageNotification() {
   // const { markOneMessageAsRead } = useSocketContext();
   const dispatch = useDispatch();
   const timeAgoRef = useRef();
-  // useListenMessage();
 
   let sender;
   
@@ -49,7 +47,7 @@ function MessageNotification() {
           </span>
         )} */}
       </div>
-      {isOpen ? (
+      {/* {isOpen ? (
         <div className="w-max max-h-80 absolute top-10 -right-14 lg:-left-48 p-3 grid gap-2 bg-white rounded-md shadow overflow-y-auto custom-scrollbar">
           <div className="flex items-center gap-4 mb-2">
             <h1 className="font-semibold">Messages</h1>
@@ -84,7 +82,7 @@ function MessageNotification() {
               </div>
             ))}
         </div>
-      ) : null}
+      ) : null} */}
     </div>
   );
 }

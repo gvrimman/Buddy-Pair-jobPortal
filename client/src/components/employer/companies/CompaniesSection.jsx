@@ -3,18 +3,21 @@ import { useDispatch, useSelector } from "react-redux";
 import CompaniesHead from "./CompaniesHead";
 import BodySection from "./BodySection";
 import { getAllCompanies } from "../../../apis/employerApi";
+import { clearCompanies } from "../../../Redux/reducers/employerReducer";
 
 function CompaniesSection({ toggleValue, setToggleValue, setQuery, query }) {
-	const [data, setData] = useState([]);
-
 	const dispatch = useDispatch();
+	const [page, setPage] = useState(1);
+
 	const handleClearFilter = () => {
-		dispatch(getAllCompanies());
+		setPage(1);
+		dispatch(clearCompanies());
 		setQuery({});
 	};
 
 	const handleSearchCandidate = () => {
-		setData([]);
+		setPage(1);
+		dispatch(clearCompanies());
 		dispatch(getAllCompanies(query));
 	};
 	return (
@@ -28,12 +31,12 @@ function CompaniesSection({ toggleValue, setToggleValue, setQuery, query }) {
 				query={query}
 				setQuery={setQuery}
 				setToggleValue={setToggleValue}
+				setPage={setPage}
 			/>
 			<BodySection
-				setQuery={setQuery}
 				query={query}
-				data={data}
-				setData={setData}
+				page={page}
+				setPage={setPage}
 			/>
 		</div>
 	);

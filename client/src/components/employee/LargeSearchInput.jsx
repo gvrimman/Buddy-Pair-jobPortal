@@ -5,6 +5,11 @@ import { CiSearch } from "react-icons/ci";
 import { CiLocationOn } from "react-icons/ci";
 import { getJobs } from "./../../apis/employeeApi";
 import { showError } from "../../utils/toast";
+import {
+	clearJobs,
+	clearQuery,
+	setQuery,
+} from "../../Redux/reducers/employeeReducer";
 
 function LargeSearchInput() {
 	const [searchTerms, setSearchTerms] = useState({
@@ -21,8 +26,10 @@ function LargeSearchInput() {
 			showError("Please enter job title or location");
 			return;
 		}
-
+		dispatch(clearJobs());
 		dispatch(getJobs(searchTerms));
+		dispatch(clearQuery());
+		dispatch(setQuery(searchTerms));
 		navigate("/job-portal/employee/jobs");
 	};
 	return (

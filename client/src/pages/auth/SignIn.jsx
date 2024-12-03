@@ -11,8 +11,13 @@ import { showError, showSuccess } from "../../utils/toast";
 import { setUser } from "../../Redux/reducers/userReducer";
 import axiosInstance from "../../utils/axios";
 import { RiLoader4Line } from "react-icons/ri";
+import handleGoogleAuthentication from "../../Services/googleAuth";
 
-function SignIn({ openSignUpModal }) {
+function SignIn({
+	openSignUpModal,
+	openUserInfoModal,
+	openForgotPasswordModal,
+}) {
 	const [isLoading, setIsLoading] = useState(false);
 	const navigate = useNavigate();
 	const dispatch = useDispatch();
@@ -28,6 +33,13 @@ function SignIn({ openSignUpModal }) {
 			setIsLoading(false);
 			dispatch(setUser(response?.data?.data));
 			showSuccess(response?.data?.message);
+
+			// if user hasn't complete total registration redirect to user info modal
+			if (!userData?.apps?.jobPortal) {
+				setTimeout(() => {
+					openUserInfoModal();
+				}, 300);
+			}
 			if (userData?.apps?.jobPortal?.role === "employee") {
 				navigate("/job-portal/employee");
 			} else if (userData?.apps?.jobPortal?.role === "employer") {
@@ -72,7 +84,7 @@ function SignIn({ openSignUpModal }) {
 					/>
 				</div>
 
-				<p className="capitalize text-customViolet font-semibold text-xs md:text-sm cursor-pointer my-2 md:my-3">
+				<p onClick={()=> openForgotPasswordModal()} className="capitalize text-customViolet font-semibold text-xs md:text-sm cursor-pointer my-2 md:my-3">
 					forgot password?
 				</p>
 
@@ -106,7 +118,9 @@ function SignIn({ openSignUpModal }) {
 			</div>
 
 			<div className="flex flex-col md:flex-row gap-2">
-				<Button className="bg-transparent text-[#000000c5] text-sm border border-gray-400 capitalize flex items-center gap-2 justify-center md:flex-1 py-2 md:py-3 rounded font-normal">
+				<Button
+					onClick={() => handleGoogleAuthentication()}
+					className="bg-transparent text-[#000000c5] text-sm border border-gray-400 capitalize flex items-center gap-2 justify-center md:flex-1 py-2 md:py-3 rounded font-normal">
 					<span className="text-lg md:text-xl">
 						<FcGoogle />
 					</span>

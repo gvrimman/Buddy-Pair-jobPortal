@@ -1,20 +1,23 @@
 import React, { useState } from "react";
 import { IoFilterOutline } from "react-icons/io5";
-import { useDispatch } from "react-redux";
+import { useDispatch, useSelector } from "react-redux";
 import { getJobs } from "../../../apis/employeeApi";
+import { clearJobs, setQuery } from "../../../Redux/reducers/employeeReducer";
 
 function JobSectionHeader({
 	setToggleValue,
-	setQuery,
-	query,
 	handleSearchJob,
 	handleClearFilter,
+	setPage,
 }) {
+	const { query } = useSelector((state) => state.employee);
+
 	const dispatch = useDispatch();
-	const [sortValue, setSortValue] = useState({});
 
 	const handleSortChange = (e) => {
-		setQuery((prev) => ({ ...prev, sort: e.target.value }));
+		dispatch(setQuery({...query, sort: e.target.value}));
+		setPage(1);
+		dispatch(clearJobs());
 		dispatch(getJobs(query));
 	};
 

@@ -10,35 +10,26 @@ import { useDispatch, useSelector } from "react-redux";
 import InfiniteScroll from "react-infinite-scroll-component";
 import { getCandidates } from "../../../apis/employerApi";
 
-function CandidatesLists({ query, setQuery, data, setData }) {
+function CandidatesLists({ page, setPage }) {
 	const dispatch = useDispatch();
 	const { candidates, hasMore, isLoading } = useSelector(
 		(state) => state.employer
 	);
+	const { query } = useSelector((state) => state.employee);
 
 	const [hoveredIndex, setHoveredIndex] = useState(null);
-	const [page, setPage] = useState(1);
+	
 	const navigate = useNavigate();
 
 	const fetchMoreData = () => {
-		
 		if (!hasMore || isLoading) return;
 
 		const nextPage = page + 1;
 		setPage(nextPage);
 		dispatch(getCandidates({ ...query, page: nextPage }));
+
 	};
 
-	useEffect(() => {
-		
-		setData((prevData) => {
-			const newCandidates = candidates.filter(
-				(candidate) =>
-					!prevData.some((dataItem) => dataItem._id === candidate._id)
-			);
-			return [...prevData, ...newCandidates];
-		});
-	}, [candidates]);
 	return (
 		<div className={`grid gap-4 my-5 tracking-wide`}>
 			<div
@@ -52,7 +43,7 @@ function CandidatesLists({ query, setQuery, data, setData }) {
 				<TbLoader2 className="animate-spin" />
 			</span>
 			<InfiniteScroll
-				dataLength={data?.length}
+				dataLength={candidates?.length}
 				next={fetchMoreData}
 				hasMore={hasMore}
 				loader={<h4>Loading...</h4>}
@@ -61,7 +52,15 @@ function CandidatesLists({ query, setQuery, data, setData }) {
 						No more users
 					</p>
 				}>
-				{data?.map((candidate, index) => (
+				<div className="mt-10">
+					{candidates?.length === 0 && (
+						<p className="text-center font-semibold text-2xl">
+							No candidates found! Try searching by candidates name or
+							location
+						</p>
+					)}
+				</div>
+				{candidates?.map((candidate, index) => (
 					<div
 						key={index}
 						className="grid gap-4 sm:flex items-center justify-between p-4 border rounded-md"

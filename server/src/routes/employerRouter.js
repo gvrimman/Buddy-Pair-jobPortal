@@ -51,7 +51,7 @@ router
 	.get(verifyJwt, authorize("employer"), getJobApplicants); // get all applicants for single job
 
 router.route("/job-accept").post(verifyJwt, authorize("employer"), acceptJob); // accept a job application
-router.route("/job-reject").post(verifyJwt, authorize("employer"), rejectJob); // accept a job application
+router.route("/job-reject").post(verifyJwt, authorize("employer"), rejectJob); // reject a job application
 router.route("/accepted-jobs").get(verifyJwt, authorize("employer"), acceptedJobs); // get all accepted jobs applicantions
 
 router.route("/rejected-jobs").get(verifyJwt, authorize("employer"), rejectedJobs); // get all rejected jobs

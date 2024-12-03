@@ -6,6 +6,8 @@ import { useDispatch } from "react-redux";
 import { useNavigate } from "react-router-dom";
 import { showError } from "../../utils/toast";
 import { getCandidates } from "../../apis/employerApi";
+import { clearCandidates } from "../../Redux/reducers/employerReducer";
+import { clearQuery, setQuery } from "../../Redux/reducers/employeeReducer";
 
 function NormalSearch() {
 	const [searchTerms, setSearchTerms] = useState({
@@ -21,7 +23,10 @@ function NormalSearch() {
 			showError("Please enter job location or candidate name");
 			return;
 		}
+		dispatch(clearCandidates())
+		dispatch(clearQuery());
 		dispatch(getCandidates(searchTerms));
+		dispatch(setQuery(searchTerms));
 		navigate("/job-portal/employer/candidates");
 	};
 	return (

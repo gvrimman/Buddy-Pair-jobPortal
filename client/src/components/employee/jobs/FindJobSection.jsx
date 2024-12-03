@@ -4,22 +4,24 @@ import JobSectionHeader from "./JobSectionHeader";
 import JobListedSection from "./JobListedSection";
 import { useDispatch, useSelector } from "react-redux";
 import { getJobs } from "../../../apis/employeeApi";
+import { clearJobs, clearQuery } from "../../../Redux/reducers/employeeReducer";
 
-function FindJobSection({ toggleValue, setToggleValue, setQuery, query }) {
-	const { jobs } = useSelector((state) => state.employee);
-	const [data, setData] = useState([]);
+function FindJobSection({ toggleValue, setToggleValue }) {
+	const { query } = useSelector((state) => state.employee);
 
 	const dispatch = useDispatch();
+	const [page, setPage] = useState(1);
 
 	const handleSearchJob = () => {
-		setData([]);
+		setPage(1);
+		dispatch(clearJobs());
 		dispatch(getJobs(query));
 	};
 
 	const handleClearFilter = () => {
-		dispatch(getJobs());
-		setQuery({});
-		// setData([]);
+		setPage(1);
+		dispatch(clearJobs());
+		dispatch(clearQuery());
 	};
 
 	return (
@@ -30,16 +32,10 @@ function FindJobSection({ toggleValue, setToggleValue, setQuery, query }) {
 			<JobSectionHeader
 				handleSearchJob={handleSearchJob}
 				handleClearFilter={handleClearFilter}
-				query={query}
-				setQuery={setQuery}
 				setToggleValue={setToggleValue}
+				setPage={setPage}
 			/>
-			<JobListedSection
-				setQuery={setQuery}
-				query={query}
-				data={data}
-				setData={setData}
-			/>
+			<JobListedSection page={page} setPage={setPage} />
 		</div>
 	);
 }

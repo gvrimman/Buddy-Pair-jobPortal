@@ -73,11 +73,9 @@ const getAllPostedJobs = async (req, res) => {
 	const limit = parseInt(req.query.limit) || 5;
 	const skip = (page - 1) * limit;
 
-	// First, get the total count of jobs
+	// get the total count of jobs
 	const jobPortal = await JobPortal.findOne({ userId: userId });
 	const totalJobs = jobPortal?.totalJobs?.length || 0;
-
-	console.log(totalJobs);
 
 	const jobs = await JobPortal.findOne({ userId: userId })
 		.select("totalJobs")
@@ -203,13 +201,13 @@ const deleteSingleJob = asyncHandler(async (req, res) => {
 // get candidates by query search
 const getCandidates = asyncHandler(async (req, res) => {
 	const {
-		name = "",
-		location = "",
-		category = "",
-		experience = [],
-		skills = [],
-		gender = [],
-		qualification = "",
+		name,
+		location,
+		category,
+		experience,
+		skills,
+		gender,
+		qualification,
 		page = Number(req.query.page) || 1,
 		limit = Number(req.query.limit) || 5,
 		sort = "newest",
@@ -231,12 +229,20 @@ const getCandidates = asyncHandler(async (req, res) => {
 		};
 	if (qualification) query.qualification = qualification;
 	if (category) query.preferredJobType = category;
-	if (gender.length) query.gender = { $in: gender };
+	if (gender?.length) query.gender = { $in: gender };
 
 	// add apply filters form employee modal
-	if (experience.length)
+	if (experience?.length)
 		query["jobDetails.workExperience"] = { $in: experience };
-	if (skills.length) query.skills = { $all: skills };
+	if (skills?.length) query.skills = { $all: skills };
+
+	// Prevent fetching all data if no filters are applied
+	if (Object.keys(query).length === 0) {
+		return res.status(400).json({
+			status: 400,
+			message: "Please provide at least one filter to search candidates.",
+		});
+	}
 
 	// pagination
 	const skip = (page - 1) * limit;
@@ -349,6 +355,46 @@ const getCandidate = asyncHandler(async (req, res) => {
 // get all applicants for all posted jobs
 const getApplicants = asyncHandler(async (req, res) => {
 	const userId = req.user._id;
+	const page = parseInt(req.query.page) || 1;
+	const limit = parseInt(req.query.limit) || 5;
+
+	// pagination
+	const skip = (page - 1) * limit;
+
+	// Get total count of applicants
+	const totalCount = await Job.aggregate([
+		{
+			$match: {
+				owner: userId,
+			},
+		},
+		{
+			$lookup: {
+				from: "users",
+				localField: "applicants",
+				foreignField: "_id",
+				as: "applicants",
+			},
+		},
+		{
+			$unwind: "$applicants",
+		},
+		{
+			$lookup: {
+				from: "jobportals",
+				localField: "applicants.apps.jobPortal",
+				foreignField: "_id",
+				as: "applicants.apps.jobPortal",
+			},
+		},
+		{
+			$unwind: "$applicants.apps.jobPortal",
+		},
+		{
+			$count: "totalCount",
+		},
+	]);
+
 	const applicants = await Job.aggregate([
 		{
 			$match: {
@@ -394,19 +440,53 @@ const getApplicants = asyncHandler(async (req, res) => {
 				},
 			},
 		},
+		{
+			$skip: skip,
+		},
+		{
+			$limit: limit,
+		},
 	]);
 
 	if (!applicants) {
 		throw new ApiError(400, "Applicants not found");
 	}
 
-	res.json(new ApiResponse(200, applicants, "applicants"));
+	const totalRecords = totalCount[0].totalCount || 0;
+	const hasMore = page * limit < totalRecords;
+
+	res.json(new ApiResponse(200, { applicants, hasMore }, "applicants"));
 });
 
 // get all applicants for single job
 const getJobApplicants = asyncHandler(async (req, res) => {
 	const jobId = req.params.id;
-	const jobApplicants = await Job.aggregate([
+	const page = parseInt(req.query.page) || 1;
+	const limit = parseInt(req.query.limit) || 5;
+
+	// pagination
+	const skip = (page - 1) * limit;
+
+	// Get total count of applicants
+	const totalCount = await Job.aggregate([
+		{
+			$match: {
+				_id: new mongoose.Types.ObjectId(jobId),
+			},
+		},
+		{ $unwind: "$applicants" },
+		{
+			$lookup: {
+				from: "users",
+				localField: "applicants",
+				foreignField: "_id",
+				as: "user",
+			},
+		},
+		{ $count: "totalCount" },
+	]);
+
+	const applicants = await Job.aggregate([
 		{
 			$match: {
 				_id: new mongoose.Types.ObjectId(jobId),
@@ -448,13 +528,18 @@ const getJobApplicants = asyncHandler(async (req, res) => {
 				},
 			},
 		},
+		{ $skip: skip },
+		{ $limit: limit },
 	]);
 
-	if (!jobApplicants) {
+	if (!applicants) {
 		throw new ApiError(400, "Job not found");
 	}
 
-	res.json(new ApiResponse(200, jobApplicants, "job applicants"));
+	const totalRecords = totalCount[0].totalCount || 0;
+	const hasMore = page * limit < totalRecords;
+
+	res.json(new ApiResponse(200, { applicants, hasMore }, "job applicants"));
 });
 
 // accept a job application
@@ -589,7 +674,7 @@ const getCompanies = asyncHandler(async (req, res) => {
 		name,
 		location,
 		page = Number(req.query.page) || 1,
-		limit = Number(req.query.limit) || 10,
+		limit = Number(req.query.limit) || 5,
 		sort = "newest",
 	} = req.query;
 

@@ -30,22 +30,40 @@ function MessageBox() {
     }
   }, [dispatch, userLists]);
 
+   const handleBack = () => {
+		dispatch(setSelected(false));
+   };
+
   return (
-    <div className="w-full h-[90%] md:flex gap-2">
-      <div className="w-full lg:w-[35%]  bg-white px-3 lg:px-5 pt-3 grid gap-4 rounded-md shadow">
-        <SearchBar />
-        <div className=" grid gap-4 mb-4 overflow-y-auto custom-scrollbar">
-          {!userLists ? (
-            <SkeltonList />
-          ) : (
-            userLists?.map((item) => <UsersList key={item._id} user={item} />)
-          )}
-        </div>
-      </div>
-      <div className="w-full lg:w-[70%]  ">
-        {selected ? <MainBox /> : <DefaultChatBox />}
-      </div>
-    </div>
+		<div className="w-full h-screen md:flex gap-2 ">
+			{/* userlist */}
+			<div
+				className={`w-full ${
+					selected ? "hidden md:block lg:w-[35%]" : "lg:w-[35%]"
+				} h-screen bg-white px-3 lg:px-5 pt-3 rounded-md shadow`}>
+				<SearchBar />
+				<div className=" grid gap-4 my-4 overflow-y-auto custom-scrollbar ">
+					{!userLists ? (
+						<SkeltonList />
+					) : (
+						userLists?.map((item) => (
+							<UsersList key={item._id} user={item} />
+						))
+					)}
+				</div>
+			</div>
+			{/* chatbox */}
+			<div
+				className={`w-full lg:w-[70%] ${
+					selected ? "block" : "hidden"
+				} lg:block`}>
+				{selected ? (
+					<MainBox handleBack={handleBack} />
+				) : (
+					<DefaultChatBox />
+				)}
+			</div>
+		</div>
   );
 }
 

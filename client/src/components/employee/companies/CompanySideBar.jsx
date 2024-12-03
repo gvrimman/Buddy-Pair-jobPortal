@@ -3,7 +3,7 @@ import { IoMdClose } from "react-icons/io";
 import TextSearch from '../../common/TextSearch';
 
 
-function CompanySideBar({ toggleValue, setToggleValue, setQuery }) {
+function CompanySideBar({ toggleValue, setToggleValue }) {
 	return (
 		<div
 			className={`bg-white h-screen py-5 absolute grid gap-5 ps-6 pr-2 transition-all ease-in-out duration-300 z-10 overflow-y-auto scroll-smooth ${
@@ -11,7 +11,6 @@ function CompanySideBar({ toggleValue, setToggleValue, setQuery }) {
 			}`}>
 			<div className="relative flex">
 				<TextSearch
-					setQuery={setQuery}
 					firsttitle={"Search by keywords"}
 					secondtitle={"Location"}
 				/>

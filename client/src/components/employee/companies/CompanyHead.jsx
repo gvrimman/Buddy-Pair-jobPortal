@@ -1,20 +1,23 @@
 import React, { useState } from "react";
 import { IoFilterOutline } from "react-icons/io5";
-import { useDispatch } from "react-redux";
+import { useDispatch, useSelector } from "react-redux";
 import { getAllCompaniesEmployee } from "../../../apis/employeeApi";
+import { clearCompanies, setQuery } from "../../../Redux/reducers/employeeReducer";
 
 
 function CompanyHead({
 	setToggleValue,
-	setQuery,
-	query,
 	handleClearFilter,
 	handleSearchCandidate,
+	setPage
 }) {
 
+	const { query } = useSelector((state) => state.employee);
   const dispatch = useDispatch();
   	const handleSortChange = (e) => {
-		setQuery((prev) => ({ ...prev, sort: e.target.value }));
+		dispatch(setQuery({ ...query, sort: e.target.value }));
+		setPage(1);
+		dispatch(clearCompanies())
 		dispatch(getAllCompaniesEmployee(query));
 	};
 

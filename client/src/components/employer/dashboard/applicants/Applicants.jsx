@@ -7,7 +7,7 @@ import femaleprofile from "/assets/images/femaleprofile.jpg";
 import { useSelector } from "react-redux";
 
 
-function Applicants() {
+function Applicants({ fetchMoreData }) {
 	const { applicants } = useSelector((state) => state.employer);
 	return (
 		<div className="grid bg-white mx-2 p-4 rounded-md shadow ">
@@ -25,10 +25,11 @@ function Applicants() {
 					<option value="oldest">Oldest</option>
 				</select> */}
 			</div>
-			<div className="grid lg:grid-cols-2 gap-3">
+			<div>
 				<CandidateCards
 					maleImg={maleprofile}
 					femaleImg={femaleprofile}
+					fetchMoreData={fetchMoreData}
 				/>
 			</div>
 		</div>

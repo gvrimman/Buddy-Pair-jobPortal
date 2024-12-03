@@ -1,20 +1,25 @@
 import React, { useState } from "react";
 import { IoFilterOutline } from "react-icons/io5";
-import { useDispatch } from "react-redux";
+import { useDispatch, useSelector } from "react-redux";
 import { getCandidates } from "../../../apis/employerApi";
 import { Button } from "@material-tailwind/react";
+import { clearCandidates } from "../../../Redux/reducers/employerReducer";
+import { setQuery } from "../../../Redux/reducers/employeeReducer";
 
 function CandidatesSectionHeader({
 	setToggleValue,
-	setQuery,
-	query,
 	handleSearchCandidate,
 	handleClearFilter,
+	setPage,
 }) {
+	const { query } = useSelector((state) => state.employee);
+
 	const dispatch = useDispatch();
 
 	const handleSortChange = (e) => {
-		setQuery((prev) => ({ ...prev, sort: e.target.value }));
+		dispatch(setQuery({ ...query, sort: e.target.value }));
+		setPage(1);
+		dispatch(clearCandidates());
 		dispatch(getCandidates(query));
 	};
 
@@ -37,7 +42,7 @@ function CandidatesSectionHeader({
 				<select
 					className="text-sm bg-white outline outline-1 outline-slate-300 px-2 py-2 rounded-md"
 					onChange={handleSortChange}
-					value={query.sort}>
+					value={query?.sort}>
 					<option value="default">Sort by (Default)</option>
 					<option value="newest">Newest</option>
 					<option value="oldest">Oldest</option>

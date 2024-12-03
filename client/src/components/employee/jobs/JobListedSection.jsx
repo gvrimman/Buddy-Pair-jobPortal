@@ -1,4 +1,4 @@
-import React, { useEffect, useState } from "react";
+import React from "react";
 import { CiLocationOn } from "react-icons/ci";
 import { IoBagHandleOutline } from "react-icons/io5";
 import { FaMoneyBill1Wave } from "react-icons/fa6";
@@ -11,14 +11,13 @@ import { bookmarkAJob, getJobs } from "../../../apis/employeeApi";
 import { MdBookmarkAdded } from "react-icons/md";
 import InfiniteScroll from "react-infinite-scroll-component";
 
-function JobListedSection({ query, setQuery, data, setData }) {
+function JobListedSection({ page, setPage }) {
+
 	const navigate = useNavigate();
 	const dispatch = useDispatch();
-	const { jobs, isLoading, bookmarkedJobs, hasMore } = useSelector(
+	const { jobs, isLoading, bookmarkedJobs, hasMore, query } = useSelector(
 		(state) => state.employee
 	);
-
-	const [page, setPage] = useState(1);
 
 	const fetchMoreData = () => {
 		if (!hasMore || isLoading) return;
@@ -27,16 +26,6 @@ function JobListedSection({ query, setQuery, data, setData }) {
 		setPage(nextPage);
 		dispatch(getJobs({ ...query, page: nextPage }));
 	};
-
-	useEffect(() => {
-		setData((prevData) => {
-			const newJobs = jobs.filter(
-				(job) => !prevData.some((dataItem) => dataItem._id === job._id)
-			);
-			return [...prevData, ...newJobs];
-		});
-	}, [jobs]);
-
 
 	const handleBookMark = (id) => {
 		dispatch(bookmarkAJob(id));
@@ -54,7 +43,7 @@ function JobListedSection({ query, setQuery, data, setData }) {
 				<TbLoader2 className="animate-spin" />
 			</span>
 			<InfiniteScroll
-				dataLength={data?.length}
+				dataLength={jobs?.length}
 				next={fetchMoreData}
 				hasMore={hasMore}
 				loader={<h4>Loading...</h4>}
@@ -63,8 +52,16 @@ function JobListedSection({ query, setQuery, data, setData }) {
 						No more jobs
 					</p>
 				}>
+				<div className="mt-10">
+					{jobs?.length === 0 && (
+						<p className="text-center font-semibold text-2xl">
+							No jobs found! Try searching by job title or
+							location
+						</p>
+					)}
+				</div>
 				<div className="grid lg:grid-cols-2 gap-3 my-5">
-					{data?.map((item) => (
+					{jobs?.map((item) => (
 						<div
 							key={item._id}
 							className="grid grid-cols-7 gap-3 p-4 bg-white outline outline-1 outline-[#673ab7] rounded-lg">

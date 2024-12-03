@@ -4,6 +4,12 @@ import ProtectedRoute from "./router/ProtectedRoute";
 import EmployeeMessages from "./pages/employee/dashboard/EmployeeMessages";
 import Messages from "./pages/employer/dashboard/Messages";
 import SingleCompany from "./pages/employee/SingleCompany";
+import PublicRoute from "./router/PublicRoute";
+import PageLoader from "./pages/shared/PageLoader";
+import EmployeeNotification from "./pages/employee/dashboard/EmployeeNotification";
+import useListenNotification from "./hooks/useListenNotification";
+import { useSocket } from "./hooks/useSocket";
+import EmployerNotification from "./pages/employer/dashboard/EmployerNotification";
 const Layout = lazy(() => import("./components/layout/Layout"));
 const SplashScreen = lazy(() => import("./pages/shared/SplashScreen"));
 const EmployerHome = lazy(() => import("./pages/employer/EmployerHome"));
@@ -63,16 +69,18 @@ const SingleEmployerCompany = lazy(() =>
 );
 
 function App() {
+	useSocket(); // Initializes the socket
+	useListenNotification(); // Listens for notifications globally
+
 	return (
 		<div>
-			<Suspense
-				fallback={
-					<div className="text-center font-semibold">Loading...</div>
-				}>
+			<Suspense fallback={<PageLoader />}>
 				<Routes>
-					<Route key={"/"} path="/" element={<Layout />}>
-						<Route path="/" element={<LandingPage />} />
-						<Route path="/auth" element={<SplashScreen />} />
+					<Route key={"/"} path="/" element={<PublicRoute />}>
+						<Route path="/" element={<Layout />}>
+							<Route index element={<LandingPage />} />
+							<Route path="/auth" element={<SplashScreen />} />
+						</Route>
 					</Route>
 
 					{/* This Router for Job Portal Employer */}
@@ -131,7 +139,12 @@ function App() {
 							/>
 
 							<Route path="messages" element={<Messages />} />
-							{/* <Route path="notifications" element={<Notification />} /> */}
+							{
+								<Route
+									path="notifications"
+									element={<EmployerNotification />}
+								/>
+							}
 						</Route>
 					</Route>
 
@@ -148,13 +161,21 @@ function App() {
 								element={<HomeCompanies />}
 							/>
 							<Route path="saved-jobs" element={<Saved />} />
-							{/* <Route path="notifications" element={<Notifications />} /> */}
+							{/* {
+								<Route
+									path="notifications"
+									element={<Notifications />}
+								/>
+							} */}
 							{/* <Route
 						path="information-form"
 						element={<MultiInfoForm />}
 					/> */}
 							<Route path="job/:id" element={<SingleJob />} />
-							<Route path="company/:id" element={<SingleCompany />} />
+							<Route
+								path="company/:id"
+								element={<SingleCompany />}
+							/>
 						</Route>
 					</Route>
 
@@ -177,11 +198,14 @@ function App() {
 								path="bookmarked-jobs"
 								element={<EmployeeBookMarked />}
 							/>
-							<Route path="messages" element={<EmployeeMessages />} />
-							{/* <Route
-						path="notification"
-						element={<EmployeeNotification />}
-					/> */}
+							<Route
+								path="messages"
+								element={<EmployeeMessages />}
+							/>
+							<Route
+								path="notification"
+								element={<EmployeeNotification />}
+							/>
 							<Route
 								path="change-password"
 								element={<EmployeeChangePassword />}

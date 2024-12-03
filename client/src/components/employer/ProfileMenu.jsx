@@ -13,9 +13,9 @@ function ProfileMenu({ drop, setDrop, from }) {
 
 	const handleLogout = async () => {
 		try {
+			dispatch(clearUser());
 			const response = await axiosInstance.post("/auth/logout");
 			showSuccess(response?.data?.message);
-			dispatch(clearUser());
 			persistor.purge();
 			navigate("/");
 		} catch (error) {

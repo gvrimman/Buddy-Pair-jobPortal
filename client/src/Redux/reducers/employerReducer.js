@@ -1,7 +1,7 @@
 import { createSlice } from "@reduxjs/toolkit";
 
 const initialState = {
-	jobs: [],
+	jobs: [], // posted jobs by employer
 	job: null,
 	candidates: [],
 	candidate: null,
@@ -14,6 +14,7 @@ const initialState = {
 	error: null,
 	hasMore: true,
 	pagination: null,
+	// query: null,
 };
 
 const employerSlice = createSlice({
@@ -31,7 +32,6 @@ const employerSlice = createSlice({
 		fetchJob(state, action) {
 			state.isLoading = false;
 			state.job = action.payload;
-			
 		},
 		createJob(state, action) {
 			state.jobs.push(action.payload);
@@ -49,16 +49,39 @@ const employerSlice = createSlice({
 		},
 		fetchCandidates(state, action) {
 			state.isLoading = false;
-			state.candidates = action.payload.candidates;
+			const newCandidates = action.payload.candidates.filter(
+				(candidate) =>
+					!state.candidates.some(
+						(existingCandidate) =>
+							existingCandidate._id === candidate._id
+					)
+			);
+			state.candidates = [...state.candidates, ...newCandidates];
 			state.hasMore = action.payload.hasMore;
 		},
-		fetchCandidate(state, action) {
-			state.candidate = action.payload;
+		clearCandidates(state, action) {
 			state.isLoading = false;
+			state.candidates = [];
+		},
+		fetchCandidate(state, action) {
+			state.isLoading = false;
+			state.candidate = action.payload;
 		},
 		fetchApplicants(state, action) {
-			state.applicants = action.payload;
 			state.isLoading = false;
+			const newApplicants = action.payload.applicants.filter(
+				(applicant) =>
+					!state.applicants.some(
+						(existingApplicant) =>
+							existingApplicant._id === applicant._id
+					)
+			);
+			state.applicants = [...state.applicants, ...newApplicants];
+			state.hasMore = action.payload.hasMore;
+		},
+		clearApplicants(state, action) {
+			state.isLoading = false;
+			state.applicants = [];
 		},
 		acceptJob(state, action) {
 			state.acceptedApplicants.push(action.payload);
@@ -78,16 +101,33 @@ const employerSlice = createSlice({
 		},
 		fetchCompanies(state, action) {
 			state.isLoading = false;
-			state.companies = action.payload.companies;
+			const newCompanies = action.payload.companies.filter(
+				(newCompany) =>
+					!state.companies.some(
+						(existingCompany) =>
+							existingCompany._id === newCompany._id
+					)
+			);
+			state.companies = [...state.companies, ...newCompanies];
 			state.hasMore = action.payload.hasMore;
 		},
 		fetchCompany(state, action) {
 			state.company = action.payload;
 			state.isLoading = false;
 		},
+		clearCompanies: (state, action) => {
+			state.isLoading = false;
+			state.companies = [];
+		},
 		fetchError(state, action) {
 			(state.isLoading = false), (state.error = action.payload);
 		},
+		// setQuery: (state, action) => {
+		// 	state.query = action.payload;
+		// },
+		// clearQuery: (state, action) => {
+		// 	state.query = null;
+		// },
 	},
 });
 
@@ -108,6 +148,11 @@ export const {
 	fetchRejectedJobs,
 	fetchCompanies,
 	fetchCompany,
+	clearCandidates,
+	clearCompanies,
+	clearApplicants,
+	// setQuery,
+	// clearQuery,
 } = employerSlice.actions;
 
 export default employerSlice.reducer;

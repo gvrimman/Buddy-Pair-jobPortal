@@ -5,20 +5,30 @@ import { IoBookmarkOutline } from "react-icons/io5";
 import { MdBookmarkAdded } from "react-icons/md";
 import JobIconDetails from "../JobIconDetails";
 import { applyAjob, bookmarkAJob } from "../../../apis/employeeApi";
+import useListenNotification from "../../../hooks/useListenNotification";
 
 function JobHead() {
 	const { job, appliedJobs, bookmarkedJobs } = useSelector(
 		(state) => state.employee
 	);
 	const dispatch = useDispatch();
+	const { sendNotifications } = useListenNotification();
 
 	const handleBookMark = (id) => {
 		dispatch(bookmarkAJob(id));
 	};
 
-	const handleJobApplying = (id) => {
+	const handleJobApplying = (userId, id) => {
+		sendNotifications(
+			userId,
+			"apply",
+			"Candidate have been applied to your job",
+			`employer/dashboard/job-applicants/${id}`
+		);
 		dispatch(applyAjob(id));
 	};
+
+	console.log(job);
 
 	return (
 		<div className="w-full h-full py-16 bg-customBgColor flex justify-center items-center">
@@ -50,7 +60,7 @@ function JobHead() {
 				<div className="mt-3 flex justify-center items-center gap-4">
 					<button
 						disabled={appliedJobs.some((jo) => jo._id === job?._id)}
-						onClick={() => handleJobApplying(job?._id)}
+						onClick={() => handleJobApplying(job?.owner?._id, job?._id)}
 						className={`w-fit px-5 py-3 bg-blue-500 hover:bg-blue-600 text-sm text-white font-semibold tracking-wider rounded-lg`}>
 						{appliedJobs.some((jo) => jo._id === job?._id)
 							? "Applied"

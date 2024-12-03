@@ -53,10 +53,12 @@ const userInfoValidation = Yup.object().shape({
 	profileImage: Yup.mixed()
 		.notRequired()
 		.test("fileType", "Only image files are allowed", (value) => {
-			return value && value[0] && value[0].type.startsWith("image/");
+			if (!value || value.length === 0) return true;
+			return value[0]?.type.startsWith("image/");
 		})
 		.test("fileSize", "File is too large, max size is 20MB", (value) => {
-			return value && value[0] && value[0].size <= 5 * 1024 * 1024;
+			if (!value || value.length === 0) return true;
+			return value[0]?.size <= 5 * 1024 * 1024;
 		}),
 	profession: Yup.array().required("Please select your profession"),
 });
@@ -86,11 +88,14 @@ const jobValidation = Yup.object().shape({
 
 const emplyerInfoValidation = Yup.object().shape({
 	profileImage: Yup.mixed()
+		.notRequired()
 		.test("fileType", "Only image files are allowed", (value) => {
-			return value && value[0] && value[0].type.startsWith("image/");
+			if (!value || value.length === 0) return true;
+			return value[0]?.type.startsWith("image/");
 		})
 		.test("fileSize", "File is too large, max size is 20MB", (value) => {
-			return value && value[0] && value[0].size <= 5 * 1024 * 1024;
+			if (!value || value.length === 0) return true;
+			return value[0]?.size <= 5 * 1024 * 1024;
 		}),
 	companyName: Yup.string().required("Please Enter your company name"),
 	companyEmail: Yup.string()
@@ -242,6 +247,24 @@ const passwordValidations = Yup.object().shape({
 		.oneOf([Yup.ref("newPassword"), null], "Passwords must match"),
 });
 
+// forgot password validation
+const forgotPasswordValidation = Yup.object().shape({
+	email: Yup.string()
+		.email("Invalid email format")
+		.required("Email is required"),
+});
+
+// reset password validation
+const resetPasswordValidation = Yup.object().shape({
+	otp: Yup.string().required("OTP is required"),
+	password: Yup.string()
+		.required("Password is required")
+		.min(3, "Minimum 8 characters"),
+	confirmPassword: Yup.string()
+		.required("Confirm Password is required")
+		.oneOf([Yup.ref("password"), null], "Passwords must match"),
+});
+
 export {
 	signupValidations,
 	loginValidations,
@@ -257,4 +280,6 @@ export {
 	passwordValidations,
 	employerProfileValidation,
 	employerLinkedinValidation,
+	forgotPasswordValidation,
+	resetPasswordValidation,
 };

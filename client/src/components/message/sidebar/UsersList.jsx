@@ -28,7 +28,7 @@ function UsersList({ user }) {
 
   return (
     <div
-      className={`px-2 py-3 grid grid-cols-4 items-center cursor-pointer rounded-lg ${
+      className={`px-2 py-3 grid grid-cols-4 h-fit items-center cursor-pointer rounded-lg ${
         selectedUser?.userId === user?.userId
           ? "bg-customViolet text-white"
           : ""
@@ -57,7 +57,7 @@ function UsersList({ user }) {
       </div>
       <div className="flex flex-col items-end gap-1">
         <p className="text-sm mr-2">
-          35 <span className="text-xs">mins</span>
+          {/* 35 <span className="text-xs">mins</span> */}
         </p>
         {user && unreadCount ? (
           <p className="min-w-5 min-h-5 flex justify-center items-center text-xs font-semibold bg-customViolet text-white rounded-full">

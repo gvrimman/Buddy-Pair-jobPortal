@@ -38,6 +38,7 @@ export const getPostedJobs =
 			const response = await axiosInstance.get(
 				`/employer/get-posted-jobs?page=${page}&limit=${limit}`
 			);
+
 			dispatch(
 				fetchJobs({
 					jobs: response?.data?.data?.jobs,
@@ -97,7 +98,6 @@ export const getCandidates = (query) => async (dispatch) => {
 			params: { ...query },
 		});
 		dispatch(fetchCandidates(response?.data?.data));
-		console.log(response?.data?.data);
 	} catch (error) {
 		dispatch(fetchError(error.message));
 		showError(error?.response?.data?.message);
@@ -115,29 +115,35 @@ export const getCandidateById = (id) => async (dispatch) => {
 	}
 };
 
-export const getApplicants = () => async (dispatch) => {
-	dispatch(fetchStart());
-	try {
-		const response = await axiosInstance.get("/employer/applicants");
-		dispatch(fetchApplicants(response?.data?.data));
-	} catch (error) {
-		dispatch(fetchError(error.message));
-		showError(error?.response?.data?.message);
-	}
-};
+export const getApplicants =
+	(page = 1, limit = 5) =>
+	async (dispatch) => {
+		dispatch(fetchStart());
+		try {
+			const response = await axiosInstance.get(
+				`/employer/applicants?page=${page}&limit=${limit}`
+			);
+			dispatch(fetchApplicants(response?.data?.data));
+		} catch (error) {
+			dispatch(fetchError(error.message));
+			showError(error?.response?.data?.message);
+		}
+	};
 
-export const getJobApplicants = (id) => async (dispatch) => {
-	dispatch(fetchStart());
-	try {
-		const response = await axiosInstance.get(
-			`/employer/job-applicants/${id}`
-		);
-		dispatch(fetchApplicants(response?.data?.data));
-	} catch (error) {
-		dispatch(fetchError(error.message));
-		showError(error?.response?.data?.message);
-	}
-};
+export const getJobApplicants =
+	({ id, page = 1, limit = 5 }) =>
+	async (dispatch) => {
+		dispatch(fetchStart());
+		try {
+			const response = await axiosInstance.get(
+				`/employer/job-applicants/${id}?page=${page}&limit=${limit}`
+			);
+			dispatch(fetchApplicants(response?.data?.data));
+		} catch (error) {
+			dispatch(fetchError(error.message));
+			showError(error?.response?.data?.message);
+		}
+	};
 
 export const acceptAJob = (jobId, userId) => async (dispatch) => {
 	dispatch(fetchStart());

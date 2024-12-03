@@ -7,6 +7,7 @@ import { FaExternalLinkAlt } from "react-icons/fa";
 
 function CompanyHead() {
 	const { company } = useSelector((state) => state.employer);
+	
 	return (
 		<div className="w-full h-full py-16 bg-customBgColor flex justify-center items-center">
 			<div className="grid gap-3">
@@ -43,7 +44,7 @@ function CompanyHead() {
 
 				<div className="mt-3 flex justify-center items-center gap-4">
 					<a
-						href={`https://${company?.companyWebsite}`}
+						href={`https://${company?.companyWebSite}`}
 						target="_blank"
 						rel="noopener noreferrer"
 						className="w-fit px-5 py-3 bg-blue-500 hover:bg-blue-600 text-sm text-white font-semibold tracking-wider rounded-lg flex items-center gap-2">
