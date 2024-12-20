@@ -257,14 +257,14 @@ function UserLocation({
 			</>
 			<div className="text-end">
 				<Button
-					onClick={() => navigate("/")}
-					className="rounded py-2 px-3 sm:py-3 sm:px-4 mx-1 bg-red-400">
-					Close
+					onClick={handleSubmit}
+					className=" py-2 px-3 sm:py-3 sm:px-4 mx-1 ">
+					Next
 				</Button>
 				<Button
-					onClick={handleSubmit}
-					className="rounded py-2 px-3 sm:py-3 sm:px-4 mx-1 bg-customViolet">
-					Next
+					onClick={() => navigate("/")}
+					className=" py-2 px-3 sm:py-3 sm:px-4 mx-1 bg-red-400">
+					Close
 				</Button>
 			</div>
 		</div>
