@@ -5,6 +5,7 @@ import CandidatesSection from "../../components/employer/candidates/CandidatesSe
 import { useDispatch, useSelector } from "react-redux";
 import { getCandidates } from "../../apis/employerApi";
 import Filter from "../../components/common/Filter";
+import JobView from "../../components/employer/candidates/JobView";
 
 function Candidates() {
 	const [toggleJobSection, setToggleJobSection] = useState(false);
@@ -14,7 +15,8 @@ function Candidates() {
 		// <div className="max-w-[1440px] mx-auto px-7 grid lg:grid-cols-4">
 		<div className="max-w-[1440px] mx-auto px-7 ">
 			<Filter/>
-			<CandidatesSideSection  />
+			<JobView/>
+			{/* <CandidatesSideSection  />
 			<CandidatesSideBar
 				toggleValue={toggleJobSection}
 				setToggleValue={setToggleJobSection}
@@ -22,7 +24,7 @@ function Candidates() {
 			<CandidatesSection
 				toggleValue={toggleJobSection}
 				setToggleValue={setToggleJobSection}
-			/>
+			/> */}
 		</div>
 	);
 }

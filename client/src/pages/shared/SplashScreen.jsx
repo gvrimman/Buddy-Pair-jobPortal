@@ -41,7 +41,7 @@ function SplashScreen() {
 	const [isUserResumeModalOpen, setIsUserResumeModalOpen] = useState(false);
 
 	const [isEmployerInfoModalOpen, setIsEmployerInfoModalOpen] =
-		useState(true);
+		useState(false);
 	// ====================================================================
 
 	const [searchParams] = useSearchParams();
