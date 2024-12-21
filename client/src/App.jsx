@@ -10,6 +10,7 @@ import EmployeeNotification from "./pages/employee/dashboard/EmployeeNotificatio
 import useListenNotification from "./hooks/useListenNotification";
 import { useSocket } from "./hooks/useSocket";
 import EmployerNotification from "./pages/employer/dashboard/EmployerNotification";
+import FindJobsNew from "./pages/employee/FindJobsNew";
 const Layout = lazy(() => import("./components/layout/Layout"));
 const SplashScreen = lazy(() => import("./pages/shared/SplashScreen"));
 const EmployerHome = lazy(() => import("./pages/employer/EmployerHome"));
@@ -156,6 +157,7 @@ function App() {
 						<Route element={<EmployeeLayout />}>
 							<Route index element={<Home />} />
 							<Route path="jobs" element={<FindJobs />} />
+							<Route path="jobs2" element={<FindJobsNew />} />
 							<Route
 								path="companies"
 								element={<HomeCompanies />}
