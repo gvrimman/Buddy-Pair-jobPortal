@@ -273,3 +273,21 @@ export const manageJobsMonthOptions = [
 	{ value: "Last 24 Months", valueToDisplay: "Last 24 Months" },
 	{ value: "Last 5 Year", valueToDisplay: "Last 5 Year" },
 ];
+
+
+/* {
+  query: {
+    name: 'fgh',
+    location: 'dfg',
+    category: 'On-site',
+    experience: [
+      'fresher',
+      '0-1'
+    ],
+    gender: [
+      'male',
+      'female'
+    ],
+    sort: 'newest'
+  }
+} */

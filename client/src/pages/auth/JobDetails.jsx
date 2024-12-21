@@ -1,4 +1,4 @@
-import { Button } from "@material-tailwind/react";
+import { Button, Typography } from "@material-tailwind/react";
 import React from "react";
 import TextInput from "../../components/common/TextInput";
 import SelectInput from "../../components/common/SelectInput";
@@ -26,15 +26,21 @@ function JobDetails({ setUserData, onClose, openUserResumeModal }) {
 	return (
 		<div className="flex flex-col gap-4 px-1 py-5">
 			<div className="relative text-center">
-				<h1 className="text-customViolet text-lg md:text-2xl font-bold">
+				{/* <h1 className="text-customViolet text-lg md:text-2xl font-bold">
 					Work Experience
-				</h1>
+				</h1> */}
+				<Typography
+					variant="h4"
+					color="blue-gray"
+					className="text-center">
+					Work Experience
+				</Typography>
 				<p className="text-[#0000008a] text-sm md:text-base font-semibold my-2">
 					Provide your recent Job Details
 				</p>
 			</div>
 			<form onSubmit={handleSubmit(onSubmit)}>
-				<div className="relative grid md:grid-cols-2 gap-3 md:gap-4 mb-3">
+				<div className="relative grid md:grid-cols-2 gap-3 md:gap-8 mb-3">
 					<TextInput
 						type={"text"}
 						label={"Job Title"}
@@ -77,14 +83,14 @@ function JobDetails({ setUserData, onClose, openUserResumeModal }) {
 				</div>
 				<div className="text-end">
 					<Button
-						onClick={() => navigate("/")}
-						className="rounded py-2 px-3 sm:py-3 sm:px-4 mx-1 bg-red-400">
-						Close
+						type="submit"
+						className=" py-2 px-3 sm:py-3 sm:px-4 mx-1 ">
+						Next
 					</Button>
 					<Button
-						type="submit"
-						className="rounded py-2 px-3 sm:py-3 sm:px-4 mx-1 bg-customViolet">
-						Next
+						onClick={() => navigate("/")}
+						className=" py-2 px-3 sm:py-3 sm:px-4 mx-1 bg-red-400">
+						Close
 					</Button>
 				</div>
 			</form>

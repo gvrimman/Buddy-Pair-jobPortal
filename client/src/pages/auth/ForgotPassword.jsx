@@ -3,7 +3,7 @@ import { AiOutlineHome } from "react-icons/ai";
 import { Link, useNavigate } from "react-router-dom";
 import useFormHandler from "../../hooks/ReactHookForm/Index";
 import TextInput from "../../components/common/TextInput";
-import { Button } from "@material-tailwind/react";
+import { Button, Typography } from "@material-tailwind/react";
 import { forgotPasswordValidation } from "../../utils/yupValidations";
 import axiosInstance from "../../utils/axios";
 import { showError, showSuccess } from "../../utils/toast";
@@ -37,39 +37,44 @@ function ForgotPassword({ setMail, openResetPasswordModal }) {
 	return (
 		<div className=" flex flex-col gap-4 px-1 py-5">
 			<div className="relative text-center">
-				<h1 className="text-customViolet text-lg md:text-2xl font-bold">
+				<Typography
+					variant="h4"
+					color="blue-gray"
+					className="text-center">
 					Forgot Password
-				</h1>
+				</Typography>
 				<p className="text-[#0000008a] text-sm md:text-base font-semibold my-2">
 					Enter your email address to reset your password
 				</p>
 			</div>
 			<form onSubmit={handleSubmit(onSubmit)}>
-				<TextInput
-					type={"email"}
-					label={"Email"}
-					errors={errors.email}
-					registering={register("email")}
-				/>
+				<div className=" relative flex flex-col mx-auto gap-3 md:gap-4 my-4 max-w-96">
+					<TextInput
+						type={"email"}
+						label={"Email"}
+						errors={errors.email}
+						registering={register("email")}
+					/>
 
-				<div className="text-end mt-3">
-					<Button
-						onClick={() => navigate("/")}
-						className="rounded py-2 px-3 sm:py-3 sm:px-4 mx-1 bg-red-400">
-						Close
-					</Button>
-					<Button
-						disabled={isLoading}
-						type="submit"
-						className="rounded py-2 px-3 sm:py-3 sm:px-4 mx-1 bg-customViolet">
-						{isLoading ? (
-							<span>
-								<RiLoader4Line className="animate-spin text-xl" />
-							</span>
-						) : (
-							"Next"
-						)}
-					</Button>
+					<div className="text-end mt-3">
+						<Button
+							disabled={isLoading}
+							type="submit"
+							className=" py-2 px-3 sm:py-3 sm:px-4 mx-1 ">
+							{isLoading ? (
+								<span>
+									<RiLoader4Line className="animate-spin text-xl" />
+								</span>
+							) : (
+								"Next"
+							)}
+						</Button>
+						<Button
+							onClick={() => navigate("/")}
+							className=" py-2 px-3 sm:py-3 sm:px-4 mx-1 bg-red-400">
+							Close
+						</Button>
+					</div>
 				</div>
 			</form>
 		</div>

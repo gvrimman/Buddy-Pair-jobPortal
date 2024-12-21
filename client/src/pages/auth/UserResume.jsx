@@ -1,7 +1,7 @@
 import React, { useState } from "react";
 import { Worker, Viewer } from "@react-pdf-viewer/core";
 import "@react-pdf-viewer/core/lib/styles/index.css";
-import { Button } from "@material-tailwind/react";
+import { Button, Typography } from "@material-tailwind/react";
 import { useNavigate } from "react-router-dom";
 import { useDispatch } from "react-redux";
 import axiosInstance from "../../utils/axios";
@@ -62,9 +62,13 @@ function UserResume({ onClose, setUserData, userData }) {
 	return (
 		<div className="flex flex-col gap-4 px-1 py-5">
 			<div className="relative text-center">
-				<h1 className="text-customViolet text-lg md:text-2xl font-bold">
+				
+				<Typography
+					variant="h4"
+					color="blue-gray"
+					className="text-center">
 					Resume
-				</h1>
+				</Typography>
 				<p className="text-[#0000008a] text-sm md:text-base font-semibold my-2">
 					Upload your resume.
 				</p>
@@ -81,7 +85,7 @@ function UserResume({ onClose, setUserData, userData }) {
 					</Worker>
 				</div>
 			)}
-			<div>
+			<div className="flex justify-center">
 				<input
 					type={"file"}
 					className="w-fit border rounded-md p-1 bg-transparent text-sm text-cyan-900 hover:text-blue-900 hover:border-blue-500 cursor-pointer"
@@ -92,15 +96,10 @@ function UserResume({ onClose, setUserData, userData }) {
 
 			<div className="text-end">
 				<Button
-					onClick={() => navigate("/")}
-					className="rounded py-2 px-3 sm:py-3 sm:px-4 mx-1 bg-red-400">
-					Close
-				</Button>
-				<Button
 					disabled={isLoading}
 					onClick={handleSubmit}
 					type="submit"
-					className="rounded py-2 px-3 sm:py-3 sm:px-4 mx-1 bg-customViolet">
+					className=" py-2 px-3 sm:py-3 sm:px-4 mx-1 ">
 					{isLoading ? (
 						<span>
 							<RiLoader4Line className="animate-spin text-xl" />
@@ -108,6 +107,11 @@ function UserResume({ onClose, setUserData, userData }) {
 					) : (
 						"Next"
 					)}
+				</Button>
+				<Button
+					onClick={() => navigate("/")}
+					className=" py-2 px-3 sm:py-3 sm:px-4 mx-1 bg-red-400">
+					Close
 				</Button>
 			</div>
 		</div>

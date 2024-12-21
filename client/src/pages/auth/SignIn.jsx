@@ -3,7 +3,7 @@ import { Link, useNavigate } from "react-router-dom";
 import { AiOutlineHome } from "react-icons/ai";
 import { FcGoogle, FcPhoneAndroid } from "react-icons/fc";
 import { useDispatch, useSelector } from "react-redux";
-import { Button } from "@material-tailwind/react";
+import { Button, Typography } from "@material-tailwind/react";
 import TextInput from "../../components/common/TextInput";
 import useFormHandler from "../../hooks/ReactHookForm/Index";
 import { loginValidations } from "../../utils/yupValidations";
@@ -53,23 +53,23 @@ function SignIn({
 	};
 
 	return (
-		<div className=" flex flex-col gap-4 px-1 py-5">
+		<div className=" flex flex-col gap-4 px-1 py-10">
 			<div className="relative text-center">
-				<Link
+				{/* <Link
 					to={"/"}
 					className="absolute -top-4 -left-1 border rounded-md p-1 bg-transparent text-2xl text-cyan-500 hover:text-blue-700 hover:border-blue-500 cursor-pointer">
 					<AiOutlineHome />
-				</Link>
-				<h1 className="text-customViolet text-lg md:text-2xl font-bold">
-					Hi, Welcome Back
-				</h1>
-				<p className="text-[#0000008a] text-sm md:text-base font-semibold my-2">
-					Enter your credentials to continue
-				</p>
+				</Link> */}
+				<Typography variant="h4" color="blue-gray">
+					Login
+				</Typography>
+				<Typography color="gray" className="mt-1 font-normal">
+					Enter your details to Login.
+				</Typography>
 			</div>
 
 			<form onSubmit={handleSubmit(onSubmit)}>
-				<div className="relative flex flex-col gap-3 md:gap-4">
+				<div className="relative flex flex-col mx-auto gap-3 md:gap-4 my-4 max-w-96">
 					<TextInput
 						type={"email"}
 						label={"Email"}
@@ -82,13 +82,31 @@ function SignIn({
 						errors={errors.password}
 						registering={register("password")}
 					/>
+
+					{/* <p
+						onClick={() => openForgotPasswordModal()}
+						className="capitalize font-semibold text-xs md:text-sm cursor-pointer ">
+						forgot password?
+					</p> */}
+
+					<div className="flex gap-5 justify-end">
+						<Button
+							disabled={isLoading}
+							type="submit"
+							className=" font-normal text-xs flex justify-center">
+							{isLoading ? (
+								<span>
+									<RiLoader4Line className="animate-spin text-xl" />
+								</span>
+							) : (
+								"Next"
+							)}
+						</Button>
+						<Button className="bg-red-600 text-xs">close</Button>
+					</div>
 				</div>
 
-				<p onClick={()=> openForgotPasswordModal()} className="capitalize text-customViolet font-semibold text-xs md:text-sm cursor-pointer my-2 md:my-3">
-					forgot password?
-				</p>
-
-				<Button
+				{/* <Button
 					disabled={isLoading}
 					type="submit"
 					className="bg-customViolet w-full py-2 md:py-3 rounded capitalize font-normal text-sm flex justify-center">
@@ -99,19 +117,30 @@ function SignIn({
 					) : (
 						"Sign in"
 					)}
-				</Button>
+				</Button> */}
 
-				<p className="mt-2 subpixel-antialiased text-center text-sm font-semibold">
+				{/* <p className="mt-2 subpixel-antialiased text-center text-sm font-semibold">
 					Don't have an account?
 					<span
 						className="cursor-pointer underline"
 						onClick={openSignUpModal}>
 						Sign Up
 					</span>
-				</p>
+				</p> */}
+
+				<Typography
+					color="gray"
+					className="mt-4 text-center font-normal">
+					Don't have an account?{" "}
+					<Link
+						className="font-medium text-gray-900"
+						onClick={openSignUpModal}>
+						Sign Up
+					</Link>
+				</Typography>
 			</form>
 
-			<div className="flex items-center gap-2">
+			{/* <div className="flex items-center gap-2">
 				<div className="w-full border border-gray-500"></div>
 				<p className="text-[#0000008a] text-xs ">OR</p>
 				<div className="w-full border border-gray-500"></div>
@@ -132,7 +161,7 @@ function SignIn({
 					</span>
 					Sign in with Phone
 				</Button>
-			</div>
+			</div> */}
 		</div>
 	);
 }

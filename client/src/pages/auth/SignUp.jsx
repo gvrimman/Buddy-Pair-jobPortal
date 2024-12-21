@@ -1,4 +1,4 @@
-import { Button } from "@material-tailwind/react";
+import { Button, Typography } from "@material-tailwind/react";
 import React, { useState } from "react";
 import { AiOutlineHome } from "react-icons/ai";
 import { FcGoogle, FcPhoneAndroid } from "react-icons/fc";
@@ -44,21 +44,21 @@ function SignUp({ onClose, openSignInModal, openUserInfoModal }) {
 	return (
 		<div className=" flex flex-col gap-4 px-1 py-5">
 			<div className="relative text-center">
-				<Link
+				{/* <Link
 					to={"/"}
 					className="absolute -top-4 -left-1 border rounded-md p-1 bg-transparent text-2xl text-cyan-500 hover:text-blue-700 hover:border-blue-500 cursor-pointer">
 					<AiOutlineHome />
-				</Link>
-				<h1 className="text-customViolet text-lg md:text-2xl font-bold">
+				</Link> */}
+				<h1 className="text-[#263238] text-lg md:text-2xl font-bold">
 					Sign Up
 				</h1>
-				<p className="text-[#0000008a] text-sm md:text-base font-semibold my-2">
-					Enter your details to Sign up
-				</p>
+				<Typography color="gray" className="mt-1 font-normal">
+					Nice to meet you! Enter your details to register.
+				</Typography>
 			</div>
 
 			<form onSubmit={handleSubmit(onSubmit)}>
-				<div className="relative grid md:grid-cols-2 gap-3 md:gap-4 mb-3">
+				<div className="relative flex flex-col mx-auto gap-3 md:gap-4 mb-3 max-w-96">
 					<TextInput
 						type={"text"}
 						label={"Name"}
@@ -89,22 +89,25 @@ function SignUp({ onClose, openSignInModal, openUserInfoModal }) {
 						registering={register("confirmPassword")}
 						errors={errors["confirmPassword"]}
 					/>
+
+					<div className="flex gap-5 justify-end">
+						<Button
+							disabled={isLoading}
+							type="submit"
+							className=" font-normal text-xs flex justify-center">
+							{isLoading ? (
+								<span>
+									<RiLoader4Line className="animate-spin text-xl" />
+								</span>
+							) : (
+								"Next"
+							)}
+						</Button>
+						<Button className="bg-red-600 text-xs">close</Button>
+					</div>
 				</div>
 
-				<Button
-					disabled={isLoading}
-					type="submit"
-					className="bg-customViolet w-full py-2 md:py-3 rounded capitalize font-normal text-sm flex justify-center">
-					{isLoading ? (
-						<span>
-							<RiLoader4Line className="animate-spin text-xl" />
-						</span>
-					) : (
-						"Sign up"
-					)}
-				</Button>
-
-				<p className="mt-2 subpixel-antialiased text-center text-sm font-semibold">
+				{/* <p className="mt-2 subpixel-antialiased text-center text-sm font-semibold">
 					Already have an account?
 					<span
 						className="cursor-pointer underline"
@@ -112,16 +115,26 @@ function SignUp({ onClose, openSignInModal, openUserInfoModal }) {
 						{" "}
 						Sign in
 					</span>
-				</p>
+				</p> */}
+				<Typography
+					color="gray"
+					className="mt-4 text-center font-normal">
+					Already have an account? { " "}
+					<Link
+						className="font-medium text-gray-900"
+						onClick={openSignInModal}>
+						 Sign in
+					</Link>
+				</Typography>
 			</form>
 
-			<div className="flex items-center gap-2">
+			{/* <div className="flex items-center gap-2">
 				<div className="w-full border border-gray-500"></div>
 				<p className="text-[#0000008a] text-xs ">OR</p>
 				<div className="w-full border border-gray-500"></div>
-			</div>
+			</div> */}
 
-			<div className="flex flex-col md:flex-row gap-2">
+			{/* <div className="flex flex-col md:flex-row gap-2">
 				<Button
 					onClick={() => handleGoogleAuthentication()}
 					className="bg-transparent text-[#000000c5] text-sm border border-gray-400 capitalize flex items-center gap-2 justify-center md:flex-1 py-2 md:py-3 rounded font-normal">
@@ -136,7 +149,7 @@ function SignUp({ onClose, openSignInModal, openUserInfoModal }) {
 					</span>
 					Sign in with Phone
 				</Button>
-			</div>
+			</div> */}
 		</div>
 	);
 }

@@ -41,7 +41,7 @@ function SplashScreen() {
 	const [isUserResumeModalOpen, setIsUserResumeModalOpen] = useState(false);
 
 	const [isEmployerInfoModalOpen, setIsEmployerInfoModalOpen] =
-		useState(false);
+		useState(true);
 	// ====================================================================
 
 	const [searchParams] = useSearchParams();
@@ -102,7 +102,9 @@ function SplashScreen() {
 			) : (
 				<>
 					{/* signIn modal */}
-					<DialogModal scale={""} isOpen={isSignInModalOpen}>
+					<DialogModal
+						scale={{ s: "sm", m: "md" }}
+						isOpen={isSignInModalOpen}>
 						<SignIn
 							openSignUpModal={() => {
 								setIsSignInModalOpen(false);
@@ -120,7 +122,9 @@ function SplashScreen() {
 					</DialogModal>
 
 					{/* signUp modal */}
-					<DialogModal scale={""} isOpen={isSignUpModalOpen}>
+					<DialogModal
+						scale={{ s: "sm", m: "md" }}
+						isOpen={isSignUpModalOpen}>
 						<SignUp
 							onClose={() => setIsSignUpModalOpen(false)}
 							openSignInModal={() => {
@@ -135,7 +139,9 @@ function SplashScreen() {
 					</DialogModal>
 
 					{/* forgot password modal */}
-					<DialogModal scale={""} isOpen={isForgotPasswordOpen}>
+					<DialogModal
+						scale={{ s: "sm", m: "md" }}
+						isOpen={isForgotPasswordOpen}>
 						<ForgotPassword
 							onClose={() => setIsForgotPasswordOpen(false)}
 							openResetPasswordModal={() => {
@@ -147,7 +153,9 @@ function SplashScreen() {
 					</DialogModal>
 
 					{/* reset password modal */}
-					<DialogModal scale={""} isOpen={isResetPassword}>
+					<DialogModal
+						scale={{ s: "sm", m: "md" }}
+						isOpen={isResetPassword}>
 						<ResetPassword
 							onClose={() => setIsResetPassword(false)}
 							openSignInModal={() => {
@@ -158,7 +166,9 @@ function SplashScreen() {
 						/>
 					</DialogModal>
 					{/* user info modal */}
-					<DialogModal scale={""} isOpen={isUserInfoModal}>
+					<DialogModal
+						scale={{ s: "sm", m: "md" }}
+						isOpen={isUserInfoModal}>
 						<UserInfo
 							onClose={() => setIsUserInfoModal(true)}
 							setUserData={setUserData}
@@ -170,7 +180,9 @@ function SplashScreen() {
 					</DialogModal>
 
 					{/* user location modal */}
-					<DialogModal scale={""} isOpen={isUserLocationModalOpen}>
+					<DialogModal
+						scale={{ s: "sm", m: "md" }}
+						isOpen={isUserLocationModalOpen}>
 						<UserLocation
 							onClose={() => setIsUserLocationModalOpen(false)}
 							setUserData={setUserData}
@@ -188,7 +200,7 @@ function SplashScreen() {
 
 					{/* user addition info modal */}
 					<DialogModal
-						scale={""}
+						scale={{ s: "sm", m: "md" }}
 						isOpen={isUserAdditionInfoModalOpen}>
 						<UserAdditionInfo
 							onClose={() =>
@@ -208,7 +220,9 @@ function SplashScreen() {
 					</DialogModal>
 
 					{/* user job detais modal */}
-					<DialogModal scale={""} isOpen={isJobDetailsModalOpen}>
+					<DialogModal
+						scale={{ s: "sm", m: "md" }}
+						isOpen={isJobDetailsModalOpen}>
 						<JobDetails
 							onClose={() => setIsJobDetailsModalOpen(false)}
 							setUserData={setUserData}
@@ -220,7 +234,9 @@ function SplashScreen() {
 					</DialogModal>
 
 					{/* user resume modal */}
-					<DialogModal scale={""} isOpen={isUserResumeModalOpen}>
+					<DialogModal
+						scale={{ s: "sm", m: "md" }}
+						isOpen={isUserResumeModalOpen}>
 						<UserResume
 							onClose={() => setIsUserResumeModalOpen(false)}
 							setUserData={setUserData}
@@ -229,7 +245,9 @@ function SplashScreen() {
 					</DialogModal>
 
 					{/* employer info modal */}
-					<DialogModal scale={""} isOpen={isEmployerInfoModalOpen}>
+					<DialogModal
+						scale={{ s: "sm", m: "md" }}
+						isOpen={isEmployerInfoModalOpen}>
 						<EmployerInfo
 							onClose={() => setIsEmployerInfoModalOpen(false)}
 							setUserData={setUserData}

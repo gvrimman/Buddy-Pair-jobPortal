@@ -1,4 +1,4 @@
-import { Button } from "@material-tailwind/react";
+import { Button, Typography } from "@material-tailwind/react";
 import {
 	educationType,
 	locationOptions,
@@ -65,17 +65,20 @@ function UserAdditionInfo({
 	};
 
 	return (
-		<div className=" flex flex-col gap-4 px-1">
+		<div className=" flex flex-col gap-4 px-1 my-4">
 			<form onSubmit={handleSubmit(onSubmit)}>
 				<div className="relative text-center">
-					<h1 className="text-customViolet text-lg md:text-2xl font-bold">
+					<Typography
+						variant="h4"
+						color="blue-gray"
+						className="text-center">
 						Additional Informations
-					</h1>
+					</Typography>
 					<p className="text-[#0000008a] text-sm md:text-base font-semibold my-2">
 						Provide your infromations
 					</p>
 				</div>
-				<div className="mb-2 md:mb-3">
+				<div className="mb-2 md:mb-8">
 					<MultiSelect
 						name={"skills"}
 						control={control}
@@ -86,7 +89,7 @@ function UserAdditionInfo({
 					/>
 				</div>
 
-				<div className="relative grid md:grid-cols-2 gap-3 md:gap-4 mb-3">
+				<div className="relative grid md:grid-cols-2 gap-3 md:gap-8 mb-3">
 					<TextInput
 						type={"text"}
 						label={"Education institute"}
@@ -142,14 +145,14 @@ function UserAdditionInfo({
 				</div>
 				<div className="text-end">
 					<Button
-						onClick={() => navigate("/")}
-						className="rounded py-2 px-3 sm:py-3 sm:px-4 mx-1 bg-red-400">
-						Close
+						type="submit"
+						className=" py-2 px-3 sm:py-3 sm:px-4 mx-1 ">
+						Next
 					</Button>
 					<Button
-						type="submit"
-						className="rounded py-2 px-3 sm:py-3 sm:px-4 mx-1 bg-customViolet">
-						Next
+						onClick={() => navigate("/")}
+						className=" py-2 px-3 sm:py-3 sm:px-4 mx-1 bg-red-400">
+						Close
 					</Button>
 				</div>
 			</form>

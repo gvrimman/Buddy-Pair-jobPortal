@@ -1,6 +1,6 @@
 import React, { useEffect, useState } from "react";
 import avatar from "/assets/images/office.png";
-import { Button } from "@material-tailwind/react";
+import { Button, Typography } from "@material-tailwind/react";
 import { useNavigate } from "react-router-dom";
 import { useDispatch } from "react-redux";
 import {
@@ -86,6 +86,12 @@ function EmployerInfo({ userData, onClose }) {
 	return (
 		<div className=" flex flex-col gap-4 px-1">
 			<form onSubmit={handleSubmit(onSubmit)}>
+				<Typography
+					variant="h4"
+					color="blue-gray"
+					className="text-center pb-4">
+					Company Details
+				</Typography>
 				<div className=" rounded-full w-20 sm:w-24 aspect-square overflow-hidden mx-auto relative mb-4">
 					<div className="absolute top-1/2 -translate-y-1/2 cursor-pointer opacity-0 scale-150">
 						<TextInput
@@ -102,7 +108,7 @@ function EmployerInfo({ userData, onClose }) {
 						loading="lazy"
 					/>
 				</div>
-				<div className="relative grid md:grid-cols-2 gap-3 md:gap-4 mb-3">
+				<div className="relative grid md:grid-cols-2 gap-3 md:gap-8 mb-3">
 					<TextInput
 						type={"text"}
 						label={"Company Name"}
@@ -165,13 +171,10 @@ function EmployerInfo({ userData, onClose }) {
 					/>
 				</div>
 				<div className="text-end">
-					<Button onClick={()=>navigate("/")} className="rounded py-2 px-3 sm:py-3 sm:px-4 mx-1 bg-red-400">
-						Close
-					</Button>
 					<Button
 						disabled={isLoading}
 						type="submit"
-						className="rounded py-2 px-3 sm:py-3 sm:px-4 mx-1 bg-customViolet">
+						className=" py-2 px-3 sm:py-3 sm:px-4 mx-1 ">
 						{isLoading ? (
 							<span>
 								<RiLoader4Line className="animate-spin text-xl" />
@@ -179,6 +182,11 @@ function EmployerInfo({ userData, onClose }) {
 						) : (
 							"Next"
 						)}
+					</Button>
+					<Button
+						onClick={() => navigate("/")}
+						className=" py-2 px-3 sm:py-3 sm:px-4 mx-1 bg-red-400">
+						Close
 					</Button>
 				</div>
 			</form>

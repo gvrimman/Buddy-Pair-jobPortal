@@ -4,13 +4,16 @@ import CandidatesSideBar from "../../components/employer/candidates/CandidatesSi
 import CandidatesSection from "../../components/employer/candidates/CandidatesSection";
 import { useDispatch, useSelector } from "react-redux";
 import { getCandidates } from "../../apis/employerApi";
+import Filter from "../../components/common/Filter";
 
 function Candidates() {
 	const [toggleJobSection, setToggleJobSection] = useState(false);
 	
 
 	return (
-		<div className="max-w-[1440px] mx-auto px-7 grid lg:grid-cols-4">
+		// <div className="max-w-[1440px] mx-auto px-7 grid lg:grid-cols-4">
+		<div className="max-w-[1440px] mx-auto px-7 ">
+			<Filter/>
 			<CandidatesSideSection  />
 			<CandidatesSideBar
 				toggleValue={toggleJobSection}

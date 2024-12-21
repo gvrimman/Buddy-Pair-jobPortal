@@ -25,7 +25,7 @@ import { showError } from "../../utils/toast";
 import { useNavigate } from "react-router-dom";
 
 function UserInfo({ onClose, setUserData, openUserLocationModal }) {
-	const navigate = useNavigate()
+	const navigate = useNavigate();
 	const [previewSrc, setPreviewSrc] = useState(null);
 
 	// hook form validation
@@ -57,8 +57,7 @@ function UserInfo({ onClose, setUserData, openUserLocationModal }) {
 
 	// form sumbission
 	const onSubmit = (data) => {
-		if(selectedOption === ""){
-			
+		if (selectedOption === "") {
 			showError("Please select your status");
 			return;
 		}
@@ -90,8 +89,15 @@ function UserInfo({ onClose, setUserData, openUserLocationModal }) {
 	};
 
 	return (
-		<div className=" flex flex-col gap-4 px-1">
+		<div className=" flex flex-col gap-4 px-1 my-4">
 			<form onSubmit={handleSubmit(onSubmit)}>
+				<Typography
+					variant="h4"
+					color="blue-gray"
+					className="text-center">
+					Personal Details
+				</Typography>
+
 				<div className=" rounded-full w-20 sm:w-24 aspect-square overflow-hidden mx-auto relative">
 					<div className="absolute top-1/2 -translate-y-1/2 cursor-pointer opacity-0 scale-150">
 						<TextInput
@@ -108,7 +114,7 @@ function UserInfo({ onClose, setUserData, openUserLocationModal }) {
 						loading="lazy"
 					/>
 				</div>
-				<div className="relative grid md:grid-cols-2 gap-3 md:gap-4 mb-3">
+				<div className="relative grid md:grid-cols-2 gap-3 md:gap-8 mb-3">
 					<TextInput
 						type={"date"}
 						label={"Date of Birth"}
@@ -219,14 +225,14 @@ function UserInfo({ onClose, setUserData, openUserLocationModal }) {
 				</div>
 				<div className="text-end">
 					<Button
-						onClick={() => navigate("/")}
-						className="rounded py-2 px-3 sm:py-3 sm:px-4 mx-1 bg-red-400">
-						Close
+						type="submit"
+						className=" py-2 px-3 sm:py-3 sm:px-4 mx-1 ">
+						Next
 					</Button>
 					<Button
-						type="submit"
-						className="rounded py-2 px-3 sm:py-3 sm:px-4 mx-1 bg-customViolet">
-						Next
+						onClick={() => navigate("/")}
+						className="py-2 px-3 sm:py-3 sm:px-4 mx-1 bg-red-400">
+						Close
 					</Button>
 				</div>
 			</form>
