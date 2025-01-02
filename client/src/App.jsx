@@ -89,10 +89,10 @@ function App() {
 
 					{/* This Router for Job Portal Employer */}
 
-					<Route
+					{/* <Route
 						path="/job-portal/auth"
 						element={<JobportalUserInfo />}
-					/>
+					/> */}
 
 					<Route
 						path="/job-portal"

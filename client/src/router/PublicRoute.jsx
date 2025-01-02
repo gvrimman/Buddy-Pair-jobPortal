@@ -6,9 +6,10 @@ function PublicRoute() {
 	const { isAuthenticated, userInfo } = useSelector((state) => state.user);
 
 	if (isAuthenticated) {
-		const role = userInfo?.apps?.jobPortal?.role;
-		if (role === "employer") return <Navigate to="/job-portal/employer" />;
-		if (role === "employee") return <Navigate to="/job-portal/employee" />;
+		// const role = userInfo?.apps?.jobPortal?.role;
+		// if (role === "employer") return <Navigate to="/job-portal/employer" />;
+		// if (role === "employee") return <Navigate to="/job-portal/employee" />;
+		return <Navigate to="/job-portal" />;
 	}
 
 	return <Outlet />;
