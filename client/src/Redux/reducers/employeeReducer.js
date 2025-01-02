@@ -3,6 +3,8 @@ import { createSlice } from "@reduxjs/toolkit";
 const initialState = {
 	jobs: [], // all jobs list
 	job: null,
+	profiles: [], // all similar profiles
+	profile: null,
 	bookmarkedJobs: [],
 	appliedJobs: [],
 	companies: [],
@@ -42,6 +44,25 @@ const employeeSlice = createSlice({
 		},
 		fetchJob: (state, action) => {
 			(state.job = action.payload), (state.isLoading = false);
+		},
+		fetchProfiles: (state, action) => {
+			state.isLoading = false;
+			// Filter out duplicates by checking profiles IDs
+			const newProfiles = action.payload.profiles.filter(
+				(newProfiles) =>
+					!state.profiles.some(
+						(existingProfiles) => existingProfiles._id === newProfiles._id
+					)
+			);
+			state.profiles = [...state.profiles, ...newProfiles];
+			state.hasMore = action.payload.hasMore;
+		},
+		clearProfiles: (state, action) => {
+			state.isLoading = false;
+			state.profiles = [];
+		},
+		fetchProfile: (state, action) => {
+			(state.profile = action.payload), (state.isLoading = false);
 		},
 		fetchBookmarkedJobs: (state, action) => {
 			state.isLoading = false;
@@ -107,6 +128,9 @@ export const {
 	fetchError,
 	fetchJobs,
 	fetchJob,
+	fetchProfiles,
+	clearProfiles,
+	fetchProfile,
 	fetchBookmarkedJobs,
 	setJobBookMarked,
 	deleteJobBookmarked,

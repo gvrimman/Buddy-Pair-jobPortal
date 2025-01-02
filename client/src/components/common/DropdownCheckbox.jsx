@@ -21,7 +21,7 @@ export default function DropdownCheckbox({ label, option }) {
 	};
 
 	const defaultValues = option.filter((opt) =>
-		query[label.toLowerCase()]?.includes(opt.value)
+		query && query[label.toLowerCase()]?.includes(opt.value)
 	);
 
 	return (
