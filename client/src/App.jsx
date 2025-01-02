@@ -10,7 +10,11 @@ import EmployeeNotification from "./pages/employee/dashboard/EmployeeNotificatio
 import useListenNotification from "./hooks/useListenNotification";
 import { useSocket } from "./hooks/useSocket";
 import EmployerNotification from "./pages/employer/dashboard/EmployerNotification";
-const Layout = lazy(() => import("./components/layout/Layout"));
+import Layout from "./layouts/Layout";
+import JobportalUserInfo from "./pages/auth/jobportal-auth/jobportalUserInfo";
+import JobView from "./components/employer/candidates/JobView";
+import ProfileView from "./components/employer/candidates/ProfileView";
+// const Layout = lazy(() => import("./components/layout/Layout"));
 const SplashScreen = lazy(() => import("./pages/shared/SplashScreen"));
 const EmployerHome = lazy(() => import("./pages/employer/EmployerHome"));
 const Candidates = lazy(() => import("./pages/employer/Candidates"));
@@ -68,6 +72,7 @@ const SingleEmployerCompany = lazy(() =>
 	import("./pages/employer/SingleEmployerCompany")
 );
 
+
 function App() {
 	useSocket(); // Initializes the socket
 	useListenNotification(); // Listens for notifications globally
@@ -77,28 +82,31 @@ function App() {
 			<Suspense fallback={<PageLoader />}>
 				<Routes>
 					<Route key={"/"} path="/" element={<PublicRoute />}>
-						<Route path="/" element={<Layout />}>
-							<Route index element={<LandingPage />} />
-							<Route path="/auth" element={<SplashScreen />} />
-						</Route>
+						<Route index element={<LandingPage />} />
+						<Route path="/auth" element={<SplashScreen />} />
 					</Route>
 
 					{/* This Router for Job Portal Employer */}
 
 					<Route
+						path="/job-portal/"
+						element={<JobportalUserInfo />}
+					/>
+
+					<Route
 						path="/job-portal/employer"
 						element={<ProtectedRoute roles={["employer"]} />}>
-						<Route element={<EmployerLayout />}>
+						<Route element={<Layout />}>
 							<Route index element={<EmployerHome />} />
+
+							<Route path="job/:id" element={<JobView />} />
+							<Route path="profile/:id" element={<ProfileView />} />
+							
 							<Route path="candidates" element={<Candidates />} />
 							<Route
 								path="companies"
 								element={<EmployerCompanies />}
 							/>
-							{/* <Route
-						path="information-form"
-						element={<EmployerInformation />}
-					/> */}
 							<Route
 								path="candidate/:id"
 								element={<SingleCandidate />}
@@ -111,7 +119,7 @@ function App() {
 					</Route>
 
 					{/* Router for Job Portal Employer Dashboard */}
-					<Route
+					{/* <Route
 						path="/job-portal/employer/dashboard"
 						element={<ProtectedRoute roles={["employer"]} />}>
 						<Route element={<EmployerDashboardLayout />}>
@@ -146,11 +154,11 @@ function App() {
 								/>
 							}
 						</Route>
-					</Route>
+					</Route> */}
 
 					{/* This Router for Job Portal Employee */}
 
-					<Route
+					{/* <Route
 						path="/job-portal/employee"
 						element={<ProtectedRoute roles={["employee"]} />}>
 						<Route element={<EmployeeLayout />}>
@@ -161,27 +169,18 @@ function App() {
 								element={<HomeCompanies />}
 							/>
 							<Route path="saved-jobs" element={<Saved />} />
-							{/* {
-								<Route
-									path="notifications"
-									element={<Notifications />}
-								/>
-							} */}
-							{/* <Route
-						path="information-form"
-						element={<MultiInfoForm />}
-					/> */}
+							
 							<Route path="job/:id" element={<SingleJob />} />
 							<Route
 								path="company/:id"
 								element={<SingleCompany />}
 							/>
 						</Route>
-					</Route>
+					</Route> */}
 
 					{/* This Router for Job Portal Employee Dashboard  */}
 
-					<Route
+					{/* <Route
 						path="/job-portal/employee/dashboard"
 						element={<ProtectedRoute roles={["employee"]} />}>
 						<Route element={<EmployeeDashboardLayout />}>
@@ -211,7 +210,7 @@ function App() {
 								element={<EmployeeChangePassword />}
 							/>
 						</Route>
-					</Route>
+					</Route> */}
 				</Routes>
 			</Suspense>
 		</div>

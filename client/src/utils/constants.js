@@ -266,6 +266,86 @@ export const experienceData = [
 	{ value: ">6", valueToDisplay: ">6" },
 ];
 
+export const filterSkillOptions = [
+	{ value: "javascript", valueToDisplay: "JavaScript" },
+	{ value: "python", valueToDisplay: "Python" },
+	{ value: "java", valueToDisplay: "Java" },
+	{ value: "csharp", valueToDisplay: "C#" },
+	{ value: "ruby", valueToDisplay: "Ruby" },
+	{ value: "go", valueToDisplay: "Go" },
+	{ value: "html", valueToDisplay: "HTML" },
+	{ value: "css", valueToDisplay: "CSS" },
+	{ value: "react", valueToDisplay: "React.js" },
+	{ value: "angular", valueToDisplay: "Angular" },
+	{ value: "vue", valueToDisplay: "Vue.js" },
+	{ value: "nodejs", valueToDisplay: "Node.js" },
+	{ value: "express", valueToDisplay: "Express.js" },
+	{ value: "mongodb", valueToDisplay: "MongoDB" },
+	{ value: "mysql", valueToDisplay: "MySQL" },
+	{ value: "postgresql", valueToDisplay: "PostgreSQL" },
+	{ value: "sql", valueToDisplay: "SQL" },
+	{ value: "docker", valueToDisplay: "Docker" },
+	{ value: "kubernetes", valueToDisplay: "Kubernetes" },
+	{ value: "aws", valueToDisplay: "AWS" },
+	{ value: "azure", valueToDisplay: "Azure" },
+	{ value: "googlecloud", valueToDisplay: "Google Cloud" },
+	{ value: "git", valueToDisplay: "Git" },
+	{ value: "github", valueToDisplay: "GitHub" },
+	{ value: "gitlab", valueToDisplay: "GitLab" },
+	{ value: "ci_cd", valueToDisplay: "CI/CD" },
+	{ value: "jest", valueToDisplay: "Jest" },
+	{ value: "mocha", valueToDisplay: "Mocha" },
+	{ value: "typescript", valueToDisplay: "TypeScript" },
+	{ value: "sass", valueToDisplay: "Sass" },
+	{ value: "graphql", valueToDisplay: "GraphQL" },
+	{ value: "redux", valueToDisplay: "Redux" },
+	{ value: "tailwindcss", valueToDisplay: "Tailwind CSS" },
+	{ value: "bootstrap", valueToDisplay: "Bootstrap" },
+	{ value: "webpack", valueToDisplay: "Webpack" },
+	{ value: "firebase", valueToDisplay: "Firebase" },
+	{ value: "jest", valueToDisplay: "Jest" },
+	{ value: "selenium", valueToDisplay: "Selenium" },
+	{ value: "scrum", valueToDisplay: "Scrum" },
+	{ value: "agile", valueToDisplay: "Agile" },
+	{ value: "vscode", valueToDisplay: "Visual Studio Code" },
+	{ value: "docker", valueToDisplay: "Docker" },
+	{ value: "linux", valueToDisplay: "Linux" },
+	{ value: "windows", valueToDisplay: "Windows" },
+	{ value: "machinelearning", valueToDisplay: "Machine Learning" },
+	{ value: "deep_learning", valueToDisplay: "Deep Learning" },
+	{ value: "tensorflow", valueToDisplay: "TensorFlow" },
+	{ value: "pytorch", valueToDisplay: "PyTorch" },
+	{ value: "opencv", valueToDisplay: "OpenCV" },
+	{ value: "r", valueToDisplay: "R" },
+	{ value: "tableau", valueToDisplay: "Tableau" },
+	{ value: "powerbi", valueToDisplay: "Power BI" },
+	{ value: "spark", valueToDisplay: "Apache Spark" },
+	{ value: "hadoop", valueToDisplay: "Hadoop" },
+	{ value: "sqlalchemy", valueToDisplay: "SQLAlchemy" },
+	{ value: "elasticsearch", valueToDisplay: "Elasticsearch" },
+	{ value: "redis", valueToDisplay: "Redis" },
+	{ value: "kafka", valueToDisplay: "Apache Kafka" },
+	{ value: "rabbitmq", valueToDisplay: "RabbitMQ" },
+	{ value: "azuredevops", valueToDisplay: "Azure DevOps" },
+	{ value: "jenkins", valueToDisplay: "Jenkins" },
+	{ value: "cloudformation", valueToDisplay: "CloudFormation" },
+	{ value: "ansible", valueToDisplay: "Ansible" },
+	{ value: "terraform", valueToDisplay: "Terraform" },
+	{ value: "nginx", valueToDisplay: "Nginx" },
+	{ value: "apache", valueToDisplay: "Apache" },
+	{ value: "rails", valueToDisplay: "Ruby on Rails" },
+	{ value: "flutter", valueToDisplay: "Flutter" },
+	{ value: "swift", valueToDisplay: "Swift" },
+	{ value: "kotlin", valueToDisplay: "Kotlin" },
+	{ value: "xcode", valueToDisplay: "Xcode" },
+	{ value: "android", valueToDisplay: "Android Development" },
+	{ value: "ios", valueToDisplay: "iOS Development" },
+	{ value: "reactnative", valueToDisplay: "React Native" },
+	{ value: "ember", valueToDisplay: "Ember.js" },
+	{ value: "laravel", valueToDisplay: "Laravel" },
+	{ value: "symfony", valueToDisplay: "Symfony" },
+];
+
 export const manageJobsMonthOptions = [
 	{ value: "Last 6 Months", valueToDisplay: "Last 6 Months" },
 	{ value: "Last 12 Months", valueToDisplay: "Last 12 Months" },
@@ -274,20 +354,27 @@ export const manageJobsMonthOptions = [
 	{ value: "Last 5 Year", valueToDisplay: "Last 5 Year" },
 ];
 
+export const salaryRanges = [
+	{ value: "0-20000", valueToDisplay: "0-20,000" },
+	{ value: "20001-40000", valueToDisplay: "20,001-40,000" },
+	{ value: "40001-60000", valueToDisplay: "40,001-60,000" },
+	{ value: "60001-80000", valueToDisplay: "60,001-80,000" },
+	{ value: "80001-100000", valueToDisplay: "80,001-100,000" },
+	{ value: "100001-120000", valueToDisplay: "100,001-120,000" },
+	{ value: "120001-140000", valueToDisplay: "120,001-140,000" },
+	{ value: "140001-160000", valueToDisplay: "140,001-160,000" },
+	{ value: "160001-180000", valueToDisplay: "160,001-180,000" },
+	{ value: "180001-200000", valueToDisplay: "180,001-200,000" },
+	{ value: "200001+", valueToDisplay: "200,001+" },
+];
 
-/* {
-  query: {
-    name: 'fgh',
-    location: 'dfg',
-    category: 'On-site',
-    experience: [
-      'fresher',
-      '0-1'
-    ],
-    gender: [
-      'male',
-      'female'
-    ],
-    sort: 'newest'
-  }
-} */
+export const joiningDayRange = [
+	{ value: "immediate", valueToDisplay: "Immediate" },
+	{ value: "within_1_week", valueToDisplay: "Within 1 Week" },
+	{ value: "within_2_weeks", valueToDisplay: "Within 2 Weeks" },
+	{ value: "within_1_month", valueToDisplay: "Within 1 Month" },
+	{ value: "within_2_months", valueToDisplay: "Within 2 Months" },
+	{ value: "within_3_months", valueToDisplay: "Within 3 Months" },
+];
+
+

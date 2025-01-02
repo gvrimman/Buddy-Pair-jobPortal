@@ -2,6 +2,9 @@ import React, { useEffect } from "react";
 import EmployerHomeBanner from "../../components/employer/EmployerHomeBanner";
 import { useDispatch } from "react-redux";
 import { getAllNotifications } from "../../apis/notificationApi";
+import Home from "./Home";
+import ProfileView from "../../components/employer/candidates/ProfileView";
+import SideBar from "../../layouts/Layout";
 function EmployerHome() {
 	const dispatch = useDispatch();
 	useEffect(() => {
@@ -9,7 +12,8 @@ function EmployerHome() {
 	}, []);
 	return (
 		<div>
-			<EmployerHomeBanner />
+			<Home/>
+			{/* <ProfileView /> */}
 		</div>
 	);
 }
