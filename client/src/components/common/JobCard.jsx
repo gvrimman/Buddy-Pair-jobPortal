@@ -6,7 +6,7 @@ function JobCard({ data }) {
 	return (
 		<div
 			className="bg-white shadow rounded-lg p-4"
-			onClick={() => navigate(`/job-portal/employer/job/${data.title}`)}>
+			onClick={() => navigate(`/job-portal/job/${data.title}`)}>
 			<h2 className="text-lg font-semibold mb-2">{data?.title}</h2>
 			<p className="text-gray-600 text-sm mb-1">
 				<span className="font-medium">Location:</span> {data?.location}

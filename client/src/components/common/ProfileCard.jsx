@@ -6,7 +6,7 @@ function ProfileCard({ data }) {
 	return (
 		<div
 			className="bg-white shadow rounded-lg p-4"
-			onClick={() => navigate(`/job-portal/employer/profile/${data.name}`)}>
+			onClick={() => navigate(`/job-portal/profile/${data.name}`)}>
 			<div className="flex items-center gap-3 mb-3">
 				<div className="w-12 overflow-hidden rounded-full">
 					<img

@@ -237,14 +237,13 @@ const Home = () => {
 		],
 	];
 
-	console.log(activeTab);
 	return (
-		<div>
+		<div className="max-w-[900px]">
 			<Filter />
 			<div className=" h-[2px] rounded-lg bg-purple-500 my-4"></div>
 			<div className=" mx-2">
 				<div className="relative">
-					<div className="grid grid-cols-2 relative bg-white h-12 rounded-full">
+					<div className="grid grid-cols-2 relative bg-white h-12 rounded-full border border-purple-300">
 						{["Find Jobs", "Similar Jobs"].map((tab, index) => (
 							<button
 								key={index}
