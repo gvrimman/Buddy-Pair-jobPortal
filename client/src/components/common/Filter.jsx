@@ -7,8 +7,10 @@ import { RiFilterFill } from "react-icons/ri";
 
 import {
 	experienceData,
-	genderOptions,
+	filterSkillOptions,
+	joiningDayRange,
 	preferredJobType,
+	salaryRanges,
 } from "../../utils/constants";
 import { useDispatch, useSelector } from "react-redux";
 import { setQuery } from "../../Redux/reducers/employeeReducer";
@@ -23,8 +25,8 @@ function Filter() {
 		dispatch(setQuery({ ...query, [e.target.name]: e.target.value }));
 	};
 	return (
-		<div className="sm:flex flex-col items-center bg-white py-3 sticky top-[80px] z-10 ">
-			<div className="flex gap-2 flex-wrap w-full sm:flex-nowrap">
+		<div className="sm:flex flex-col items-center bg-white pt-3 sticky top-0 z-10 px-2">
+			<div className="flex gap-2 flex-wrap w-full sm:flex-nowrap sm:z-50">
 				<Input
 					onChange={handleChange}
 					onFocus={() => setIsFilterOpen(true)}
@@ -83,46 +85,36 @@ function Filter() {
 					</Button>
 				</div>
 				<div className="mb-4 mt-4 sm:m-0 flex flex-col sm:flex-row sm:flex-wrap gap-3 w-full ">
-					<div className="flex-1">
-						<Select
-							name="category"
-							onChange={(e) =>
-								dispatch(setQuery({ ...query, category: e }))
-							}
-							value={
-								query?.category
-									? query.category
-									: preferredJobType?.[0]?.valueToDisplay ||
-									  optionValue
-							}
-							label="Category"
-							className="outline-none text-sm rounded-md py-2">
-							{preferredJobType?.map((preJob, i) => (
-								<Option key={i} value={preJob?.value}>
-									{preJob?.valueToDisplay}
-								</Option>
-							))}
-						</Select>{" "}
+					<div className="flex-1 min-w-fit">
+						<DropdownCheckbox
+							label={"Employment Type"}
+							option={preferredJobType}
+						/>
 					</div>
-					<DropdownCheckbox label={"Gender"} option={genderOptions} />
-					<DropdownCheckbox
-						label={"Experience"}
-						option={experienceData}
-					/>
-					<div className="relative flex-1">
-						<Select
-							onChange={(e) =>
-								dispatch(setQuery({ ...query, sort: e }))
-							}
-							label="Sort by"
-							defaultValue="Newest"
-							className="outline-none text-sm rounded-md py-2">
-							<Option value="newest">Newest</Option>
-							<Option value="oldest">Oldest</Option>
-						</Select>
-						<span className="absolute text-[#828b92] text-2xl top-1/2 -translate-y-1/2 right-3 bg-[#ffffff]">
-							<CgSortAz />
-						</span>
+
+					<div className="flex-1 min-w-fit">
+						<DropdownCheckbox
+							label={"Experience"}
+							option={experienceData}
+						/>
+					</div>
+					<div className="flex-1 min-w-fit">
+						<DropdownCheckbox
+							label={"Skills"}
+							option={filterSkillOptions}
+						/>
+					</div>
+					<div className="flex-1 min-w-fit">
+						<DropdownCheckbox
+							label={"Salary Range"}
+							option={salaryRanges}
+						/>
+					</div>
+					<div className="flex-1 min-w-fit">
+						<DropdownCheckbox
+							label={"Joining Days"}
+							option={joiningDayRange}
+						/>
 					</div>
 				</div>
 

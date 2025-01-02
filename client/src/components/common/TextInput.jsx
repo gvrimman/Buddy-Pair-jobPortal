@@ -7,7 +7,7 @@ function TextInput({ type, label, registering, errors, value }) {
 
 	return (
 		<div className="relative">
-			<Input type={type} size="lg" label={label} defaultValue={value} {...registering} />
+			<Input type={type} size="" label={label} defaultValue={value} {...registering} />
 			{errors && (
 				<Tooltip
 					content={errors?.message}
