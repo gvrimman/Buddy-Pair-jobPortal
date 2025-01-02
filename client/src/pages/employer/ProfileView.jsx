@@ -12,7 +12,7 @@ function Container({ children }) {
 
 function ProfileView() {
 	return (
-		<div className="w-[95%] max-w-[1440px] mx-auto ">
+		<div className="max-w-[900px]">
 			<Container>
 				<div className="  flex items-baseline justify-between mb-3">
 					<div className="overflow-hidden aspect-square border-2 border-customViolet rounded-full w-16 h-16">
@@ -33,7 +33,9 @@ function ProfileView() {
 					<h5 className="font-medium text-md">Vayanad</h5>
 				</div>
 				<p className="text-xs">Mernstack Developer</p>
-				<p className="text-xs my-2 font-medium px-2 rounded-xl bg-gray-300 text-gray-800 w-fit">2.5 Year</p>
+				<p className="text-xs my-2 font-medium px-2 rounded-xl bg-gray-300 text-gray-800 w-fit">
+					2.5 Year
+				</p>
 			</Container>
 			<Container>
 				<h4 className="font-medium text-sm my-2">About</h4>
@@ -72,10 +74,12 @@ function ProfileView() {
 				<h4 className="font-medium text-sm my-2">Works at</h4>
 				<div>
 					<p className="text-xs my-1">
-						Company: <span className="font-semibold">abc private ltd</span>
+						Company:{" "}
+						<span className="font-semibold">abc private ltd</span>
 					</p>
 					<p className="text-xs my-1">
-						Location: <span className="font-semibold">Thrichur</span>
+						Location:{" "}
+						<span className="font-semibold">Thrichur</span>
 					</p>
 				</div>
 			</Container>

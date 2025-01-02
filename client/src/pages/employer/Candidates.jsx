@@ -5,7 +5,7 @@ import CandidatesSection from "../../components/employer/candidates/CandidatesSe
 import { useDispatch, useSelector } from "react-redux";
 import { getCandidates } from "../../apis/employerApi";
 import Filter from "../../components/common/Filter";
-import JobView from "../../components/employer/candidates/JobView";
+import JobView from "./JobView";
 import SideBar from "../../layouts/Layout";
 
 function Candidates() {

@@ -12,8 +12,10 @@ import { useSocket } from "./hooks/useSocket";
 import EmployerNotification from "./pages/employer/dashboard/EmployerNotification";
 import Layout from "./layouts/Layout";
 import JobportalUserInfo from "./pages/auth/jobportal-auth/jobportalUserInfo";
-import JobView from "./components/employer/candidates/JobView";
-import ProfileView from "./components/employer/candidates/ProfileView";
+import JobView from "./pages/employer/JobView";
+import ProfileView from "./pages/employer/ProfileView";
+import RequestsView from "./pages/employer/RequestsView";
+import Jobs from "./pages/employer/Jobs";
 // const Layout = lazy(() => import("./components/layout/Layout"));
 const SplashScreen = lazy(() => import("./pages/shared/SplashScreen"));
 const EmployerHome = lazy(() => import("./pages/employer/EmployerHome"));
@@ -72,7 +74,6 @@ const SingleEmployerCompany = lazy(() =>
 	import("./pages/employer/SingleEmployerCompany")
 );
 
-
 function App() {
 	useSocket(); // Initializes the socket
 	useListenNotification(); // Listens for notifications globally
@@ -88,20 +89,31 @@ function App() {
 
 					{/* This Router for Job Portal Employer */}
 
-					<Route
-						path="/job-portal/"
+					{/* <Route
+						path="/job-portal/auth"
 						element={<JobportalUserInfo />}
-					/>
+					/> */}
 
 					<Route
-						path="/job-portal/employer"
+						path="/job-portal"
 						element={<ProtectedRoute roles={["employer"]} />}>
 						<Route element={<Layout />}>
 							<Route index element={<EmployerHome />} />
 
+							<Route path="profile" element={<ProfileView />} />
 							<Route path="job/:id" element={<JobView />} />
-							<Route path="profile/:id" element={<ProfileView />} />
-							
+							<Route
+								path="profile/:id"
+								element={<ProfileView />}
+							/>
+							<Route path="requests" element={<RequestsView />} />
+							<Route path="jobs" element={<Jobs />} />
+							<Route path="messages" element={<Messages />} />
+							<Route
+								path="notifications"
+								element={<EmployerNotification />}
+							/>
+
 							<Route path="candidates" element={<Candidates />} />
 							<Route
 								path="companies"

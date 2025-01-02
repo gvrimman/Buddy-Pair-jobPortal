@@ -3,7 +3,7 @@ import EmployerHomeBanner from "../../components/employer/EmployerHomeBanner";
 import { useDispatch } from "react-redux";
 import { getAllNotifications } from "../../apis/notificationApi";
 import Home from "./Home";
-import ProfileView from "../../components/employer/candidates/ProfileView";
+import ProfileView from "./ProfileView";
 import SideBar from "../../layouts/Layout";
 function EmployerHome() {
 	const dispatch = useDispatch();
@@ -12,7 +12,7 @@ function EmployerHome() {
 	}, []);
 	return (
 		<div>
-			<Home/>
+			<Home />
 			{/* <ProfileView /> */}
 		</div>
 	);

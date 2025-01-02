@@ -10,7 +10,7 @@ function EmployerNotification() {
 		dispatch(getAllNotifications());
 	}, []);
   return (
-		<div className="h-screen">
+		<div className="h-screen max-w-[900px] w-full">
 			<Notification />
 		</div>
   );

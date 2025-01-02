@@ -97,7 +97,7 @@ function JobportalUserInfo() {
 					</div>
 					<div className="text-end mt-3">
 						<Button
-						onClick={() => navigate("/job-portal/employer")}
+						onClick={() => navigate("/job-portal")}
 							type="submit"
 							className=" py-2 px-3 sm:py-3 sm:px-4 mx-1 ">
 							Next

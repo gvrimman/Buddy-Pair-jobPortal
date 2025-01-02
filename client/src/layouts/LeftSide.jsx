@@ -26,7 +26,7 @@ function LeftSide() {
 		},
 	];
 	return (
-		<div className="flex-1 p-3 rounded-lg bg-gradient-to-t from-purple-50 to-purple-100 hidden md:block h-screen sticky top-1">
+		<div className="w-[20vw] p-3 rounded-lg bg-gradient-to-t from-purple-50 to-purple-100 hidden md:block h-screen sticky top-1">
 			<div>
 				<h2 className="font-bold text-2xl text-purple-700">
 					BuddyPair

@@ -104,14 +104,19 @@ const fetchMatchedJobs = asyncHandler(async (req, res) => {
   const query = {};
 
   if (name) query.jobTitle = { $regex: name, $options: "i" };
-  else query.jobTitle = { $regex: jobPref.preferences.jobTitle, $options: "i" };
+  else query.jobTitle = {
+    $in: jobPref.profession.map((title) => new RegExp(title, "i")),
+  };
 
   if (location) query.jobPlace = { $regex: location, $options: "i" };
-  else query.jobPlace = { $regex: jobPref.preferences.location, $options: "i" };
+  else query.jobPlace = {
+    $in: jobPref.preferredJobLocation.map((loc) => new RegExp(loc, "i")),
+  };
 
   if (category) query.employmentType = category;
   if (experience?.length) query.experience = { $in: experience };
   if (jobtype?.length) query.jobType = { $in: jobtype };
+  else if (jobPref.preferredJobType) query.jobType = { $regex: jobPref.preferredJobType, $options: "i" };
 
   if (datePosted) {
     switch (datePosted) {
@@ -224,44 +229,18 @@ const fetchSimilarProfiles = asyncHandler(async (req, res) => {
 
   // Destructure query parameters and define defaults
   const {
-    name,
-    location,
-    category,
-    experience,
-    jobtype,
     page = Number(req.query.page) || 1,
     limit = Number(req.query.limit) || 5,
     sort = "newest",
   } = req.query;
 
   // Construct the query for similar profiles
-  const query = {
-    "apps.jobPortal": { $ne: null }, // Ensure they are linked to a job portal
-  };
-
-  if (name) query.username = { $regex: name, $options: "i" };
-  else
-    query["jobPortal.preferences.jobTitle"] = {
-      $regex: jobPref.preferences.jobTitle,
-      $options: "i",
+  const query = {};
+  if (jobPref.profession.length) {
+    query.profession = {
+      $in: jobPref.profession.map((prof) => prof),
     };
-
-  if (location)
-    query["jobPortal.preferences.location"] = {
-      $regex: location,
-      $options: "i",
-    };
-  else
-    query["jobPortal.preferences.location"] = {
-      $regex: jobPref.preferences.location,
-      $options: "i",
-    };
-
-  if (category) query["jobPortal.preferences.category"] = category;
-  if (experience?.length)
-    query["jobPortal.preferences.experience"] = { $in: experience };
-  if (jobtype?.length)
-    query["jobPortal.preferences.jobType"] = { $in: jobtype };
+  }
 
   // Pagination logic
   const skip = (page - 1) * limit;
@@ -273,19 +252,18 @@ const fetchSimilarProfiles = asyncHandler(async (req, res) => {
   } else if (sort === "oldest") {
     sortOrder.createdAt = 1;
   }
-
   // Aggregate pipeline to fetch similar profiles
-  const profiles = await User.aggregate([
+  const profiles = await JobPortal.aggregate([
     {
       $lookup: {
-        from: "jobportals",
-        localField: "apps.jobPortal",
+        from: "users",
+        localField: "userId",
         foreignField: "_id",
-        as: "jobPortal",
+        as: "userId",
       },
     },
     {
-      $unwind: "$jobPortal",
+      $unwind: "$userId",
     },
     {
       $match: query,
@@ -301,17 +279,21 @@ const fetchSimilarProfiles = asyncHandler(async (req, res) => {
     },
     {
       $project: {
-        _id: 1,
-        username: 1,
-        email: 1,
-        phone: 1,
-        "jobPortal.preferences": 1,
+        "userId._id": 1,
+        "userId.username": 1,
+        "userId.phone": 1,
+        "userId.email": 1,
+        profession: 1,
+        locationName: 1,
+        skills: 1,
+        jobDetails: 1,
+        profileImage: 1,
       },
     },
   ]);
 
   // Count total matching profiles
-  const totalCount = await User.countDocuments(query);
+  const totalCount = await JobPortal.countDocuments(query);
 
   // Determine if more profiles are available
   const hasMore = page * limit < totalCount;

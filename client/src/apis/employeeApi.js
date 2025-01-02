@@ -5,6 +5,8 @@ import {
 	fetchError,
 	fetchJobs,
 	fetchJob,
+	fetchProfiles,
+	fetchProfile,
 	fetchBookmarkedJobs,
 	setJobBookMarked,
 	deleteJobBookmarked,
@@ -26,6 +28,32 @@ export const getJobs = (query) => async (dispatch) => {
 		dispatch(fetchError(error.message));
 		showError(error?.response?.data?.message);
 	}
+};
+
+export const fetchPreferedJobs = (query) => async (dispatch) => {
+  dispatch(fetchStart());
+  try {
+    const response = await axiosInstance.get("/user/findjobs", {
+      params: { ...query },
+    });
+    dispatch(fetchJobs(response?.data?.data));
+  } catch (error) {
+    dispatch(fetchError(error.message));
+    showError(error?.response?.data?.message);
+  }
+};
+
+export const fetchSimilarProfiles = (query) => async (dispatch) => {
+  dispatch(fetchStart());
+  try {
+    const response = await axiosInstance.get("/user/similarprofiles", {
+      params: { ...query },
+    });
+    dispatch(fetchProfiles(response?.data?.data));
+  } catch (error) {
+    dispatch(fetchError(error.message));
+    showError(error?.response?.data?.message);
+  }
 };
 
 export const getJobById = (id) => async (dispatch) => {
