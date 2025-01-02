@@ -7,31 +7,31 @@ function RightSide() {
 	const Links = [
 		{
 			title: "Home",
-			link: "/",
+			link: "/job-portal/",
 		},
 		{
 			title: "Profile",
-			link: "/job-portal/employer",
+			link: "/job-portal/profile",
 		},
 		{
-			title: "Find Jobs",
-			link: "/job-portal/employer/candidates",
+			title: "Jobs",
+			link: "/job-portal/jobs",
 		},
 		{
 			title: "Messages",
-			link: "/",
+			link: "/job-portal/messages",
 		},
 		{
 			title: "Notifications",
-			link: "/",
+			link: "/job-portal/notifications",
 		},
 		{
 			title: "Requests",
-			link: "/",
+			link: "/job-portal/requests",
 		},
 	];
 	return (
-		<div className="flex-1 p-3 rounded-lg bg-gradient-to-t from-purple-50 to-purple-100 hidden md:block h-screen sticky top-1">
+		<div className="w-[20vw] p-3 rounded-lg bg-gradient-to-t from-purple-50 to-purple-100 hidden md:block h-screen sticky top-1">
 			<div className="flex items-center gap-3">
 				<div className="w-14 border-pink-400 border-[3px] overflow-hidden aspect-square rounded-full">
 					<img
@@ -50,7 +50,9 @@ function RightSide() {
 			<div className=" mt-7">
 				<ul>
 					{Links.map((link, i) => (
-						<li key={i} className="font-semibold text-gray-600 my-1 hover:bg-purple-200 rounded-lg hover:text-white transition-all ease-in-out duration-300">
+						<li
+							key={i}
+							className="font-semibold text-gray-600 my-1 hover:bg-purple-200 rounded-lg hover:text-white transition-all ease-in-out duration-300">
 							<NavLink
 								to={link?.link}
 								className={({ isActive }) =>

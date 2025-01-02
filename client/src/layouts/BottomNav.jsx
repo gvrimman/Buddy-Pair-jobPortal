@@ -7,27 +7,27 @@ import { NavLink } from "react-router-dom";
 const link = [
 	{
 		title: "profile",
-		link: "/",
+		link: "/job-portal/profile",
 		icon: <PiUserFill />,
 	},
 	{
 		title: "jobs",
-		link: "/",
+		link: "/job-portal/jobs",
 		icon: <MdWork />,
 	},
 	{
 		title: "home",
-		link: "/job-portal/employer",
+		link: "/job-portal",
 		icon: <MdHome />,
 	},
 	{
 		title: "chat",
-		link: "/",
+		link: "/job-portal/messages",
 		icon: <MdOutlineChatBubble />,
 	},
 	{
 		title: "requests",
-		link: "/",
+		link: "/job-portal/requests",
 		icon: <IoBagAddSharp />,
 	},
 ];

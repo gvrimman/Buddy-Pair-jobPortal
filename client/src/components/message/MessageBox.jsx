@@ -35,7 +35,7 @@ function MessageBox() {
    };
 
   return (
-		<div className="w-full h-screen md:flex gap-2 ">
+		<div className="max-w-[900px] w-full h-screen md:flex gap-2 ">
 			{/* userlist */}
 			<div
 				className={`w-full ${

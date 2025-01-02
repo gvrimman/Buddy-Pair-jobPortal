@@ -4,7 +4,7 @@ import { FaIndianRupeeSign } from "react-icons/fa6";
 
 function JobView() {
 	return (
-		<div className="w-full">
+		<div className="max-w-[900px]">
 			<div className=" py-2 px-2 rounded-md shadow-md border text-gray-700 text-sm">
 				<h4 className="text-center font-semibold text-md">
 					Mern Stack Developer

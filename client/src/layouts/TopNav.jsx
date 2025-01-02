@@ -9,27 +9,27 @@ import { IoMdCloseCircleOutline } from "react-icons/io";
 const RightLinks = [
 	{
 		title: "Home",
-		link: "/",
+		link: "/job-portal",
 	},
 	{
 		title: "Profile",
-		link: "/job-portal/employer",
+		link: "/job-portal/profile",
 	},
 	{
-		title: "Find Jobs",
-		link: "/job-portal/employer/candidates",
+		title: "Jobs",
+		link: "/job-portal/jobs",
 	},
 	{
 		title: "Messages",
-		link: "/",
+		link: "/job-portal/messages",
 	},
 	{
 		title: "Notifications",
-		link: "/",
+		link: "/job-portal/notifications",
 	},
 	{
 		title: "Requests",
-		link: "/",
+		link: "/job-portal/requests",
 	},
 ];
 
