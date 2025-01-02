@@ -219,7 +219,7 @@ const getCandidates = asyncHandler(async (req, res) => {
 	if (name) {
 		query.$or = [
 			{ "userId.username": { $regex: name, $options: "i" } },
-			{ "jobDetails.jobTitle": { $regex: name, $options: "i" } },
+			{ "jobDetails.jobTitle": { $regex: name, $options: "i" } }, //some change may need (jobDetails -> preferences)
 		];
 	}
 	if (location)

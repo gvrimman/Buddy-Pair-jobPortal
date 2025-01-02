@@ -34,7 +34,10 @@ const verifyJwt = asyncHandler(async (req, _, next) => {
 	}
 });
 
-// protect routes by role middleware
+/**
+ * @deprecated The method should not be used
+ * @use protect routes by role middleware
+ */
 const authorize = (...roles) => {
 	return async (req, res, next) => {
 		const user = await User.findById(req.user._id).populate(
