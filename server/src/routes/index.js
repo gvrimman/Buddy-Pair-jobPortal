@@ -2,6 +2,7 @@ const express = require("express");
 const authRoutes = require("./authRouter");
 const emplyerRoutes = require("./employerRouter")
 const emplyeeRoutes = require("./employeeRouter");
+const userRouter = require("./userRouter");
 const messageRoutes = require("./messageRouter");
 const notificationRoutes = require("./notificationRouter");
 const router = express.Router();
@@ -10,6 +11,7 @@ const router = express.Router();
 router.use("/auth", authRoutes);
 router.use("/employer", emplyerRoutes);
 router.use("/employee", emplyeeRoutes);
+router.use("/user", userRouter);
 router.use("/message", messageRoutes);
 router.use("/notification", notificationRoutes);
 
