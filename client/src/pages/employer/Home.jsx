@@ -281,12 +281,12 @@ const Home = () => {
   };
 
   return (
-    <div>
+    <div className="max-w-[900px]">
       <Filter search={fetchData} />
       <div className="h-[2px] rounded-lg bg-purple-500 my-4"></div>
       <div className="mx-2">
         <div className="relative">
-          <div className="grid grid-cols-2 relative shadow bg-white h-12 rounded-full">
+          <div className="grid grid-cols-2 relative shadow bg-white h-12 rounded-full border border-purple-300">
             {["Find Jobs", "Similar Jobs"].map((tab, index) => (
               <button
                 key={index}
@@ -328,12 +328,11 @@ const Home = () => {
           {activeTab === 0 ? (
             <>
               <div className="mt-10">
-                {jobs?.length === 0 &&
-                  !isLoading &&(
-                    <p className="text-center font-semibold text-2xl">
-                      No jobs found! Try searching by job title or location
-                    </p>
-                  )}
+                {jobs?.length === 0 && !isLoading && (
+                  <p className="text-center font-semibold text-2xl">
+                    No jobs found! Try searching by job title or location
+                  </p>
+                )}
               </div>
               <JobGrid data={jobData[activeTab]} />
             </>
