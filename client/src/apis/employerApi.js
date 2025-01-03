@@ -31,7 +31,7 @@ export const createAJob = (data) => async (dispatch) => {
 	}
 };
 export const getPostedJobs =
-	(page = 1, limit = 5) =>
+	(page = 1, limit) =>
 	async (dispatch) => {
 		dispatch(fetchStart());
 		try {
@@ -42,7 +42,7 @@ export const getPostedJobs =
 			dispatch(
 				fetchJobs({
 					jobs: response?.data?.data?.jobs,
-					pagination: response?.data?.data?.pagination,
+					hasMore: response?.data?.data?.hasMore,
 				})
 			);
 		} catch (error) {

@@ -26,8 +26,14 @@ const employerSlice = createSlice({
 		},
 		fetchJobs(state, action) {
 			state.isLoading = false;
-			state.jobs = action.payload.jobs;
-			state.pagination = action.payload.pagination;
+			const newJobs = action.payload.jobs.filter(
+				(newJob) =>
+					!state.jobs.some(
+						(existingJob) => existingJob._id === newJob._id
+					)
+			);
+			state.jobs = [...state.jobs, ...newJobs];
+			state.hasMore = action.payload.hasMore;
 		},
 		fetchJob(state, action) {
 			state.isLoading = false;
