@@ -5,8 +5,12 @@ function LeftSide() {
 	// side bar links
 	const Links = [
 		{
-			title: "Dating",
+			title: "Proffessional Community",
 			link: "/",
+		},
+		{
+			title: "Job Portal",
+			link: "/job-portal/",
 		},
 		{
 			title: "Matirimony",
@@ -19,10 +23,6 @@ function LeftSide() {
 		{
 			title: "Study Abroad",
 			link: "/",
-		},
-		{
-			title: "Job Portal",
-			link: "/job-portal/",
 		},
 	];
 	return (

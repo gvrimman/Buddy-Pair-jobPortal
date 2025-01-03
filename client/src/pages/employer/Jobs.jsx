@@ -1,5 +1,5 @@
 import { Button } from "@material-tailwind/react";
-import React, { useState } from "react";
+import React, { useEffect, useState } from "react";
 import TextInput from "../../components/common/TextInput";
 import SelectInput from "../../components/common/SelectInput";
 import MultiSelect from "../../components/common/MultiSelect";
@@ -17,122 +17,37 @@ import {
 	skillOptions,
 } from "../../utils/constants";
 import JobCard from "../../components/common/JobCard";
+import { createAJob, getPostedJobs } from "../../apis/employerApi";
+import { useDispatch, useSelector } from "react-redux";
+import Pagination from "../../components/common/Pagination";
 
-const jobsData = [
-	{
-		title: "Frontend Developer",
-		location: "Kochi, Kerala",
-		salary: "₹6 LPA - ₹10 LPA",
-		noticePeriod: "30 Days",
-		skills: ["React", "JavaScript", "CSS"],
-	},
-	{
-		title: "Backend Developer",
-		location: "Thiruvananthapuram, Kerala",
-		salary: "₹8 LPA - ₹12 LPA",
-		noticePeriod: "Immediate",
-		skills: ["Node.js", "MongoDB", "AWS"],
-	},
-	{
-		title: "Full Stack Developer",
-		location: "Kozhikode, Kerala",
-		salary: "₹10 LPA - ₹15 LPA",
-		noticePeriod: "15 Days",
-		skills: ["React", "Node.js", "AWS"],
-	},
-	{
-		title: "DevOps Engineer",
-		location: "Kochi, Kerala",
-		salary: "₹7 LPA - ₹11 LPA",
-		noticePeriod: "45 Days",
-		skills: ["Docker", "Kubernetes", "CI/CD"],
-	},
-	{
-		title: "Software Engineer",
-		location: "Thrissur, Kerala",
-		salary: "₹5 LPA - ₹9 LPA",
-		noticePeriod: "30 Days",
-		skills: ["Python", "Django", "PostgreSQL"],
-	},
-	{
-		title: "Product Manager",
-		location: "Kochi, Kerala",
-		salary: "₹12 LPA - ₹18 LPA",
-		noticePeriod: "Immediate",
-		skills: ["Agile", "Scrum", "JIRA"],
-	},
-	{
-		title: "Data Scientist",
-		location: "Kannur, Kerala",
-		salary: "₹10 LPA - ₹14 LPA",
-		noticePeriod: "15 Days",
-		skills: ["Python", "Machine Learning", "SQL"],
-	},
-	{
-		title: "AI Engineer",
-		location: "Kottayam, Kerala",
-		salary: "₹15 LPA - ₹20 LPA",
-		noticePeriod: "60 Days",
-		skills: ["TensorFlow", "PyTorch", "Deep Learning"],
-	},
-	{
-		title: "QA Engineer",
-		location: "Kochi, Kerala",
-		salary: "₹4 LPA - ₹6 LPA",
-		noticePeriod: "30 Days",
-		skills: ["Selenium", "Java", "Cypress"],
-	},
-	{
-		title: "Mobile Developer",
-		location: "Thiruvananthapuram, Kerala",
-		salary: "₹7 LPA - ₹10 LPA",
-		noticePeriod: "30 Days",
-		skills: ["Flutter", "React Native", "Kotlin"],
-	},
-	{
-		title: "Game Developer",
-		location: "Kochi, Kerala",
-		salary: "₹9 LPA - ₹13 LPA",
-		noticePeriod: "30 Days",
-		skills: ["Unity", "C#", "Blender"],
-	},
-	{
-		title: "Network Engineer",
-		location: "Thrissur, Kerala",
-		salary: "₹6 LPA - ₹9 LPA",
-		noticePeriod: "Immediate",
-		skills: ["Cisco", "Networking", "VPN"],
-	},
-	{
-		title: "Security Analyst",
-		location: "Kannur, Kerala",
-		salary: "₹8 LPA - ₹12 LPA",
-		noticePeriod: "15 Days",
-		skills: ["Cybersecurity", "Firewalls", "Incident Response"],
-	},
-	{
-		title: "UI Designer",
-		location: "Kochi, Kerala",
-		salary: "₹5 LPA - ₹8 LPA",
-		noticePeriod: "15 Days",
-		skills: ["Figma", "Sketch", "Adobe XD"],
-	},
-	{
-		title: "Cloud Architect",
-		location: "Thiruvananthapuram, Kerala",
-		salary: "₹14 LPA - ₹20 LPA",
-		noticePeriod: "30 Days",
-		skills: ["AWS", "Azure", "GCP"],
-	},
-];
 
 function Jobs() {
+	// redux
+	const { jobs, isLoading, pagination } = useSelector(
+		(store) => store.employer
+	);
+	const dispatch = useDispatch();
+
+	// states
+	const [currentPage, setCurrentPage] = useState(1);
+	const [itemsPerPage] = useState(9);
 	const [jobFormShow, setJobFormShow] = useState(false);
+
+
+	// form hook
 	const { register, handleSubmit, errors, reset, control, watch } =
 		useFormHandler(jobPostValidation);
 
+
+	useEffect(() => {
+		dispatch(getPostedJobs(currentPage, itemsPerPage));
+	}, [dispatch, currentPage, itemsPerPage,jobFormShow]);
+
 	const onSubmit = (data) => {
+		dispatch(createAJob(data));
 		reset();
+		setJobFormShow(false);
 	};
 	return (
 		<div className="max-w-[900px] w-full relative">
@@ -275,10 +190,14 @@ function Jobs() {
 
 			{/* job card grid */}
 			<div className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-3 gap-4 py-5">
-				{jobsData.map((job, i) => (
+				{jobs.map((job, i) => (
 					<JobCard key={i} data={job} />
 				))}
 			</div>
+			<Pagination
+				pagination={pagination}
+				setCurrentPage={setCurrentPage}
+			/>
 		</div>
 	);
 }
