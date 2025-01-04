@@ -1,5 +1,5 @@
 import { Button } from "@material-tailwind/react";
-import React, { useState } from "react";
+import React, { useEffect, useState } from "react";
 import TextInput from "../../components/common/TextInput";
 import SelectInput from "../../components/common/SelectInput";
 import MultiSelect from "../../components/common/MultiSelect";
@@ -17,123 +17,44 @@ import {
 	skillOptions,
 } from "../../utils/constants";
 import JobCard from "../../components/common/JobCard";
-
-const jobsData = [
-	{
-		title: "Frontend Developer",
-		location: "Kochi, Kerala",
-		salary: "₹6 LPA - ₹10 LPA",
-		noticePeriod: "30 Days",
-		skills: ["React", "JavaScript", "CSS"],
-	},
-	{
-		title: "Backend Developer",
-		location: "Thiruvananthapuram, Kerala",
-		salary: "₹8 LPA - ₹12 LPA",
-		noticePeriod: "Immediate",
-		skills: ["Node.js", "MongoDB", "AWS"],
-	},
-	{
-		title: "Full Stack Developer",
-		location: "Kozhikode, Kerala",
-		salary: "₹10 LPA - ₹15 LPA",
-		noticePeriod: "15 Days",
-		skills: ["React", "Node.js", "AWS"],
-	},
-	{
-		title: "DevOps Engineer",
-		location: "Kochi, Kerala",
-		salary: "₹7 LPA - ₹11 LPA",
-		noticePeriod: "45 Days",
-		skills: ["Docker", "Kubernetes", "CI/CD"],
-	},
-	{
-		title: "Software Engineer",
-		location: "Thrissur, Kerala",
-		salary: "₹5 LPA - ₹9 LPA",
-		noticePeriod: "30 Days",
-		skills: ["Python", "Django", "PostgreSQL"],
-	},
-	{
-		title: "Product Manager",
-		location: "Kochi, Kerala",
-		salary: "₹12 LPA - ₹18 LPA",
-		noticePeriod: "Immediate",
-		skills: ["Agile", "Scrum", "JIRA"],
-	},
-	{
-		title: "Data Scientist",
-		location: "Kannur, Kerala",
-		salary: "₹10 LPA - ₹14 LPA",
-		noticePeriod: "15 Days",
-		skills: ["Python", "Machine Learning", "SQL"],
-	},
-	{
-		title: "AI Engineer",
-		location: "Kottayam, Kerala",
-		salary: "₹15 LPA - ₹20 LPA",
-		noticePeriod: "60 Days",
-		skills: ["TensorFlow", "PyTorch", "Deep Learning"],
-	},
-	{
-		title: "QA Engineer",
-		location: "Kochi, Kerala",
-		salary: "₹4 LPA - ₹6 LPA",
-		noticePeriod: "30 Days",
-		skills: ["Selenium", "Java", "Cypress"],
-	},
-	{
-		title: "Mobile Developer",
-		location: "Thiruvananthapuram, Kerala",
-		salary: "₹7 LPA - ₹10 LPA",
-		noticePeriod: "30 Days",
-		skills: ["Flutter", "React Native", "Kotlin"],
-	},
-	{
-		title: "Game Developer",
-		location: "Kochi, Kerala",
-		salary: "₹9 LPA - ₹13 LPA",
-		noticePeriod: "30 Days",
-		skills: ["Unity", "C#", "Blender"],
-	},
-	{
-		title: "Network Engineer",
-		location: "Thrissur, Kerala",
-		salary: "₹6 LPA - ₹9 LPA",
-		noticePeriod: "Immediate",
-		skills: ["Cisco", "Networking", "VPN"],
-	},
-	{
-		title: "Security Analyst",
-		location: "Kannur, Kerala",
-		salary: "₹8 LPA - ₹12 LPA",
-		noticePeriod: "15 Days",
-		skills: ["Cybersecurity", "Firewalls", "Incident Response"],
-	},
-	{
-		title: "UI Designer",
-		location: "Kochi, Kerala",
-		salary: "₹5 LPA - ₹8 LPA",
-		noticePeriod: "15 Days",
-		skills: ["Figma", "Sketch", "Adobe XD"],
-	},
-	{
-		title: "Cloud Architect",
-		location: "Thiruvananthapuram, Kerala",
-		salary: "₹14 LPA - ₹20 LPA",
-		noticePeriod: "30 Days",
-		skills: ["AWS", "Azure", "GCP"],
-	},
-];
+import { createAJob, getPostedJobs } from "../../apis/employerApi";
+import { useDispatch, useSelector } from "react-redux";
+import InfiniteScroll from "react-infinite-scroll-component";
 
 function Jobs() {
+	// redux
+	const { jobs, isLoading, pagination, hasMore } = useSelector(
+		(store) => store.employer
+	);
+	const dispatch = useDispatch();
+
+	// states
+	const [page, setPage] = useState(1);
 	const [jobFormShow, setJobFormShow] = useState(false);
+
+	// fetch data and infinite scroll
+	useEffect(() => {
+		dispatch(getPostedJobs(page));
+	}, [page]);
+
+	const fetchMoreData = () => {
+		// if (!hasMore || isLoading) return;
+
+		const nextPage = page + 1;
+		setPage(nextPage);
+	};
+
+	// form hook
 	const { register, handleSubmit, errors, reset, control, watch } =
 		useFormHandler(jobPostValidation);
 
 	const onSubmit = (data) => {
+		dispatch(createAJob(data));
 		reset();
+		setJobFormShow(false);
 	};
+
+	console.log(hasMore);
 	return (
 		<div className="max-w-[900px] w-full relative">
 			<div className="flex items-center justify-between my-3 mx-2">
@@ -274,11 +195,25 @@ function Jobs() {
 			{/* job post form end */}
 
 			{/* job card grid */}
-			<div className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-3 gap-4 py-5">
-				{jobsData.map((job, i) => (
-					<JobCard key={i} data={job} />
-				))}
-			</div>
+
+			<InfiniteScroll
+				dataLength={jobs?.length}
+				next={fetchMoreData}
+				hasMore={hasMore}
+				loader={
+					<h4 className="text-center font-semibold">Loading...</h4>
+				}
+				endMessage={
+					<p className="text-center font-semibold mt-5">
+						"No more jobs"
+					</p>
+				}>
+				<div className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-3 gap-4 py-5">
+					{jobs.map((job, i) => (
+						<JobCard key={i} data={job} />
+					))}
+				</div>
+			</InfiniteScroll>
 		</div>
 	);
 }

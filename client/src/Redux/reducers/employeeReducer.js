@@ -64,6 +64,9 @@ const employeeSlice = createSlice({
 		fetchProfile: (state, action) => {
 			(state.profile = action.payload), (state.isLoading = false);
 		},
+		clearProfile: (state, action) => {
+			state.profile = null;
+		},
 		fetchBookmarkedJobs: (state, action) => {
 			state.isLoading = false;
 			state.bookmarkedJobs = action.payload.bookmarkedJobs;
@@ -130,6 +133,7 @@ export const {
 	fetchJob,
 	fetchProfiles,
 	clearProfiles,
+	clearProfile,
 	fetchProfile,
 	fetchBookmarkedJobs,
 	setJobBookMarked,
