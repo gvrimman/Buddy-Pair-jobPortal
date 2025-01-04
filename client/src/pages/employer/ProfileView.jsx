@@ -1,6 +1,10 @@
+import React, { useEffect } from "react";
 import { Button } from "@material-tailwind/react";
-import React from "react";
+import { useParams } from "react-router-dom";
+import { useSelector, useDispatch } from "react-redux";
 import { FaUserPlus } from "react-icons/fa6";
+import { getProfileById } from "../../apis/employeeApi";
+import { TbLoader2 } from "react-icons/tb";
 
 function Container({ children }) {
 	return (
@@ -11,92 +15,115 @@ function Container({ children }) {
 }
 
 function ProfileView() {
+	const { userInfo } = useSelector((state) => state.user);
+	const { profile, isLoading } = useSelector((state) => state.employee);
+	const { profileId } = useParams();
+	const dispatch = useDispatch();
+
+	console.log("profile: ", profile);
+
+	useEffect(() => {
+		dispatch(getProfileById(profileId ? profileId : userInfo._id));
+	}, [profileId, dispatch]);
+
 	return (
-		<div className="max-w-[900px]">
-			<Container>
-				<div className="  flex items-baseline justify-between mb-3">
-					<div className="overflow-hidden aspect-square border-2 border-customViolet rounded-full w-16 h-16">
-						<img
-							className="w-full h-full object-cover"
-							src="https://cdn-icons-png.flaticon.com/512/219/219969.png"
-							alt=""
-						/>
-					</div>
+    <div className="max-w-[900px]">
+      <Container>
+        <div
+          className={`fixed inset-0  bg-gray-500 opacity-30 transition  ${
+            isLoading ? "block" : "hidden"
+          }`}
+        ></div>
+        <span
+          className={`text-purple-900 text-2xl fixed top-1/2 left-1/2 transform -translate-x-1/2 -translate-y-1/2  ${
+            isLoading ? "block" : "hidden"
+          } `}
+        >
+          <TbLoader2 className="animate-spin text-lg" />
+        </span>
+        <div className="  flex items-baseline justify-between mb-3">
+          <div className="overflow-hidden aspect-square border-2 border-customViolet rounded-full w-16 h-16">
+            <img
+              className="w-full h-full object-cover"
+              src={
+                profile && profile?.apps?.jobPortal.profileImage
+                  ? profile?.apps?.jobPortal.profileImage
+                  : "https://cdn.iconscout.com/icon/free/png-256/free-avatar-icon-download-in-svg-png-gif-file-formats--user-boy-avatars-flat-icons-pack-people-456322.png"
+              }
+              alt=""
+            />
+          </div>
 
-					<Button className="text-2xl text-purple-800 w-fit bg-transparent shadow-none hover:shadow-none">
-						<FaUserPlus />
-					</Button>
-				</div>
-				<div className="flex gap-2 items-center mb-1">
-					<h4 className="font-semibold text-md">Jon Doe</h4>
-					<span>|</span>
-					<h5 className="font-medium text-md">Vayanad</h5>
-				</div>
-				<p className="text-xs">Mernstack Developer</p>
-				<p className="text-xs my-2 font-medium px-2 rounded-xl bg-gray-300 text-gray-800 w-fit">
-					2.5 Year
-				</p>
-			</Container>
-			<Container>
-				<h4 className="font-medium text-sm my-2">About</h4>
-				<p className="text-xs leading-5">
-					Lorem ipsum dolor sit amet consectetur, adipisicing elit.
-					Reiciendis quidem ipsum voluptas incidunt pariatur culpa
-					eaque impedit. Repellat quidem quibusdam nesciunt aspernatur
-					sapiente suscipit deserunt, totam, natus iusto odit veniam?
-				</p>
-			</Container>
-			<Container>
-				<h4 className="font-medium text-sm my-2">Major Skills</h4>
-				<div className="rounded-md flex gap-2 flex-wrap items-center">
-					<div className=" bg-purple-50 text-purple-600 w-fit px-4 py-1 rounded-full text-xs font-medium">
-						html
-					</div>
-					<div className=" bg-purple-50 text-purple-600 w-fit px-4 py-1 rounded-full text-xs font-medium">
-						css
-					</div>
-					<div className=" bg-purple-50 text-purple-600 w-fit px-4 py-1 rounded-full text-xs font-medium">
-						java
-					</div>
-					<div className=" bg-purple-50 text-purple-600 w-fit px-4 py-1 rounded-full text-xs font-medium">
-						html
-					</div>
-					<div className=" bg-purple-50 text-purple-600 w-fit px-4 py-1 rounded-full text-xs font-medium">
-						css
-					</div>
-					<div className=" bg-purple-50 text-purple-600 w-fit px-4 py-1 rounded-full text-xs font-medium">
-						java
-					</div>
-				</div>
-			</Container>
+          <Button className="text-2xl text-purple-800 w-fit bg-transparent shadow-none hover:shadow-none">
+            <FaUserPlus />
+          </Button>
+        </div>
+        <div className="flex gap-2 items-center mb-1">
+          <h4 className="font-semibold text-md">{profile.username}</h4>
+          <span>|</span>
+          <h5 className="font-medium text-md">
+            {profile?.apps?.jobPortal?.locationName}
+          </h5>
+        </div>
+        <p className="text-xs">{profile?.apps?.jobPortal?.profession[0]}</p>
+        {/* <p className="text-xs my-2 font-medium px-2 rounded-xl bg-gray-300 text-gray-800 w-fit">
+          2.5 Year
+        </p> */}
+      </Container>
+      <Container>
+        <h4 className="font-medium text-sm my-2">About</h4>
+        <p className="text-xs leading-5">Not Avaliable</p>
+      </Container>
+      <Container>
+        <h4 className="font-medium text-sm my-2">Major Skills</h4>
+        <div className="rounded-md flex gap-2 flex-wrap items-center">
+          {profile?.apps?.jobPortal?.skills.length ? (
+            profile?.apps?.jobPortal?.skills?.map((skill, index) => (
+              <div
+                key={index}
+                className="bg-purple-50 text-purple-600 w-fit px-4 py-1 rounded-full text-xs font-medium"
+              >
+                {skill}
+              </div>
+            ))
+          ) : (
+            <div className="bg-purple-50 text-center text-purple-600 w-fit px-4 py-1 rounded-full text-xs font-medium">
+              No skills added yet
+            </div>
+          )}
+        </div>
+      </Container>
 
-			<Container>
-				<h4 className="font-medium text-sm my-2">Works at</h4>
-				<div>
-					<p className="text-xs my-1">
-						Company:{" "}
-						<span className="font-semibold">abc private ltd</span>
-					</p>
-					<p className="text-xs my-1">
-						Location:{" "}
-						<span className="font-semibold">Thrichur</span>
-					</p>
-				</div>
-			</Container>
-			<Container>
-				<h4 className="font-medium text-sm my-2">Contact</h4>
-				<div>
-					<p className="text-xs my-1">
-						Email:{" "}
-						<span className="font-semibold">abc@gmail.com</span>
-					</p>
-					<p className="text-xs my-1">
-						Phone: <span className="font-semibold">5825698545</span>
-					</p>
-				</div>
-			</Container>
-		</div>
-	);
+      <Container>
+        <h4 className="font-medium text-sm my-2">Works at</h4>
+        <div>
+          <p className="text-xs my-1">
+            Company:{" "}
+            <span className="font-semibold">
+              {profile?.apps?.jobPortal?.companyName}
+            </span>
+          </p>
+          <p className="text-xs my-1">
+            Location:{" "}
+            <span className="font-semibold">
+              {profile?.apps?.jobPortal?.companyAddress}
+            </span>
+          </p>
+        </div>
+      </Container>
+      <Container>
+        <h4 className="font-medium text-sm my-2">Contact</h4>
+        <div>
+          <p className="text-xs my-1">
+            Email: <span className="font-semibold">{profile.email}</span>
+          </p>
+          <p className="text-xs my-1">
+            Phone: <span className="font-semibold">{profile.phone}</span>
+          </p>
+        </div>
+      </Container>
+    </div>
+  );
 }
 
 export default ProfileView;

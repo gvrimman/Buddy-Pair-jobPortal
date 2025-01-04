@@ -16,6 +16,17 @@ const getProfile = asyncHandler(async (req, res) => {
   else res.json(new ApiResponse(200, user, "User profile"));
 });
 
+const getProfileByID = asyncHandler(async (req, res) => {
+  const userId = req.params.id;
+  const user = await User.findById(userId)
+    .select("-password -refreshToken")
+    .populate("apps.jobPortal")
+    .exec();
+
+  if (!user) throw new ApiError(400, "user not found");
+  else res.json(new ApiResponse(200, user, "User profile"));
+});
+
 const checkPreferenceStatus = asyncHandler(async (req, res) => {
   const userId = req.user._id;
   const user = await User.findById(userId)
@@ -103,20 +114,26 @@ const fetchMatchedJobs = asyncHandler(async (req, res) => {
 
   const query = {};
 
-  if (name) query.jobTitle = { $regex: name, $options: "i" };
-  else query.jobTitle = {
-    $in: jobPref.profession.map((title) => new RegExp(title, "i")),
-  };
+  if (name) {
+    query.jobTitle = { $regex: name, $options: "i" };
+  }
 
-  if (location) query.jobPlace = { $regex: location, $options: "i" };
-  else query.jobPlace = {
-    $in: jobPref.preferredJobLocation.map((loc) => new RegExp(loc, "i")),
-  };
+  if (location) {
+    query.jobPlace = { $regex: location, $options: "i" };
+  }
+
+  if (!name && !location) {
+    query.jobTitle = {
+      $in: jobPref.profession.map((title) => new RegExp(title, "i")),
+    };
+    query.jobPlace = {
+      $in: jobPref.preferredJobLocation.map((loc) => new RegExp(loc, "i")),
+    };
+  }
 
   if (category) query.employmentType = category;
   if (experience?.length) query.experience = { $in: experience };
   if (jobtype?.length) query.jobType = { $in: jobtype };
-  else if (jobPref.preferredJobType) query.jobType = { $regex: jobPref.preferredJobType, $options: "i" };
 
   if (datePosted) {
     switch (datePosted) {
@@ -172,6 +189,8 @@ const fetchMatchedJobs = asyncHandler(async (req, res) => {
     sortOrder.createdAt = 1;
   }
 
+  console.log(query);
+
   // total count of results
   const totalCount = await Job.countDocuments(query);
 
@@ -218,6 +237,21 @@ const fetchMatchedJobs = asyncHandler(async (req, res) => {
   res.json(new ApiResponse(200, { jobs, hasMore }, "jobs"));
 });
 
+const getJobByID = asyncHandler(async (req, res) => {
+  const jobId = req.params.id;
+  const job = await Job.findById(jobId).populate({
+    path: "owner",
+    select: "apps.jobPortal",
+    populate: {
+      path: "apps.jobPortal",
+    },
+  });
+  if (!job) {
+    throw new ApiError(400, "job not found");
+  }
+  res.json(new ApiResponse(200, job, "selected job"));
+});
+
 const fetchSimilarProfiles = asyncHandler(async (req, res) => {
   const jobPortalId = req.user.apps.jobPortal;
 
@@ -229,6 +263,11 @@ const fetchSimilarProfiles = asyncHandler(async (req, res) => {
 
   // Destructure query parameters and define defaults
   const {
+    name,
+    location,
+    category,
+    experience,
+    jobtype,
     page = Number(req.query.page) || 1,
     limit = Number(req.query.limit) || 5,
     sort = "newest",
@@ -236,11 +275,15 @@ const fetchSimilarProfiles = asyncHandler(async (req, res) => {
 
   // Construct the query for similar profiles
   const query = {};
-  if (jobPref.profession.length) {
+  if(name) {
+    query.profession = { $regex: name, $options: "i" };
+  }
+  else if (jobPref.profession.length) {
     query.profession = {
       $in: jobPref.profession.map((prof) => prof),
     };
   }
+  //if(location) query.profession = { $regex: name, $options: "i" };
 
   // Pagination logic
   const skip = (page - 1) * limit;
@@ -314,9 +357,11 @@ const fetchSimilarProfiles = asyncHandler(async (req, res) => {
 
 module.exports = {
   getProfile,
+  getProfileByID,
   checkPreferenceStatus,
   getPreferences,
   updatePreferences,
   fetchMatchedJobs,
+  getJobByID,
   fetchSimilarProfiles,
 };
