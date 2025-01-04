@@ -8,6 +8,7 @@ import PublicRoute from "./router/PublicRoute";
 import PageLoader from "./pages/shared/PageLoader";
 import EmployeeNotification from "./pages/employee/dashboard/EmployeeNotification";
 import useListenNotification from "./hooks/useListenNotification";
+import FetchCSRFToken from "./utils/generateCSRFToken";
 import { useSocket } from "./hooks/useSocket";
 import EmployerNotification from "./pages/employer/dashboard/EmployerNotification";
 import Layout from "./layouts/Layout";
@@ -77,6 +78,7 @@ const SingleEmployerCompany = lazy(() =>
 function App() {
 	useSocket(); // Initializes the socket
 	useListenNotification(); // Listens for notifications globally
+	FetchCSRFToken();
 
 	return (
 		<div>

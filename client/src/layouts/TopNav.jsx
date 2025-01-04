@@ -9,36 +9,40 @@ import { IoMdCloseCircleOutline } from "react-icons/io";
 
 // side bar links
 const RightLinks = [
-	{
-		title: "Home",
-		link: "/job-portal",
-	},
-	{
-		title: "Profile",
-		link: "/job-portal/profile",
-	},
-	{
-		title: "Jobs",
-		link: "/job-portal/jobs",
-	},
-	{
-		title: "Messages",
-		link: "/job-portal/messages",
-	},
-	{
-		title: "Notifications",
-		link: "/job-portal/notifications",
-	},
-	{
-		title: "Requests",
-		link: "/job-portal/requests",
-	},
+  {
+    title: "Home",
+    link: "/job-portal",
+  },
+  {
+    title: "Profile",
+    link: "/job-portal/profile",
+  },
+  {
+    title: "Jobs",
+    link: "/job-portal/jobs",
+  },
+  {
+    title: "Applied jobs",
+    link: "/job-portal/requests",
+  },
+  {
+    title: "Messages",
+    link: "/job-portal/messages",
+  },
+  {
+    title: "Notifications",
+    link: "/job-portal/notifications",
+  },
 ];
 
 const LeftLinks = [
 	{
-		title: "Dating",
+		title: "Proffessional Community",
 		link: "/",
+	},
+  {
+		title: "Job Portal",
+		link: "/job-portal/",
 	},
 	{
 		title: "Matirimony",
@@ -51,10 +55,6 @@ const LeftLinks = [
 	{
 		title: "Study Abroad",
 		link: "/",
-	},
-	{
-		title: "Job Portal",
-		link: "/job-portal/",
 	},
 ];
 

@@ -22,6 +22,10 @@ function RightSide() {
 			title: "Jobs",
 			link: "/job-portal/jobs",
 		},
+    {
+			title: "Applied jobs",
+			link: "/job-portal/requests",
+		},
 		{
 			title: "Messages",
 			link: "/job-portal/messages",
@@ -29,10 +33,6 @@ function RightSide() {
 		{
 			title: "Notifications",
 			link: "/job-portal/notifications",
-		},
-		{
-			title: "Requests",
-			link: "/job-portal/requests",
 		},
 	];
 

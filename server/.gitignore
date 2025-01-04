@@ -3,3 +3,6 @@
 
 # environment
 .env
+
+# log file
+access.log

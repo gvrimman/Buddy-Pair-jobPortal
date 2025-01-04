@@ -29,8 +29,6 @@ function useListenNotification() {
 				socket.off("receiveNotification");
 				socket.off("connect", handleNotification);
 			};
-		} else {
-			console.error("Socket is undefined");
 		}
 	}, [socket, dispatch]);
 
