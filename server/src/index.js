@@ -42,7 +42,7 @@ app.use(
 		origin: process.env.CLIENT_URL,
 		methods: "GET,POST,PUT,PATCH,DELETE,OPTIONS",
 		credentials: true,
-		allowedHeaders: ["Content-Type", "Authorization", "x-csrf-token", "Accept"],
+		// allowedHeaders: ["Content-Type", "Authorization", "x-csrf-token", "Accept"],
 	})
 );
 app.use(cookieParser());
