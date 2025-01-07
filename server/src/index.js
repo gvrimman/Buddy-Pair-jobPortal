@@ -26,15 +26,6 @@ app.use(
     message: "Too many login attempts, please try again after 15 minutes.",
   })
 );
-app.use(helmet());
-// app.use(
-//   helmet.contentSecurityPolicy({
-//     directives: {
-//       defaultSrc: ["'self'"],
-//       scriptSrc: ["'self'", "apis.google.com"],
-//     },
-//   })
-// );
 app.use(express.json({ limit: "30mb" }));
 app.use(express.urlencoded({ extended: true }));
 app.use(
@@ -42,9 +33,23 @@ app.use(
 		origin: process.env.CLIENT_URL,
 		methods: "GET,POST,PUT,PATCH,DELETE,OPTIONS",
 		credentials: true,
-		// allowedHeaders: ["Content-Type", "Authorization", "x-csrf-token", "Accept"],
+		allowedHeaders: ["Content-Type", "Authorization", "x-csrf-token", "Accept"],
 	})
 );
+
+app.use(helmet());
+// app.use(
+//   helmet.contentSecurityPolicy({
+//     directives: {
+//       defaultSrc: ["'self'"],
+//       scriptSrc: ["'self'", "http://localhost:5173"],
+//       styleSrc: ["'self'", "http://localhost:5173"],
+//       connectSrc: ["'self'", "http://localhost:3000"],
+//       imgSrc: ["'self'", "data:"],
+//     },
+//   })
+// );
+
 app.use(cookieParser());
 
 app.use(
