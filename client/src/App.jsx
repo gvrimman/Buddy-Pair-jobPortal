@@ -18,6 +18,9 @@ import ProfileView from "./pages/employer/ProfileView";
 import RequestsView from "./pages/employer/RequestsView";
 import Jobs from "./pages/employer/Jobs";
 import PostedJobView from "./pages/employer/PostedJobView";
+import AcceptReferral from "./pages/referral/AcceptReferral";
+import ReferralDashboard from "./pages/referral/ReferralDashboard";
+import ProfileSection from "./pages/referral/ProfileSection";
 // const Layout = lazy(() => import("./components/layout/Layout"));
 const SplashScreen = lazy(() => import("./pages/shared/SplashScreen"));
 const EmployerHome = lazy(() => import("./pages/employer/EmployerHome"));
@@ -82,63 +85,50 @@ function App() {
 	FetchCSRFToken();
 
 	return (
-		<div>
-			<Suspense fallback={<PageLoader />}>
-				<Routes>
-					<Route key={"/"} path="/" element={<PublicRoute />}>
-						<Route index element={<LandingPage />} />
-						<Route path="/auth" element={<SplashScreen />} />
-					</Route>
+    <div>
+      <Suspense fallback={<PageLoader />}>
+        <Routes>
+          <Route key={"/"} path="/" element={<PublicRoute />}>
+            <Route index element={<LandingPage />} />
+            <Route path="/auth" element={<SplashScreen />} />
+          </Route>
 
-					{/* This Router for Job Portal Employer */}
+          {/* This Router for Job Portal Employer */}
 
-					{/* <Route
+          {/* <Route
 						path="/job-portal/auth"
 						element={<JobportalUserInfo />}
 					/> */}
 
-					<Route
-						path="/job-portal"
-						element={<ProtectedRoute roles={["employer"]} />}>
-						<Route element={<Layout />}>
-							<Route index element={<EmployerHome />} />
+          <Route
+            path="/job-portal"
+            element={<ProtectedRoute roles={["employer"]} />}
+          >
+            <Route element={<Layout />}>
+              <Route index element={<EmployerHome />} />
 
-							<Route path="profile" element={<ProfileView />} />
-							<Route path="job/:jobId" element={<JobView />} />
-							<Route
-								path="profile/:profileId"
-								element={<ProfileView />}
-							/>
-							<Route path="requests" element={<RequestsView />} />
-							<Route path="jobs" element={<Jobs />} />
-							<Route
-								path="jobs/:jobId"
-								element={<PostedJobView />}
-							/>
-							<Route path="messages" element={<Messages />} />
-							<Route
-								path="notifications"
-								element={<EmployerNotification />}
-							/>
+              <Route path="profile" element={<ProfileView />} />
+              <Route path="job/:jobId" element={<JobView />} />
+              <Route path="profile/:profileId" element={<ProfileView />} />
+              <Route path="requests" element={<RequestsView />} />
+              <Route path="jobs" element={<Jobs />} />
+              <Route path="jobs/:jobId" element={<PostedJobView />} />
+              <Route path="messages" element={<Messages />} />
+              <Route path="notifications" element={<EmployerNotification />} />
 
-							<Route path="candidates" element={<Candidates />} />
-							<Route
-								path="companies"
-								element={<EmployerCompanies />}
-							/>
-							<Route
-								path="candidate/:id"
-								element={<SingleCandidate />}
-							/>
-							<Route
-								path="company/:id"
-								element={<SingleEmployerCompany />}
-							/>
-						</Route>
-					</Route>
+              <Route path="candidates" element={<Candidates />} />
+              <Route path="companies" element={<EmployerCompanies />} />
+              <Route path="candidate/:id" element={<SingleCandidate />} />
+              <Route path="company/:id" element={<SingleEmployerCompany />} />
 
-					{/* Router for Job Portal Employer Dashboard */}
-					{/* <Route
+              <Route path="referral" element={<AcceptReferral />} />
+              <Route path="status/referral" element={<ReferralDashboard />} />
+              <Route path="profile/referral" element={<ProfileSection />} />
+            </Route>
+          </Route>
+
+          {/* Router for Job Portal Employer Dashboard */}
+          {/* <Route
 						path="/job-portal/employer/dashboard"
 						element={<ProtectedRoute roles={["employer"]} />}>
 						<Route element={<EmployerDashboardLayout />}>
@@ -175,9 +165,9 @@ function App() {
 						</Route>
 					</Route> */}
 
-					{/* This Router for Job Portal Employee */}
+          {/* This Router for Job Portal Employee */}
 
-					{/* <Route
+          {/* <Route
 						path="/job-portal/employee"
 						element={<ProtectedRoute roles={["employee"]} />}>
 						<Route element={<EmployeeLayout />}>
@@ -197,9 +187,9 @@ function App() {
 						</Route>
 					</Route> */}
 
-					{/* This Router for Job Portal Employee Dashboard  */}
+          {/* This Router for Job Portal Employee Dashboard  */}
 
-					{/* <Route
+          {/* <Route
 						path="/job-portal/employee/dashboard"
 						element={<ProtectedRoute roles={["employee"]} />}>
 						<Route element={<EmployeeDashboardLayout />}>
@@ -230,10 +220,10 @@ function App() {
 							/>
 						</Route>
 					</Route> */}
-				</Routes>
-			</Suspense>
-		</div>
-	);
+        </Routes>
+      </Suspense>
+    </div>
+  );
 }
 
 export default App;
