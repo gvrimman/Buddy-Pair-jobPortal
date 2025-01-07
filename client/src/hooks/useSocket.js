@@ -45,9 +45,9 @@ export const useSocket = () => {
       console.log("[Server]: reason: ", reason);
     });
 
-    newSocket.onAny((eventname, ...args) => {
-      console.log(`[Server]: Event triggered: ${eventname} `, ...args);
-    });
+    // newSocket.onAny((eventname, ...args) => {
+    //   console.log(`[Server]: Event triggered: ${eventname} `, ...args);
+    // });
 
     return () => {
       newSocket.close();

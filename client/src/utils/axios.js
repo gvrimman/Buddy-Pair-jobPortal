@@ -12,11 +12,21 @@ const axiosInstance = axios.create({
 	},
 });
 
-// // Request Interceptor
+// Request Interceptor
+// Add a request interceptor to include CSRF token
 axiosInstance.interceptors.request.use(
 	(config) => {
-		return config;
-	},
+    // Retrieve the CSRF token from the cookies
+    const csrfToken = document.cookie
+      .split("; ")
+      .find((row) => row.startsWith("XSRF-TOKEN="))
+      ?.split("=")[1];
+
+    if (csrfToken) {
+      config.headers["X-CSRF-Token"] = csrfToken; // Include token in the headers
+    }
+    return config;
+  },
 	(error) => {
 		return Promise.reject("Axios request error:", error);
 	}

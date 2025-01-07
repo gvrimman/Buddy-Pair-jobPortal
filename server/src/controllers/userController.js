@@ -6,14 +6,14 @@ const ApiResponse = require("../utils/apiResponse");
 const asyncHandler = require("../utils/asyncHandler");
 
 const getProfile = asyncHandler(async (req, res) => {
-  const userId = req.user._id;
-  const user = await User.findById(userId)
-    .select("-password -refreshToken")
-    .populate("apps.jobPortal")
-    .exec();
+	const userId = req.user._id;
+	const user = await User.findById(userId)
+		.select("-password -refreshToken")
+		.populate("apps.jobPortal")
+		.exec();
 
-  if (!user) throw new ApiError(400, "user not found");
-  else res.json(new ApiResponse(200, user, "User profile"));
+	if (!user) throw new ApiError(400, "user not found");
+	else res.json(new ApiResponse(200, user, "User profile"));
 });
 
 const getProfileByID = asyncHandler(async (req, res) => {
@@ -28,91 +28,91 @@ const getProfileByID = asyncHandler(async (req, res) => {
 });
 
 const checkPreferenceStatus = asyncHandler(async (req, res) => {
-  const userId = req.user._id;
-  const user = await User.findById(userId)
-    .select("-password -refreshToken")
-    .populate("apps.jobPortal")
-    .exec();
+	const userId = req.user._id;
+	const user = await User.findById(userId)
+		.select("-password -refreshToken")
+		.populate("apps.jobPortal")
+		.exec();
 
-  if (!user) throw new ApiError(400, "user not found");
-  else
-    res.json(
-      new ApiResponse(
-        200,
-        user.apps.jobPortal.preferenceStatus,
-        "Preference status"
-      )
-    );
+	if (!user) throw new ApiError(400, "user not found");
+	else
+		res.json(
+			new ApiResponse(
+				200,
+				user.apps.jobPortal.preferenceStatus,
+				"Preference status"
+			)
+		);
 });
 
 const getPreferences = asyncHandler(async (req, res) => {
-  const jobPortalId = req.user.apps.jobPortal;
-  const jobPref = await JobPortal.findById(jobPortalId);
-  res.json(new ApiResponse(200, jobPref, "User job preferences"));
+	const jobPortalId = req.user.apps.jobPortal;
+	const jobPref = await JobPortal.findById(jobPortalId);
+	res.json(new ApiResponse(200, jobPref, "User job preferences"));
 });
 
 const updatePreferences = asyncHandler(async (req, res) => {
-  const {
-    companyName = "",
-    designation = "",
-    LastWorkingDate = null,
-    LastWithdrawnSalary = 0,
-    QuitReason = "",
-    workExperience = 0,
-    jobTitle,
-    jobType,
-    skills,
-    location,
-    salary,
-  } = req.body;
-  const jobPortalId = req.user.apps.jobPortal;
-  const jobPref = await JobPortal.findByIdAndUpdate(
-    jobPortalId,
-    {
-      preferenceStatus: true,
-      jobDetails: {
-        companyName,
-        designation,
-        LastWorkingDate,
-        LastWithdrawnSalary,
-        QuitReason,
-        workExperience,
-      },
-      preferences: {
-        jobTitle,
-        jobType,
-        skills: skills.map((skill) => skill.value),
-        location,
-        salary,
-      },
-    },
-    {
-      new: true,
-    }
-  );
-  if (!jobPref) {
-    throw new ApiError(400, "Preferences not found");
-  }
+	const {
+		companyName = "",
+		designation = "",
+		LastWorkingDate = null,
+		LastWithdrawnSalary = 0,
+		QuitReason = "",
+		workExperience = 0,
+		jobTitle,
+		jobType,
+		skills,
+		location,
+		salary,
+	} = req.body;
+	const jobPortalId = req.user.apps.jobPortal;
+	const jobPref = await JobPortal.findByIdAndUpdate(
+		jobPortalId,
+		{
+			preferenceStatus: true,
+			jobDetails: {
+				companyName,
+				designation,
+				LastWorkingDate,
+				LastWithdrawnSalary,
+				QuitReason,
+				workExperience,
+			},
+			preferences: {
+				jobTitle,
+				jobType,
+				skills: skills.map((skill) => skill.value),
+				location,
+				salary,
+			},
+		},
+		{
+			new: true,
+		}
+	);
+	if (!jobPref) {
+		throw new ApiError(400, "Preferences not found");
+	}
 
-  res.json(new ApiResponse(200, jobPref, "Preferences updated"));
+	res.json(new ApiResponse(200, jobPref, "Preferences updated"));
 });
 
 const fetchMatchedJobs = asyncHandler(async (req, res) => {
-  const jobPortalId = req.user.apps.jobPortal;
-  const jobPref = await JobPortal.findById(jobPortalId);
-  const {
-    name,
-    location,
-    category,
-    experience,
-    jobtype,
-    datePosted,
-    page = Number(req.query.page) || 1,
-    limit = Number(req.query.limit) || 5,
-    sort = "newest",
-  } = req.query;
+	const jobPortalId = req.user.apps.jobPortal;
+	const jobPref = await JobPortal.findById(jobPortalId);
+	const {
+		name,
+		location,
+		category,
+		experience,
+		jobtype,
+		datePosted,
+		page = Number(req.query.page) || 1,
+		limit = Number(req.query.limit) || 5,
+		sort = "newest",
+	} = req.query;
 
-  const query = {};
+	const query = {};
 
   if (name) {
     query.jobTitle = { $regex: name, $options: "i" };
@@ -135,51 +135,51 @@ const fetchMatchedJobs = asyncHandler(async (req, res) => {
   if (experience?.length) query.experience = { $in: experience };
   if (jobtype?.length) query.jobType = { $in: jobtype };
 
-  if (datePosted) {
-    switch (datePosted) {
-      case "Last Hour":
-        query.createdAt = {
-          $gte: new Date(Date.now() - 60 * 60 * 1000),
-        };
-        break;
-      case "Last 24 Hours":
-        query.createdAt = {
-          $gte: new Date(Date.now() - 24 * 60 * 60 * 1000),
-        };
-        break;
-      case "Last 7 Days":
-        query.createdAt = {
-          $gte: new Date(Date.now() - 7 * 24 * 60 * 60 * 1000),
-        };
-        break;
-      case "Last 14 Days":
-        query.createdAt = {
-          $gte: new Date(Date.now() - 14 * 24 * 60 * 60 * 1000),
-        };
-        break;
-      case "Last 30 Days":
-        query.createdAt = {
-          $gte: new Date(Date.now() - 30 * 24 * 60 * 60 * 1000),
-        };
-        break;
-      default:
-        query.createdAt = {
-          $gte: new Date(Date.now() - 7 * 24 * 60 * 60 * 1000),
-        };
-        break;
-    }
-  }
+	if (datePosted) {
+		switch (datePosted) {
+			case "Last Hour":
+				query.createdAt = {
+					$gte: new Date(Date.now() - 60 * 60 * 1000),
+				};
+				break;
+			case "Last 24 Hours":
+				query.createdAt = {
+					$gte: new Date(Date.now() - 24 * 60 * 60 * 1000),
+				};
+				break;
+			case "Last 7 Days":
+				query.createdAt = {
+					$gte: new Date(Date.now() - 7 * 24 * 60 * 60 * 1000),
+				};
+				break;
+			case "Last 14 Days":
+				query.createdAt = {
+					$gte: new Date(Date.now() - 14 * 24 * 60 * 60 * 1000),
+				};
+				break;
+			case "Last 30 Days":
+				query.createdAt = {
+					$gte: new Date(Date.now() - 30 * 24 * 60 * 60 * 1000),
+				};
+				break;
+			default:
+				query.createdAt = {
+					$gte: new Date(Date.now() - 7 * 24 * 60 * 60 * 1000),
+				};
+				break;
+		}
+	}
 
-  // Prevent fetching all data if no filters are applied
-  if (Object.keys(query).length === 0) {
-    throw new ApiError(
-      400,
-      "Please provide at least one filter to search jobs."
-    );
-  }
+	// Prevent fetching all data if no filters are applied
+	if (Object.keys(query).length === 0) {
+		throw new ApiError(
+			400,
+			"Please provide at least one filter to search jobs."
+		);
+	}
 
-  // paginate
-  const skip = (page - 1) * limit;
+	// paginate
+	const skip = (page - 1) * limit;
 
   // set sort order
   const sortOrder = {};
@@ -194,47 +194,47 @@ const fetchMatchedJobs = asyncHandler(async (req, res) => {
   // total count of results
   const totalCount = await Job.countDocuments(query);
 
-  const jobs = await Job.aggregate([
-    {
-      $lookup: {
-        from: "users",
-        localField: "owner",
-        foreignField: "_id",
-        as: "owner",
-      },
-    },
-    {
-      $lookup: {
-        from: "jobportals",
-        localField: "owner.apps.jobPortal",
-        foreignField: "_id",
-        as: "owner",
-      },
-    },
-    {
-      $unwind: "$owner",
-    },
-    {
-      $match: query,
-    },
-    {
-      $sort: sortOrder,
-    },
-    {
-      $skip: skip,
-    },
-    {
-      $limit: Number(limit),
-    },
-  ]);
+	const jobs = await Job.aggregate([
+		{
+			$lookup: {
+				from: "users",
+				localField: "owner",
+				foreignField: "_id",
+				as: "owner",
+			},
+		},
+		{
+			$lookup: {
+				from: "jobportals",
+				localField: "owner.apps.jobPortal",
+				foreignField: "_id",
+				as: "owner",
+			},
+		},
+		{
+			$unwind: "$owner",
+		},
+		{
+			$match: query,
+		},
+		{
+			$sort: sortOrder,
+		},
+		{
+			$skip: skip,
+		},
+		{
+			$limit: Number(limit),
+		},
+	]);
 
-  if (!jobs) {
-    throw new ApiError(400, "jobs not found");
-  }
+	if (!jobs) {
+		throw new ApiError(400, "jobs not found");
+	}
 
-  const hasMore = page * limit < totalCount;
+	const hasMore = page * limit < totalCount;
 
-  res.json(new ApiResponse(200, { jobs, hasMore }, "jobs"));
+	res.json(new ApiResponse(200, { jobs, hasMore }, "jobs"));
 });
 
 const getJobByID = asyncHandler(async (req, res) => {
@@ -253,13 +253,13 @@ const getJobByID = asyncHandler(async (req, res) => {
 });
 
 const fetchSimilarProfiles = asyncHandler(async (req, res) => {
-  const jobPortalId = req.user.apps.jobPortal;
+	const jobPortalId = req.user.apps.jobPortal;
 
-  // Fetch the user's job portal preferences
-  const jobPref = await JobPortal.findById(jobPortalId);
-  if (!jobPref) {
-    throw new ApiError(400, "JobPortal not found.");
-  }
+	// Fetch the user's job portal preferences
+	const jobPref = await JobPortal.findById(jobPortalId);
+	if (!jobPref) {
+		throw new ApiError(400, "JobPortal not found.");
+	}
 
   // Destructure query parameters and define defaults
   const {
@@ -285,74 +285,74 @@ const fetchSimilarProfiles = asyncHandler(async (req, res) => {
   }
   //if(location) query.profession = { $regex: name, $options: "i" };
 
-  // Pagination logic
-  const skip = (page - 1) * limit;
+	// Pagination logic
+	const skip = (page - 1) * limit;
 
-  // Sort order
-  const sortOrder = {};
-  if (sort === "newest") {
-    sortOrder.createdAt = -1;
-  } else if (sort === "oldest") {
-    sortOrder.createdAt = 1;
-  }
-  // Aggregate pipeline to fetch similar profiles
-  const profiles = await JobPortal.aggregate([
-    {
-      $lookup: {
-        from: "users",
-        localField: "userId",
-        foreignField: "_id",
-        as: "userId",
-      },
-    },
-    {
-      $unwind: "$userId",
-    },
-    {
-      $match: query,
-    },
-    {
-      $sort: sortOrder,
-    },
-    {
-      $skip: skip,
-    },
-    {
-      $limit: Number(limit),
-    },
-    {
-      $project: {
-        "userId._id": 1,
-        "userId.username": 1,
-        "userId.phone": 1,
-        "userId.email": 1,
-        profession: 1,
-        locationName: 1,
-        skills: 1,
-        jobDetails: 1,
-        profileImage: 1,
-      },
-    },
-  ]);
+	// Sort order
+	const sortOrder = {};
+	if (sort === "newest") {
+		sortOrder.createdAt = -1;
+	} else if (sort === "oldest") {
+		sortOrder.createdAt = 1;
+	}
+	// Aggregate pipeline to fetch similar profiles
+	const profiles = await JobPortal.aggregate([
+		{
+			$lookup: {
+				from: "users",
+				localField: "userId",
+				foreignField: "_id",
+				as: "userId",
+			},
+		},
+		{
+			$unwind: "$userId",
+		},
+		{
+			$match: query,
+		},
+		{
+			$sort: sortOrder,
+		},
+		{
+			$skip: skip,
+		},
+		{
+			$limit: Number(limit),
+		},
+		{
+			$project: {
+				"userId._id": 1,
+				"userId.username": 1,
+				"userId.phone": 1,
+				"userId.email": 1,
+				profession: 1,
+				locationName: 1,
+				skills: 1,
+				jobDetails: 1,
+				profileImage: 1,
+			},
+		},
+	]);
 
-  // Count total matching profiles
-  const totalCount = await JobPortal.countDocuments(query);
+	// Count total matching profiles
+	const totalCount = await JobPortal.countDocuments(query);
 
-  // Determine if more profiles are available
-  const hasMore = page * limit < totalCount;
+	// Determine if more profiles are available
+	const hasMore = page * limit < totalCount;
 
-  if (!profiles.length) {
-    throw new ApiError(404, "No similar profiles found.");
-  }
+	if (!profiles.length) {
+		throw new ApiError(404, "No similar profiles found.");
+	}
 
-  // Send the response
-  res.json(
-    new ApiResponse(
-      200,
-      { profiles, hasMore },
-      "Similar profiles fetched successfully."
-    )
-  );
+	// Send the response
+	res.json(
+		new ApiResponse(
+			200,
+			{ profiles, hasMore },
+			"Similar profiles fetched successfully."
+		)
+	);
 });
 
 module.exports = {

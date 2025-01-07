@@ -22,7 +22,7 @@ function ProfileCard({ data }) {
         </div>
         <div>
           <h2 className="text-lg font-semibold">{data?.userId?.username}</h2>
-          <span className="text-sm font-bold">{data?.profession[0]}</span>
+          {/* <span className="text-sm font-bold">{data?.profession[0]}</span> */}
         </div>
       </div>
 

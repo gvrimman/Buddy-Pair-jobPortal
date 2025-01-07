@@ -7,6 +7,16 @@ const messageRoutes = require("./messageRouter");
 const notificationRoutes = require("./notificationRouter");
 const router = express.Router();
 
+router.get("/csrf-token", (req, res) => {
+  // Send the CSRF token in a cookie
+  res.cookie("XSRF-TOKEN", req.csrfToken(), {
+    httpOnly: false,
+    secure: process.env.NODE_ENV === "production",
+    sameSite: "Strict",
+  });
+  res.json({ message: "CSRF token set in cookie" });
+});
+
 // all routes
 router.use("/auth", authRoutes);
 router.use("/employer", emplyerRoutes);
