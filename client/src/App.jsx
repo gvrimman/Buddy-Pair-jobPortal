@@ -102,9 +102,9 @@ function App() {
 							<Route index element={<EmployerHome />} />
 
 							<Route path="profile" element={<ProfileView />} />
-							<Route path="job/:id" element={<JobView />} />
+							<Route path="job/:jobId" element={<JobView />} />
 							<Route
-								path="profile/:id"
+								path="profile/:profileId"
 								element={<ProfileView />}
 							/>
 							<Route path="requests" element={<RequestsView />} />

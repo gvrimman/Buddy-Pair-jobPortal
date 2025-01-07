@@ -7,6 +7,7 @@ import {
 	fetchJob,
 	fetchProfiles,
 	fetchProfile,
+	clearProfile,
 	fetchBookmarkedJobs,
 	setJobBookMarked,
 	deleteJobBookmarked,
@@ -59,12 +60,23 @@ export const fetchSimilarProfiles = (query) => async (dispatch) => {
 export const getJobById = (id) => async (dispatch) => {
 	dispatch(fetchStart());
 	try {
-		const response = await axiosInstance.get(`/employee/job/${id}`);
+		const response = await axiosInstance.get(`/user/job/${id}`);
 		dispatch(fetchJob(response?.data?.data));
 	} catch (error) {
 		dispatch(fetchError(error.message));
 		showError(error?.response?.data?.message);
 	}
+};
+
+export const getProfileById = (id) => async (dispatch) => {
+  dispatch(fetchStart());
+  try {
+    const response = await axiosInstance.get(`/user/profile/${id}`);
+    dispatch(fetchProfile(response?.data?.data));
+  } catch (error) {
+    dispatch(fetchError(error.message));
+    showError(error?.response?.data?.message);
+  }
 };
 
 export const getBookmarkedJobs =
