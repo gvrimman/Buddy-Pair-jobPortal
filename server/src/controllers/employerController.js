@@ -73,7 +73,6 @@ const getAllPostedJobs = async (req, res) => {
 	const limit = parseInt(req.query.limit) || 12;
 	const skip = (page - 1) * limit;
 
-	console.log(page, limit);
 
 	// get the total count of jobs
 	const jobPortal = await JobPortal.findOne({ userId: userId });
@@ -96,7 +95,6 @@ const getAllPostedJobs = async (req, res) => {
 
 	// Get total count for pagination
 	const hasMore = page * limit < totalJobs;
-	console.log(hasMore);
 
 	res.json(
 		new ApiResponse(

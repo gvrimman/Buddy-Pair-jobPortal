@@ -1,8 +1,8 @@
-import React from "react";
+import React, { useEffect, useState } from "react";
 import { MdHome, MdOutlineChatBubble, MdWork } from "react-icons/md";
 import { IoBagAddSharp } from "react-icons/io5";
 import { PiUserFill } from "react-icons/pi";
-import { NavLink } from "react-router-dom";
+import { NavLink, useLocation } from "react-router-dom";
 
 const link = [
 	{
@@ -32,8 +32,21 @@ const link = [
 	},
 ];
 function BottomNav() {
+	const [hideNav, setHideNav] = useState(false);
+	const location = useLocation();
+
+	useEffect(() => {
+		if (location.pathname === "/job-portal/messages") {
+			setHideNav(true);
+		}else {
+			setHideNav(false);
+		}
+	}, [location.pathname]);
 	return (
-		<div className="md:hidden fixed z-10 bottom-0 left-0 right-0">
+		<div
+			className={`md:hidden fixed z-10 bottom-0 left-0 right-0 ${
+				hideNav && "hidden"
+			}`}>
 			<div className="m-4 shadow-2xl bg-white py-2 rounded-full flex items-center justify-around">
 				{link.map((item, i) => (
 					<div key={i} className="text-3xl text-purple-500">

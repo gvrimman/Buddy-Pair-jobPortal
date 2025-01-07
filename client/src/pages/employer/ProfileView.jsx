@@ -27,7 +27,7 @@ function ProfileView() {
 	}, [profileId, dispatch]);
 
 	return (
-    <div className="max-w-[900px]">
+    <div className="max-w-[900px] w-full">
       <Container>
         <div
           className={`fixed inset-0  bg-gray-500 opacity-30 transition  ${
@@ -59,7 +59,7 @@ function ProfileView() {
           </Button>
         </div>
         <div className="flex gap-2 items-center mb-1">
-          <h4 className="font-semibold text-md">{profile.username}</h4>
+          <h4 className="font-semibold text-md">{profile?.username}</h4>
           <span>|</span>
           <h5 className="font-medium text-md">
             {profile?.apps?.jobPortal?.locationName}
@@ -115,10 +115,10 @@ function ProfileView() {
         <h4 className="font-medium text-sm my-2">Contact</h4>
         <div>
           <p className="text-xs my-1">
-            Email: <span className="font-semibold">{profile.email}</span>
+            Email: <span className="font-semibold">{profile?.email}</span>
           </p>
           <p className="text-xs my-1">
-            Phone: <span className="font-semibold">{profile.phone}</span>
+            Phone: <span className="font-semibold">{profile?.phone}</span>
           </p>
         </div>
       </Container>

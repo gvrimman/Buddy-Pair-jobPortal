@@ -44,7 +44,8 @@ function ChatInput({ receiver }) {
   };
 
   return (
-    <div className="h-[80px] lg:mx-3 px-2 flex items-center gap-2  fixed bottom-3 w-[85vw] sm:w-[90vw] md:w-[40vw] lg:w-[55vw] xl:w-[45vw]">
+    // <div className="h-[80px] lg:mx-3 px-2 flex items-center gap-2  fixed bottom-3 w-[85vw] sm:w-[90vw] md:w-[40vw] lg:w-[55vw] xl:w-[35vw]">
+    <div className="h-fit flex items-center gap-3">
       <div className="w-full bg-white p-2 border-2 border-slate-500 rounded-lg">
         <input
           type="text"
