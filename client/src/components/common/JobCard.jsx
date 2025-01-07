@@ -8,10 +8,10 @@ function JobCard({ data }) {
 		<div
 			className="bg-white shadow rounded-lg p-4"
 			onClick={() => {
-				if (location.pathname === "job-portal/jobs") {
-					navigate(`/job-portal/job/${data._id}`);
+				if (location.pathname === "/job-portal/jobs") {
+					navigate(`/job-portal/jobs/${data?._id}`);
 				} else {
-					navigate(`/job-portal/jobs/${data._id}`);
+					navigate(`/job-portal/job/${data?._id}`);
 				}
 			}}>
 			<h2 className="text-lg font-semibold mb-2">{data?.jobTitle}</h2>

@@ -109,7 +109,10 @@ function App() {
 							/>
 							<Route path="requests" element={<RequestsView />} />
 							<Route path="jobs" element={<Jobs />} />
-							<Route path="jobs/:id" element={<PostedJobView />} />
+							<Route
+								path="jobs/:jobId"
+								element={<PostedJobView />}
+							/>
 							<Route path="messages" element={<Messages />} />
 							<Route
 								path="notifications"
