@@ -70,7 +70,7 @@ function MainBox({ handleBack }) {
 						</p>
 					)}
 				</div>
-				<div className="pt-6">
+				<div className="relative mt-3">
 					<ChatInput receiver={selectedUser} />
 				</div>
 			</div>

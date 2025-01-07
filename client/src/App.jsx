@@ -16,6 +16,7 @@ import JobView from "./pages/employer/JobView";
 import ProfileView from "./pages/employer/ProfileView";
 import RequestsView from "./pages/employer/RequestsView";
 import Jobs from "./pages/employer/Jobs";
+import PostedJobView from "./pages/employer/PostedJobView";
 // const Layout = lazy(() => import("./components/layout/Layout"));
 const SplashScreen = lazy(() => import("./pages/shared/SplashScreen"));
 const EmployerHome = lazy(() => import("./pages/employer/EmployerHome"));
@@ -108,6 +109,7 @@ function App() {
 							/>
 							<Route path="requests" element={<RequestsView />} />
 							<Route path="jobs" element={<Jobs />} />
+							<Route path="jobs/:id" element={<PostedJobView />} />
 							<Route path="messages" element={<Messages />} />
 							<Route
 								path="notifications"

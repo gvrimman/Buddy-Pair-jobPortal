@@ -1,8 +1,11 @@
 import { Button } from "@material-tailwind/react";
 import React from "react";
 import { FaIndianRupeeSign } from "react-icons/fa6";
+import { useSelector } from "react-redux";
 
 function JobView() {
+	const { isAuthenticated } = useSelector((state) => state.user);
+	console.log()
 	return (
 		<div className="max-w-[900px]">
 			<div className=" py-2 px-2 rounded-md shadow-md border text-gray-700 text-sm">
