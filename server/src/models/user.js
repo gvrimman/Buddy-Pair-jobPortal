@@ -36,14 +36,8 @@ const userSchema = new mongoose.Schema(
         ref: "ECommerceApp",
       },
     },
-    referralType: {
-      type: String,
-      enum: ["discount200Users", "courseReduction"],
-      default: null,
-    },
-    referredCount: { type: Number, default: 0 },
-    discountAmount: { type: Number, default: 0 }, // For courseReduction
-    rewardEarned: { type: Boolean, default: false }, // For discount200Users
+    referrals: { type: Number, default: 0 }, // Total referrals count
+    eligibleCourses: [String], // List of courses eligible for free
   },
   { timestamps: true }
 );

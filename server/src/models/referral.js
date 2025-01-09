@@ -1,22 +1,11 @@
 const mongoose = require("mongoose");
 
-const ReferralSchema = new mongoose.Schema({
-  referrer: {
-    type: mongoose.Schema.Types.ObjectId,
-    ref: "User",
-    required: true,
-  },
-  referee: {
-    type: mongoose.Schema.Types.ObjectId,
-    ref: "User",
-    required: true,
-  },
-  type: {
-    type: String,
-    enum: ["discount200Users", "courseReduction"],
-    required: true,
-  },
-  createdAt: { type: Date, default: Date.now },
+const referralCodeSchema = new mongoose.Schema({
+  userId: { type: mongoose.Schema.Types.ObjectId, ref: "User", required: true },
+  referralCode: { type: String, unique: true },
+  type: String, // "free_course" or "discount"
+  referrals: [{ type: mongoose.Schema.Types.ObjectId, ref: "User" }], // Users referred
+  totalReferrals: { type: Number, default: 0 },
 });
 
-module.exports = mongoose.model("Referral", ReferralSchema);
+module.exports = mongoose.model("ReferralCode", referralCodeSchema);

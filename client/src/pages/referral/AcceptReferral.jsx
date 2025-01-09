@@ -1,87 +1,58 @@
-import React, { useEffect, useState } from "react";
-import { useLocation } from "react-router-dom";
-import axiosInstance from "../../utils/axios";
+import React, { useEffect, useState } from 'react';
+import { useSearchParams } from 'react-router-dom';
+import axios from "../../utils/axios";
 
-const AcceptReferral = () => {
-  const [status, setStatus] = useState(null);
-  const [error, setError] = useState(null);
-  const location = useLocation();
-
-  // Extract query parameters
-  const getQueryParams = () => {
-    const params = new URLSearchParams(location.search);
-    return {
-      referrer: params.get("referrer"),
-      type: params.get("type"),
-    };
-  };
-
-  const validateReferral = async (referrer, type) => {
-    try {
-      const validTypes = ["discount200Users", "courseReduction"];
-      if (!validTypes.includes(type)) {
-        throw new Error("Invalid referral type.");
-      }
-
-      const response = await axiosInstance.post("/referral/validate", {
-        referrer,
-        type,
-      });
-      setStatus(response.data);
-    } catch (err) {
-      setError(
-        err.response?.data?.message || err.message || "Something went wrong."
-      );
-    }
-  };
+function AcceptReferral() {
+  const [searchParams] = useSearchParams();
+  const [message, setMessage] = useState('');
+  const [status, setStatus] = useState('');
 
   useEffect(() => {
-    const { referrer, type } = getQueryParams();
+    const trackReferral = async () => {
+      const referralCode = searchParams.get('code');
+      if (!referralCode) {
+        setMessage('Invalid referral link.');
+        setStatus('error');
+        return;
+      }
 
-    if (!referrer || !type) {
-      setError("Missing required query parameters.");
-      return;
-    }
+      try {
+        const response = await axios.post('referral/track', { referralCode });
+        setMessage(response.data.message);
+        setStatus('success');
+      } catch (error) {
+        const errorMessage =
+          error.response?.data?.message || 'An error occurred while tracking the referral.';
+        setMessage(errorMessage);
+        setStatus('error');
+      }
+    };
 
-    validateReferral(referrer, type);
-  }, [location]);
+    trackReferral();
+  }, [searchParams]);
 
   return (
-    <div className="p-6 bg-gray-100 min-h-screen flex items-center justify-center">
-      <div className="max-w-md w-full bg-white rounded-lg shadow-md p-6">
-        <h1 className="text-2xl font-bold text-gray-800 mb-4 text-center">
-          Referral Status
+    <div className="max-w-[900px] w-full flex flex-col items-center justify-center min-h-screen bg-gray-100">
+      <div className="p-6 bg-white rounded-lg shadow-md">
+        <h1 className="text-2xl font-bold text-center">
+          {status === 'success' ? 'Referral Accepted!' : 'Referral Failed'}
         </h1>
-
-        {/* Loading Indicator */}
-        {!status && !error && (
-          <p className="text-center text-gray-500">Validating referral...</p>
-        )}
-
-        {/* Error Handling */}
-        {error && (
-          <div className="bg-red-100 text-red-700 p-4 rounded-lg">
-            <p>{error}</p>
-          </div>
-        )}
-
-        {/* Referral Status */}
-        {status && (
-          <div className="bg-green-100 text-green-700 p-4 rounded-lg">
-            <p>
-              <span className="font-semibold">Referrer:</span> {status.referrer}
-            </p>
-            <p>
-              <span className="font-semibold">Type:</span> {status.type}
-            </p>
-            <p>
-              <span className="font-semibold">Status:</span> {status.message}
-            </p>
-          </div>
-        )}
+        <p
+          className={`mt-4 text-center ${
+            status === 'success' ? 'text-green-600' : 'text-red-600'
+          }`}
+        >
+          {message}
+        </p>
+        <a
+          href="/job-portal"
+          className="mt-6 block px-6 py-2 bg-purple-500 text-white text-center rounded hover:bg-purple-600"
+        >
+          Go to Homepage
+        </a>
       </div>
     </div>
   );
-};
+}
 
 export default AcceptReferral;

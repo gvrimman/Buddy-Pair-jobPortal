@@ -1,20 +1,22 @@
 import React from "react";
 import { useSelector } from "react-redux";
-import { Navigate, Outlet } from "react-router-dom";
+import { Navigate, Outlet, useLocation } from "react-router-dom";
 
 function ProtectedRoute({ roles }) {
   const { isAuthenticated, userInfo } = useSelector((state) => state.user);
+  const location = useLocation();
 
   // return isAuthenticated && roles.includes(userInfo?.apps?.jobPortal?.role) ? (
   // 	<Outlet />
   // ) : (
   // 	<Navigate to="/" />
   // );
-  return isAuthenticated ? (
-  	<Outlet />
-  ) : (
-  	<Navigate to="/" />
-  );
+  if(isAuthenticated) {
+    return <Outlet />
+  } else {
+    localStorage.setItem("redirectPath", location.pathname + location.search);
+    return <Navigate to="/" />
+  }
 }
 
 export default ProtectedRoute;

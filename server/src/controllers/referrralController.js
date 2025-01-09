@@ -1,96 +1,149 @@
 const User = require("../models/user");
 const Referral = require("../models/referral");
+const AdminConfig = require("../models/AdminConfig");
 const ApiError = require("../utils/apiError");
 const ApiResponse = require("../utils/apiResponse");
 const asyncHandler = require("../utils/asyncHandler");
 
 const GenerateReferralToken = asyncHandler(async (req, res) => {
-  const { type } = req.body;
+  const userId = req.user._id;
+  const adminConfig = await AdminConfig.findOne();
 
-  if (!["discount200Users", "courseReduction"].includes(type)) {
-    return res.status(400).json({ error: "Invalid referral type." });
+  if (!adminConfig || !adminConfig.activeReferralType) {
+    return res.status(400).json({ message: "Referral system is not active" });
   }
+  const existingCode = await Referral.findOne({
+    userId,
+    type: adminConfig.activeReferralType,
+  });
 
-  try {
-    const user = await User.findById(req.user.id);
-    if (!user) return res.status(404).json({ error: "User not found." });
+  if (existingCode)
+    return res.status(400).json({ message: "Referral code already exists" });
 
-    user.referralType = type;
-    await user.save();
+  const referralCode = `REF${Math.random()
+    .toString(36)
+    .substr(2, 8)
+    .toUpperCase()}`;
 
-    const referralLink = `${process.env.CLIENT_URL}/referral?referrer=${user._id}&type=${type}`;
-    res.json({ referralLink });
-  } catch (err) {
-    res.status(500).json({ error: "Failed to generate referral link." });
-  }
+  const newCode = await Referral.create({
+    userId,
+    referralCode,
+    type: adminConfig.activeReferralType,
+    referrals: [],
+  });
+
+  res.json({ referralCode: newCode.referralCode });
 });
 
 const TrackReferralToken = asyncHandler(async (req, res) => {
-    const { referrer, type } = req.query;
-    const { refereeEmail } = req.body;
+  const { referralCode } = req.body;
+  const referredUserId = req.user._id;
+  
+  const adminConfig = await AdminConfig.findOne();
 
-    try {
-      const referrerUser = await User.findById(referrer);
-      if (!referrerUser || referrerUser.referralType !== type) {
-        return res
-          .status(400)
-          .json({ error: "Invalid referrer or referral type." });
-      }
+  if (!adminConfig || !adminConfig.activeReferralType) {
+    return res.status(400).json({ message: "Referral system is not active" });
+  }
+  
+  const referrer = await Referral.findOne({ referralCode });
+  
+  if (!referrer)
+  return res.status(404).json({ message: "Invalid referral code" });
 
-      const refereeUser = await User.findOne({ email: refereeEmail });
-      if (!refereeUser) {
-        return res.status(404).json({ error: "Referee not found." });
-      }
+  if (referrer.userId.toString() === referredUserId.toString()) {
+    return res.status(400).json({ message: "Self-referral is not allowed" });
+  }
 
-      const existingReferral = await Referral.findOne({
-        referrer,
-        referee: refereeUser.id,
-      });
-      if (existingReferral) {
-        return res.status(400).json({ error: "Referral already tracked." });
-      }
+  if (referrer.referrals.includes(referredUserId.toString())) {
+    return res.status(400).json({ message: "Referral already tracked" });
+  }
 
-      await Referral.create({ referrer, referee: refereeUser.id, type });
-      referrerUser.referredCount += 1;
+  // Check if the user has already been referred by someone else
+  const existingReferral = await Referral.findOne({
+    referrals: referredUserId.toString(),
+  });
+  if (existingReferral) {
+    return res
+      .status(400)
+      .json({ message: "User has already been referred by another user" });
+  }
 
-      // Update discount or reward
-      if (type === "courseReduction") {
-        referrerUser.discountAmount = Math.min(
-          referrerUser.referredCount * 5000,
-          50000
-        );
-      } else if (
-        type === "discount200Users" &&
-        referrerUser.referredCount >= 200
-      ) {
-        referrerUser.rewardEarned = true;
-      }
+  if (referrer.type !== adminConfig.activeReferralType) {
+    return res.status(400).json({ message: "Referral code is inactive" });
+  }
+  
+  referrer.referrals.push(referredUserId);
+  referrer.totalReferrals += 1;
+  await referrer.save();
 
-      await referrerUser.save();
-      res.json({ message: "Referral tracked successfully." });
-    } catch (err) {
-      res.status(500).json({ error: "Failed to track referral." });
-    }
+  if (referrer.type === "free_course" && referrer.totalReferrals >= 200) {
+    const user = await User.findById(referrer.userId);
+    user.eligibleCourses = (await AdminConfig.findOne()).courses.map(
+      (course) => course.name
+    );
+    await user.save();
+  }
+  res.json({ message: "Referral tracked successfully" });
 });
 
 const GetRefTokenProgress = asyncHandler(async (req, res) => {
-    try {
-      const user = await User.findById(req.user.id);
-      if (!user) return res.status(404).json({ error: "User not found." });
+  try {
+    const userId = req.user._id;
+    const userData = await User.findById(userId);
+    const adminConfig = await AdminConfig.findOne();
 
-      const referrals = await Referral.find({ referrer: user.id });
-      res.json({
-        referralType: user.referralType,
-        referredCount: user.referredCount,
-        referrals,
-      });
-    } catch (err) {
-      res.status(500).json({ error: "Failed to fetch referral progress." });
+    if (!adminConfig || !adminConfig.activeReferralType) {
+      return res.status(400).json({ message: "Referral system is not active" });
     }
+
+    // Fetch the referral data
+    const referral = await Referral.findOne({
+      userId,
+      type: adminConfig.activeReferralType,
+    })
+      .populate("referrals", "username email") // Populate referred users' basic info
+      .exec();
+
+    if (!referral) {
+      return res.status(404).json({ message: "No referral data found" });
+    }
+
+    res.json({
+      referralCode: referral.referralCode,
+      referrals: referral.referrals,
+      settings: {
+        activeReferralType: adminConfig.activeReferralType,
+        maxDiscount: adminConfig.maxDiscount,
+        discountPerReferral: adminConfig.discountPerReferral,
+        freeCourseTarget: adminConfig.freeCourseTarget,
+        courses: adminConfig.courses,
+        eligibleCourses: userData.eligibleCourses,
+      },
+    });
+  } catch (error) {
+    console.error(error);
+    res.status(500).json({ message: "Server error" });
+  }
 });
+
+const GetadminSettings = asyncHandler(async (req, res) => {
+  const settings = await AdminConfig.findOne();
+  res.json(settings);
+});
+
+const UpdateadminSettings = asyncHandler(async (req, res) => {
+  const updatedSettings = await AdminConfig.findOneAndUpdate({}, req.body, {
+    new: true,
+    upsert: true,
+  });
+  res.json(updatedSettings);
+});
+
 
 module.exports = {
   GenerateReferralToken,
   TrackReferralToken,
   GetRefTokenProgress,
+  GetadminSettings,
+  UpdateadminSettings,
 };

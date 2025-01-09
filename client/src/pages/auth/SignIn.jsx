@@ -40,11 +40,12 @@ function SignIn({
 					openUserInfoModal();
 				}, 300);
 			}
-			if (userData?.apps?.jobPortal?.role === "employee") {
-				navigate("/job-portal/employee");
-			} else if (userData?.apps?.jobPortal?.role === "employer") {
-				navigate("/job-portal/employer");
-			}
+			const redirectPath = localStorage.getItem("redirectPath");
+
+			if (redirectPath) {
+				localStorage.removeItem("redirectPath");
+				navigate(redirectPath);
+			} else navigate("/job-portal");
 		} catch (error) {
 			setIsLoading(false);
 			console.error("Login Error:", error);

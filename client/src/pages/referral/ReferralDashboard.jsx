@@ -1,113 +1,102 @@
 import React, { useState, useEffect } from "react";
-import axiosInstance from "../../utils/axios";
+import axios from "../../utils/axios";
+import ShareLink from "./ShareLink";
 
-const ReferralDashboard = () => {
-  const [referralLink, setReferralLink] = useState("");
-  const [progress, setProgress] = useState(null);
-  const [loading, setLoading] = useState(false);
 
-  const generateReferralLink = async (type) => {
-    setLoading(true);
-    try {
-      const response = await axiosInstance.post("/referral/generate", { type });
-      setReferralLink(response.data.referralLink);
-    } catch (error) {
-      alert("Failed to generate referral link.");
-    }
-    setLoading(false);
-  };
-
-  const fetchProgress = async () => {
-    try {
-      const response = await axiosInstance.get("/referral/progress");
-      setProgress(response.data);
-    } catch (error) {
-      alert("Failed to fetch referral progress.");
-    }
-  };
+function ReferralDashboard() {
+  const [referralCode, setReferralCode] = useState(null);
+  const [referrals, setReferrals] = useState([]);
+  const [settings, setSettings] = useState(null);
 
   useEffect(() => {
-    fetchProgress();
+    // Fetch referral data
+    const fetchReferralData = async () => {
+      const { data } = await axios.get("referral/progress");
+      setReferralCode(data.referralCode);
+      setReferrals(data.referrals);
+      setSettings(data.settings);
+    };
+    fetchReferralData();
   }, []);
 
+  const generateCode = async () => {
+    const { data } = await axios.post("referral/generate");
+    setReferralCode(data.referralCode);
+  };
+
   return (
-    <div className="p-6 bg-gray-100 min-h-screen">
-      <div className="max-w-4xl mx-auto bg-white rounded-lg shadow-md p-6">
-        <h1 className="text-2xl font-bold mb-4 text-gray-800">
-          Referral Dashboard
-        </h1>
+    <div className="container mx-auto p-4 max-w-[900px] w-full flex flex-col items-center justify-center min-h-screen">
+      <h1 className="text-2xl font-bold text-gray-700">Referral Program</h1>
+      {!referralCode ? (
+        <button
+          className="mt-4 px-4 py-2 bg-purple-500 text-white rounded"
+          onClick={generateCode}
+        >
+          Generate Referral Code
+        </button>
+      ) : (
+        <ShareLink referralCode={referralCode} />
+      )}
 
-        {/* Generate Referral Link Section */}
-        <div className="mb-6">
-          <button
-            onClick={() => generateReferralLink("discount200Users")}
-            className="bg-blue-600 text-white px-4 py-2 rounded-lg shadow hover:bg-blue-700 transition mr-4"
-          >
-            Generate 200 Users Discount Link
-          </button>
-          <button
-            onClick={() => generateReferralLink("courseReduction")}
-            className="bg-green-600 text-white px-4 py-2 rounded-lg shadow hover:bg-green-700 transition"
-          >
-            Generate Course Reduction Link
-          </button>
-        </div>
+      <h2 className="text-xl font-bold mt-6 text-gray-700">Referred Users</h2>
+      <ul>
+        {referrals.map((ref) => (
+          <li className="text-gray-700" key={ref.id}>
+            {ref.username}
+          </li>
+        ))}
+      </ul>
 
-        {/* Referral Link */}
-        {loading && <p className="text-gray-500">Generating link...</p>}
-        {referralLink && (
-          <div className="bg-gray-50 p-4 rounded-lg shadow border">
-            <h3 className="text-lg font-semibold text-gray-700 mb-2">
-              Your Referral Link:
-            </h3>
-            <p className="text-gray-600 break-all">{referralLink}</p>
-          </div>
-        )}
-
-        {/* Referral Progress */}
-        {progress && (
-          <div className="mt-6 bg-gray-50 p-4 rounded-lg shadow border">
-            <h3 className="text-lg font-semibold text-gray-700 mb-2">
-              Referral Progress
-            </h3>
-            <p className="text-gray-600">
-              <span className="font-semibold">Type:</span>{" "}
-              {progress.referralType}
-            </p>
-            <p className="text-gray-600">
-              <span className="font-semibold">Referred Count:</span>{" "}
-              {progress.referredCount}
-            </p>
-
-            {/* Referral List */}
-            <ul className="mt-4 space-y-2">
-              {progress.referrals.map((ref) => (
-                <li
-                  key={ref._id}
-                  className="bg-white p-2 rounded-lg shadow border"
-                >
-                  Referred User ID: {ref.referee}
-                </li>
+      {settings?.activeReferralType === "free_course" && (
+        <div className="mt-6">
+          <h2 className="text-xl font-bold text-gray-700">
+            Eligible for Free Courses
+          </h2>
+          {settings?.eligibleCourses?.length > 0 ? (
+            <select className="border p-2 rounded">
+              {settings?.eligibleCourses.map((course, index) => (
+                <option key={index} value={course}>
+                  {course}
+                </option>
               ))}
-            </ul>
+            </select>
+          ) : (
+            <p className="text-gray-700">
+              Reach 200 referrals to unlock free courses.
+            </p>
+          )}
+        </div>
+      )}
 
-            {/* Rewards Section */}
-            {progress.referralType === "discount200Users" &&
-              progress.referredCount >= 200 && (
-                <button className="mt-4 bg-purple-600 text-white px-4 py-2 rounded-lg shadow hover:bg-purple-700 transition">
-                  Claim Reward
-                </button>
-              )}
-            {progress.referralType === "courseReduction" && (
-              <p className="mt-4 text-green-700 font-semibold">
-                Discount Earned: ₹{progress.discountAmount}
+      {settings?.activeReferralType === "discount" && (
+        <div className="mt-6">
+          <h2 className="text-xl font-bold text-gray-700">Course Discounts</h2>
+          {settings?.courses.map((course) => (
+            <div
+              key={course.name}
+              className="p-4 border rounded mb-4 text-gray-700"
+            >
+              <h3 className="text-lg font-bold">{course.name}</h3>
+              <p>Duration: {course.duration}</p>
+              <p>Original Price: ₹{course.price}</p>
+              <p>
+                Discounted Price: ₹
+                {Math.max(
+                  course.price -
+                    referrals.length * settings.discountPerReferral,
+                  course.price -
+                    settings.maxDiscount * settings.discountPerReferral
+                )}
               </p>
-            )}
-          </div>
-        )}
-      </div>
+              <button className="mt-2 px-4 py-2 bg-purple-500 text-white rounded">
+                Buy Course
+              </button>
+            </div>
+          ))}
+        </div>
+      )}
     </div>
   );
-};
+}
 
 export default ReferralDashboard;

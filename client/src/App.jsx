@@ -20,7 +20,7 @@ import Jobs from "./pages/employer/Jobs";
 import PostedJobView from "./pages/employer/PostedJobView";
 import AcceptReferral from "./pages/referral/AcceptReferral";
 import ReferralDashboard from "./pages/referral/ReferralDashboard";
-import ProfileSection from "./pages/referral/ProfileSection";
+import AdminSettings from "./pages/referral/AdminSettings";
 // const Layout = lazy(() => import("./components/layout/Layout"));
 const SplashScreen = lazy(() => import("./pages/shared/SplashScreen"));
 const EmployerHome = lazy(() => import("./pages/employer/EmployerHome"));
@@ -82,7 +82,7 @@ const SingleEmployerCompany = lazy(() =>
 function App() {
 	useSocket(); // Initializes the socket
 	useListenNotification(); // Listens for notifications globally
-	FetchCSRFToken();
+	//FetchCSRFToken();
 
 	return (
     <div>
@@ -122,8 +122,8 @@ function App() {
               <Route path="company/:id" element={<SingleEmployerCompany />} />
 
               <Route path="referral" element={<AcceptReferral />} />
-              <Route path="status/referral" element={<ReferralDashboard />} />
-              <Route path="profile/referral" element={<ProfileSection />} />
+              <Route path="profile/referral" element={<ReferralDashboard />} />
+              <Route path="referral/admin/settings" element={<AdminSettings /> } />
             </Route>
           </Route>
 
