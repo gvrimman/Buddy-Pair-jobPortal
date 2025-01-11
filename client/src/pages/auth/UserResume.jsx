@@ -51,7 +51,12 @@ function UserResume({ onClose, setUserData, userData }) {
 			dispatch(setUser(response?.data?.data));
 			setIsLoading(false);
 			onClose();
-			navigate("/job-portal/employee");
+			const redirectPath = localStorage.getItem("redirectPath");
+
+			if (redirectPath) {
+				localStorage.removeItem("redirectPath");
+				navigate(redirectPath);
+			} else navigate("/job-portal");
 			showSuccess(response.data?.message);
 		} catch (error) {
 			setIsLoading(false);

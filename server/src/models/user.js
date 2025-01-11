@@ -3,41 +3,43 @@ const bcrypt = require("bcrypt");
 const jwt = require("jsonwebtoken");
 
 const userSchema = new mongoose.Schema(
-	{
-		googleId: { type: String, unique: true, sparse: true },
-		username: { type: String, required: true },
-		email: { type: String, required: true, unique: true, index: true },
-		phone: { type: String, required: true, unique: true, index: true },
-		password: {
-			type: String,
-			required: function () {
-				return !this.googleId;
-			},
-		},
-		apps: {
-			jobPortal: {
-				type: mongoose.Schema.Types.ObjectId,
-				ref: "JobPortal",
-			},
-			datingApp: {
-				type: mongoose.Schema.Types.ObjectId,
-				ref: "DatingApp",
-			},
-			matrimonyApp: {
-				type: mongoose.Schema.Types.ObjectId,
-				ref: "MatrimonyApp",
-			},
-			eLearningApp: {
-				type: mongoose.Schema.Types.ObjectId,
-				ref: "ELearningApp",
-			},
-			eCommerceApp: {
-				type: mongoose.Schema.Types.ObjectId,
-				ref: "ECommerceApp",
-			},
-		},
-	},
-	{ timestamps: true }
+  {
+    googleId: { type: String, unique: true, sparse: true },
+    username: { type: String, required: true },
+    email: { type: String, required: true, unique: true, index: true },
+    phone: { type: String, required: true, unique: true, index: true },
+    password: {
+      type: String,
+      required: function () {
+        return !this.googleId;
+      },
+    },
+    apps: {
+      jobPortal: {
+        type: mongoose.Schema.Types.ObjectId,
+        ref: "JobPortal",
+      },
+      datingApp: {
+        type: mongoose.Schema.Types.ObjectId,
+        ref: "DatingApp",
+      },
+      matrimonyApp: {
+        type: mongoose.Schema.Types.ObjectId,
+        ref: "MatrimonyApp",
+      },
+      eLearningApp: {
+        type: mongoose.Schema.Types.ObjectId,
+        ref: "ELearningApp",
+      },
+      eCommerceApp: {
+        type: mongoose.Schema.Types.ObjectId,
+        ref: "ECommerceApp",
+      },
+    },
+    referrals: { type: Number, default: 0 }, // Total referrals count
+    eligibleCourses: [String], // List of courses eligible for free
+  },
+  { timestamps: true }
 );
 
 // user password encrypting process

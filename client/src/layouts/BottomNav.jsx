@@ -51,6 +51,7 @@ function BottomNav() {
 				{link.map((item, i) => (
 					<div key={i} className="text-3xl text-purple-500">
 						<NavLink
+							end={true}
 							to={item?.link}
 							className={({ isActive }) =>
 								isActive

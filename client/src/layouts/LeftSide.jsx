@@ -10,7 +10,7 @@ function LeftSide() {
 		},
 		{
 			title: "Job Portal",
-			link: "/job-portal/",
+			link: "/job-portal",
 		},
 		{
 			title: "Matirimony",

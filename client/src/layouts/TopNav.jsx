@@ -42,7 +42,7 @@ const LeftLinks = [
 	},
   {
 		title: "Job Portal",
-		link: "/job-portal/",
+		link: "/job-portal",
 	},
 	{
 		title: "Matirimony",
@@ -204,6 +204,7 @@ function TopNav() {
 										key={i}
 										className="font-semibold text-gray-600 my-1 hover:bg-purple-200 rounded-lg hover:text-white transition-all ease-in-out duration-300">
 										<NavLink
+											end={true}
 											to={link?.link}
 											className={({ isActive }) =>
 												isActive
