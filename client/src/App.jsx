@@ -21,6 +21,11 @@ import PostedJobView from "./pages/employer/PostedJobView";
 import AcceptReferral from "./pages/referral/AcceptReferral";
 import ReferralDashboard from "./pages/referral/ReferralDashboard";
 import AdminSettings from "./pages/referral/AdminSettings";
+import PrivacyPolicy from "./pages/shared/PrivacyPolicy";
+import RefundPolicy from "./pages/shared/RefundPolicy";
+import TermsConditions from "./pages/shared/TermsConditions";
+import AboutUs from "./pages/shared/AboutUs";
+import ContactUs from "./pages/shared/ContactUs";
 // const Layout = lazy(() => import("./components/layout/Layout"));
 const SplashScreen = lazy(() => import("./pages/shared/SplashScreen"));
 const EmployerHome = lazy(() => import("./pages/employer/EmployerHome"));
@@ -123,7 +128,16 @@ function App() {
 
               <Route path="referral" element={<AcceptReferral />} />
               <Route path="profile/referral" element={<ReferralDashboard />} />
-              <Route path="referral/admin/settings" element={<AdminSettings /> } />
+              <Route
+                path="referral/admin/settings"
+                element={<AdminSettings />}
+              />
+
+              <Route path="privacy-policy" element={<PrivacyPolicy />} />
+              <Route path="refund-policy" element={<RefundPolicy />} />
+              <Route path="terms-conditions" element={<TermsConditions />} />
+              <Route path="contact-us" element={<ContactUs />} />
+              <Route path="about-us" element={<AboutUs />} />
             </Route>
           </Route>
 
