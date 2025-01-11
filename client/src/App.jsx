@@ -31,65 +31,65 @@ const SplashScreen = lazy(() => import("./pages/shared/SplashScreen"));
 const EmployerHome = lazy(() => import("./pages/employer/EmployerHome"));
 const Candidates = lazy(() => import("./pages/employer/Candidates"));
 const EmployerCompanies = lazy(() =>
-	import("./pages/employer/EmployerCompanies")
+  import("./pages/employer/EmployerCompanies")
 );
 const EmployerDashboard = lazy(() =>
-	import("./pages/employer/dashboard/EmployerDashboard")
+  import("./pages/employer/dashboard/EmployerDashboard")
 );
 const PostJobs = lazy(() => import("./pages/employer/dashboard/PostJobs"));
 const LandingPage = lazy(() => import("./pages/shared/LandingPage"));
 const EmployerLayout = lazy(() => import("./layouts/EmployerLayout"));
 const EmployerDashboardLayout = lazy(() =>
-	import("./layouts/EmployerDashboardLayout")
+  import("./layouts/EmployerDashboardLayout")
 );
 const CompanyProfile = lazy(() =>
-	import("./pages/employer/dashboard/CompanyProfile")
+  import("./pages/employer/dashboard/CompanyProfile")
 );
 const ManageJobs = lazy(() => import("./pages/employer/dashboard/ManageJobs"));
 const AllApplicants = lazy(() =>
-	import("./pages/employer/dashboard/AllApplicants")
+  import("./pages/employer/dashboard/AllApplicants")
 );
 const EmployeeLayout = lazy(() => import("./layouts/EmplyeeLayout"));
 const EmployeeDashboardLayout = lazy(() =>
-	import("./layouts/EmployeeDashboardLayout")
+  import("./layouts/EmployeeDashboardLayout")
 );
 const Home = lazy(() => import("./pages/employee/Home"));
 const FindJobs = lazy(() => import("./pages/employee/FindJobs"));
 const HomeCompanies = lazy(() => import("./pages/employee/HomeCompanies"));
 const UpdateJob = lazy(() =>
-	import("./components/employer/dashboard/manageJobs/UpdateJob")
+  import("./components/employer/dashboard/manageJobs/UpdateJob")
 );
 const SingleJob = lazy(() => import("./pages/employee/SingleJob"));
 const Saved = lazy(() => import("./pages/employee/Saved"));
 const EmployeeBookMarked = lazy(() =>
-	import("./pages/employee/dashboard/EmployeeBookMarked")
+  import("./pages/employee/dashboard/EmployeeBookMarked")
 );
 const EmployeeProfile = lazy(() =>
-	import("./pages/employee/dashboard/EmployeeProfile")
+  import("./pages/employee/dashboard/EmployeeProfile")
 );
 const EmployeeDashboard = lazy(() =>
-	import("./pages/employee/dashboard/EmployeeDashboard")
+  import("./pages/employee/dashboard/EmployeeDashboard")
 );
 const EmployeeApplied = lazy(() =>
-	import("./pages/employee/dashboard/EmployeeApplied")
+  import("./pages/employee/dashboard/EmployeeApplied")
 );
 const EmployeeChangePassword = lazy(() =>
-	import("./pages/employee/dashboard/EmployeeChangePassword")
+  import("./pages/employee/dashboard/EmployeeChangePassword")
 );
 const SingleCandidate = lazy(() => import("./pages/employer/SingleCandidate"));
 const JobApplicatns = lazy(() =>
-	import("./pages/employer/dashboard/JobApplicatns")
+  import("./pages/employer/dashboard/JobApplicatns")
 );
 const SingleEmployerCompany = lazy(() =>
-	import("./pages/employer/SingleEmployerCompany")
+  import("./pages/employer/SingleEmployerCompany")
 );
 
 function App() {
-	useSocket(); // Initializes the socket
-	useListenNotification(); // Listens for notifications globally
-	//FetchCSRFToken();
+  useSocket(); // Initializes the socket
+  useListenNotification(); // Listens for notifications globally
+  //FetchCSRFToken();
 
-	return (
+  return (
     <div>
       <Suspense fallback={<PageLoader />}>
         <Routes>
@@ -132,13 +132,15 @@ function App() {
                 path="referral/admin/settings"
                 element={<AdminSettings />}
               />
-
-              <Route path="privacy-policy" element={<PrivacyPolicy />} />
-              <Route path="refund-policy" element={<RefundPolicy />} />
-              <Route path="terms-conditions" element={<TermsConditions />} />
-              <Route path="contact-us" element={<ContactUs />} />
-              <Route path="about-us" element={<AboutUs />} />
             </Route>
+          </Route>
+          {/**Static routes */}
+          <Route path="/job-portal" element={<Layout />}>
+            <Route path="privacy-policy" element={<PrivacyPolicy />} />
+            <Route path="refund-policy" element={<RefundPolicy />} />
+            <Route path="terms-conditions" element={<TermsConditions />} />
+            <Route path="contact-us" element={<ContactUs />} />
+            <Route path="about-us" element={<AboutUs />} />
           </Route>
 
           {/* Router for Job Portal Employer Dashboard */}

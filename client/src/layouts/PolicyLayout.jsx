@@ -2,7 +2,7 @@ import React from "react";
 
 function PolicyContainer({ children }) {
   return (
-    <div className="rounded-md shadow-md border py-4 px-6 text-gray-700 text-sm my-4 bg-white">
+    <div className="rounded-md shadow-md border py-4 px-6 text-gray-700 text-sm my-4 bg-white pb-12">
       {children}
     </div>
   );

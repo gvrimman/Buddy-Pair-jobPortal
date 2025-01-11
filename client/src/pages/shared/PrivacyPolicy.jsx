@@ -218,7 +218,7 @@ function PrivacyPolicy() {
         If you have any questions or concerns about this Privacy Policy or your
         data, please contact us:
       </p>
-      <ul className="list-disc list-inside text-xs mb-12">
+      <ul className="list-disc list-inside text-xs">
         <li>
           <strong>Email:</strong> buddypair24@gmail.com
         </li>
