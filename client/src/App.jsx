@@ -1,4 +1,6 @@
-import React, { lazy, Suspense } from "react";
+import React, { lazy, Suspense, useEffect } from "react";
+import { useDispatch } from "react-redux";
+import verifyUser from "./utils/verifyAuth";
 import { Routes, Route } from "react-router-dom";
 import ProtectedRoute from "./router/ProtectedRoute";
 import EmployeeMessages from "./pages/employee/dashboard/EmployeeMessages";
@@ -12,7 +14,7 @@ import FetchCSRFToken from "./utils/generateCSRFToken";
 import { useSocket } from "./hooks/useSocket";
 import EmployerNotification from "./pages/employer/dashboard/EmployerNotification";
 import Layout from "./layouts/Layout";
-import JobportalUserInfo from "./pages/auth/jobportal-auth/jobportalUserInfo";
+//import JobportalUserInfo from "./pages/auth/jobportal-auth/jobportalUserInfo";
 import JobView from "./pages/employer/JobView";
 import ProfileView from "./pages/employer/ProfileView";
 import RequestsView from "./pages/employer/RequestsView";
@@ -88,6 +90,13 @@ function App() {
   useSocket(); // Initializes the socket
   useListenNotification(); // Listens for notifications globally
   //FetchCSRFToken();
+
+  const dispatch = useDispatch();
+
+  useEffect(() => {
+    // Verify user authentication on app load
+    verifyUser(dispatch);
+  }, [dispatch]);
 
   return (
     <div>

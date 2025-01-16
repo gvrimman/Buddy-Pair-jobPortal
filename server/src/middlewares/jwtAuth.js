@@ -28,9 +28,7 @@ const verifyJwt = asyncHandler(async (req, _, next) => {
 		next();
 	} catch (error) {
 		console.error("Jwt verification ERROR:", error);
-		if (error.name === "TokenExpiredError") {
-			throw new ApiError(401, "AccessToken expired", error);
-		}
+		throw new ApiError(401, "AccessToken expired", error);
 	}
 });
 
