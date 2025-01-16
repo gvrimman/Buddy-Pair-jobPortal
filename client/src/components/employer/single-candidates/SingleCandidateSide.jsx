@@ -7,36 +7,24 @@ import { useSelector } from "react-redux";
 import SmallBox from "../../common/SmallBox";
 
 function SingleCandidateSide() {
-	const { candidate } = useSelector((state) => state.employer);
+  const { candidate } = useSelector((state) => state.employer);
 
-	return (
-		<div className=" bg-gray-100 p-5 grid gap-4 shadow-md rounded-md">
-			<SmallBox
-				icon={<SlCalender />}
-				title={candidate?.jobDetails?.workExperience}
-			/>
-			<SmallBox icon={<GiSandsOfTime />} title={candidate?.age} />
-			<SmallBox
-				icon={<FaMoneyBill1Wave />}
-				title={candidate?.jobDetails?.ctc || 0}
-			/>
-			<SmallBox
-				icon={<FaMoneyBill1Wave />}
-				title={candidate?.jobDetails?.eCtc || 0}
-			/>
-			{/* {candidate?.preference?.languages?.map((item, index) => (
-				<SmallBox
-					key={index}
-					icon={<LiaLanguageSolid />}
-					title={"English"}
-				/>
-			))} */}
-			<SmallBox
-				icon={<PiGraduationCapLight />}
-				title={candidate?.qualification}
-			/>
-		</div>
-	);
+  const sideDetails = [
+    { icon: <SlCalender />, title: candidate?.jobDetails?.workExperience },
+    { icon: <GiSandsOfTime />, title: candidate?.age },
+    { icon: <FaMoneyBill1Wave />, title: candidate?.jobDetails?.ctc || "N/A" },
+    { icon: <FaMoneyBill1Wave />, title: candidate?.jobDetails?.eCtc || "N/A" },
+    { icon: <PiGraduationCapLight />, title: candidate?.qualification },
+  ];
+
+  return (
+    <div className="bg-gray-100 p-5 shadow-md rounded-md space-y-4">
+      {sideDetails.map((detail, index) => (
+        <SmallBox key={index} icon={detail.icon} title={detail.title} />
+      ))}
+    </div>
+  );
 }
+
 
 export default SingleCandidateSide;

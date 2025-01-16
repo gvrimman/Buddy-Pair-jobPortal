@@ -3,7 +3,7 @@ import React from "react";
 function SmallBox({icon, title, text}) {
   return (
     <div className="flex items-start gap-3 ">
-      <div className="mt-1 text-xl text-blue-600">
+      <div className="mt-1 text-xl text-purple-600">
         {icon}
       </div>
       <div>

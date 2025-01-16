@@ -125,6 +125,7 @@ function App() {
               <Route path="job/:jobId" element={<JobView />} />
               <Route path="profile/:profileId" element={<ProfileView />} />
               <Route path="requests" element={<RequestsView />} />
+              <Route path="requests1" element={<EmployeeApplied />} />
               <Route path="jobs" element={<Jobs />} />
               <Route path="jobs/:jobId" element={<PostedJobView />} />
               <Route path="messages" element={<Messages />} />

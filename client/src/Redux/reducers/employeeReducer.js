@@ -83,7 +83,12 @@ const employeeSlice = createSlice({
 			state.isLoading = false;
 		},
 		getAppliedJobs: (state, action) => {
-			state.appliedJobs = action.payload.appliedJobs;
+			if(action.payload.appliedJobs){
+				const newJobs = action.payload.appliedJobs.filter(
+					(job) => !state.appliedJobs.some((existingJob) => existingJob._id === job._id)
+				);
+				state.appliedJobs = [...state.appliedJobs, ...newJobs];
+			}
 			state.pagination = action.payload.pagination;
 			state.isLoading = false;
 		},

@@ -6,48 +6,36 @@ import { useSelector } from "react-redux";
 import { LiaBehance } from "react-icons/lia";
 
 function SocialMedia() {
-	const { candidate } = useSelector((state) => state.employer);
-	return (
-		<div className="bg-customBgColor p-4 flex justify-between items-center shadow-md rounded-md">
-			<h1 className="text-lg font-semibold tracking-wide">
-				Social Media
-			</h1>
-			<div className="flex items-center gap-4">
-				<a href={candidate?.socialLinks?.portfolio} target="_blank">
-					<BsBrowserChrome
-						className={`text-blue-300 hover:text-blue-500 text-lg ${
-							candidate?.socialLinks?.portfolio &&
-							"cursor-pointer"
-						}`}
-					/>
-				</a>
+  const { candidate } = useSelector((state) => state.employer);
 
-				<a href={candidate?.socialLinks?.linkedin} target="_blank">
-					<FaLinkedinIn
-						className={`text-blue-300 hover:text-blue-500 text-lg ${
-							candidate?.socialLinks?.linkedin && "cursor-pointer"
-						}`}
-					/>
-				</a>
-
-				<a href={candidate?.socialLinks?.behance} target="_blank">
-					<LiaBehance
-						className={`text-blue-300 hover:text-blue-500 text-lg ${
-							candidate?.socialLinks?.behance && "cursor-pointer"
-						}`}
-					/>
-				</a>
-
-				<a href={candidate?.socialLinks?.github} target="_blank">
-					<TbBrandGithubFilled
-						className={`text-blue-300 hover:text-blue-500 text-lg ${
-							candidate?.socialLinks?.github && "cursor-pointer"
-						}`}
-					/>
-				</a>
-			</div>
-		</div>
-	);
+  return (
+    <div className="bg-customBgColor p-4 flex flex-col justify-between items-center shadow-md rounded-md gap-2">
+      <h1 className="text-lg font-semibold tracking-normal text-nowrap">Social Media</h1>
+      <div className="flex items-center gap-4">
+        {[
+          {
+            link: candidate?.socialLinks?.portfolio,
+            icon: <BsBrowserChrome />,
+          },
+          { link: candidate?.socialLinks?.linkedin, icon: <FaLinkedinIn /> },
+          { link: candidate?.socialLinks?.behance, icon: <LiaBehance /> },
+          {
+            link: candidate?.socialLinks?.github,
+            icon: <TbBrandGithubFilled />,
+          },
+        ].map((social, index) =>
+          social.link ? (
+            <a key={index} href={social.link} target="_blank" rel="noreferrer">
+              <div className="text-purple-300 hover:text-purple-500 text-lg cursor-pointer">
+                {social.icon}
+              </div>
+            </a>
+          ) : null
+        )}
+      </div>
+    </div>
+  );
 }
+
 
 export default SocialMedia;

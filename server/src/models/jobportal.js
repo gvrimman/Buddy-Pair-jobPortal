@@ -44,7 +44,7 @@ const jobPortalSchema = new mongoose.Schema(
       LastWorkingDate: Date,
       LastWithdrawnSalary: Number,
       QuitReason: String,
-      workExperience: Number,
+      workExperience: String,
     },
 	preferenceStatus: {
 		type: Boolean,

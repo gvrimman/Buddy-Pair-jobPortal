@@ -22,15 +22,22 @@ function SingleCandidate() {
 
   return (
     <>
+      {/* Candidate Header Section */}
       <SingleCandidateHead />
-      <div className="max-w-[1440px] mx-auto bg-white px-3 py-5 grid lg:grid-cols-3">
-        <div className="w-full lg:w-4/5 grid gap-4">
+
+      {/* Main Content */}
+      <div className="max-w-[1440px] mx-auto px-4 py-6 grid grid-cols-1 lg:grid-cols-3 gap-6">
+        {/* Sidebar */}
+        <div className="order-2 lg:order-1">
           <SingleCandidateSide />
-          <SocialMedia />
-          <MessageMe />
+          <div className="mt-6 space-y-4 pb-16">
+            <SocialMedia />
+            <MessageMe />
+          </div>
         </div>
 
-        <div className="col-span-2 px-3 ">
+        {/* Main Details */}
+        <div className="col-span-2 order-1 lg:order-2 space-y-6">
           <AboutCandidate />
           <CandidateEducation />
           <CandidateExperience />

@@ -3,15 +3,29 @@ import { Button } from "@material-tailwind/react";
 import { useParams } from "react-router-dom";
 import { useSelector, useDispatch } from "react-redux";
 import { FaIndianRupeeSign } from "react-icons/fa6";
-import { getJobById } from "../../apis/employeeApi";
+import { getJobById, applyAjob } from "../../apis/employeeApi";
+import useListenNotification from "../../hooks/useListenNotification";
 import { TbLoader2 } from "react-icons/tb";
 
 function JobView() {
-  const { job, isLoading } = useSelector((state) => state.employee);
+  const { job, isLoading, appliedJobs } = useSelector(
+    (state) => state.employee
+  );
   const { jobId } = useParams();
   const dispatch = useDispatch();
+  const { sendNotifications } = useListenNotification();
 
   console.log("job: ", job);
+
+  const handleJobApplying = (userId, id) => {
+    sendNotifications(
+      userId,
+      "apply",
+      "Candidate have been applied to your job",
+      `employer/dashboard/job-applicants/${id}`
+    );
+    dispatch(applyAjob(id));
+  };
 
   useEffect(() => {
     dispatch(getJobById(jobId));
@@ -84,7 +98,13 @@ function JobView() {
         </div>
       </div>
       <div className="my-4 flex items-center gap-3">
-        <Button onClick={()=>{alert("Not yet ready....")}} className="bg-customViolet ">apply</Button>
+        <Button
+          disabled={appliedJobs.some((jo) => jo._id === job?._id)}
+          onClick={() => handleJobApplying(job?.owner?._id, job?._id)}
+          className="bg-customViolet "
+        >
+          {appliedJobs.some((jo) => jo._id === job?._id) ? "Applied" : "Apply"}
+        </Button>
         <div className="border border-gray-500 flex items-center gap-2 px-2 py-1 rounded-md w-full">
           <div className="overflow-hidden aspect-square border border-gray-300 rounded-full w-8">
             <img

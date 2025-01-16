@@ -531,7 +531,7 @@ const getJobApplicants = asyncHandler(async (req, res) => {
 		throw new ApiError(400, "Job not found");
 	}
 
-	const totalRecords = totalCount[0].totalCount || 0;
+	const totalRecords = totalCount[0]?.totalCount || 0;
 	const hasMore = page * limit < totalRecords;
 
 	res.json(new ApiResponse(200, { applicants, hasMore }, "job applicants"));

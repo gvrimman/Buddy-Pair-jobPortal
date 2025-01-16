@@ -58,10 +58,10 @@ function Jobs() {
 	return (
 		<div className="max-w-[900px] w-full relative">
 			<div className="flex items-center justify-between my-3 mx-2">
-				<h5 className="font-semibold underline underline-offset-4 text-lg">
+				<h5 className="font-semibold text-xl text-purple-500">
 					Posted Jobs
 				</h5>
-				<Button onClick={() => setJobFormShow(true)}>Post a Job</Button>
+				<Button className="text-white bg-purple-500 hover:bg-purple-600" onClick={() => setJobFormShow(true)}>Post a Job</Button>
 			</div>
 
 			{/* job post form start */}
