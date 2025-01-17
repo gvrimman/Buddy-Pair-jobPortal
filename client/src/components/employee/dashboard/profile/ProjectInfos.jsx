@@ -37,50 +37,51 @@ function ProjectInfos() {
 	};
 
 	return (
-		<div className="grid bg-white mx-2 p-4 rounded-md shadow">
-			<h2 className="py-2 text-lg tracking-wide font-semibold">
-				Social Network
-			</h2>
-			<form onSubmit={handleSubmit(onSubmit)}>
-				<div className="mt-5 grid lg:grid-cols-2 gap-3">
-					<TextInput
-						label={"Portfolio Url"}
-						type={"text"}
-						value={
-							userInfo?.apps?.jobPortal?.socialLinks?.portfolio
-						}
-						registering={register("portfolio")}
-						errors={errors.portfolio}
-					/>
-					<TextInput
-						label={"GitHub Url"}
-						type={"text"}
-						value={userInfo?.apps?.jobPortal?.socialLinks?.github}
-						registering={register("github")}
-						errors={errors.github}
-					/>
-					<TextInput
-						label={"LinkedIn Url"}
-						type={"text"}
-						value={userInfo?.apps?.jobPortal?.socialLinks?.linkedin}
-						registering={register("linkedin")}
-						errors={errors.linkedin}
-					/>
-					<TextInput
-						label={"Behance Url"}
-						type={"text"}
-						value={userInfo?.apps?.jobPortal?.socialLinks?.behance}
-						registering={register("behance")}
-						errors={errors.behance}
-					/>
-				</div>
+    <div className="grid bg-white mx-2 p-4 rounded-md shadow">
+      <h2 className="py-2 text-xl text-purple-500 tracking-wide font-semibold">
+        Social Network
+      </h2>
+      <form onSubmit={handleSubmit(onSubmit)}>
+        <div className="mt-5 grid lg:grid-cols-2 gap-3">
+          <TextInput
+            label={"Portfolio Url"}
+            type={"text"}
+            value={userInfo?.apps?.jobPortal?.socialLinks?.portfolio}
+            registering={register("portfolio")}
+            errors={errors.portfolio}
+          />
+          <TextInput
+            label={"GitHub Url"}
+            type={"text"}
+            value={userInfo?.apps?.jobPortal?.socialLinks?.github}
+            registering={register("github")}
+            errors={errors.github}
+          />
+          <TextInput
+            label={"LinkedIn Url"}
+            type={"text"}
+            value={userInfo?.apps?.jobPortal?.socialLinks?.linkedin}
+            registering={register("linkedin")}
+            errors={errors.linkedin}
+          />
+          <TextInput
+            label={"Behance Url"}
+            type={"text"}
+            value={userInfo?.apps?.jobPortal?.socialLinks?.behance}
+            registering={register("behance")}
+            errors={errors.behance}
+          />
+        </div>
 
-				<Button type="submit" className="w-fit mt-3 text-end">
-					Update
-				</Button>
-			</form>
-		</div>
-	);
+        <Button
+          type="submit"
+          className="bg-purple-500 hover:bg-purple-400 w-fit mt-3 text-end"
+        >
+          Update
+        </Button>
+      </form>
+    </div>
+  );
 }
 
 export default ProjectInfos;

@@ -122,6 +122,8 @@ function App() {
               <Route index element={<EmployerHome />} />
 
               <Route path="profile" element={<ProfileView />} />
+              <Route path="edit/profile" element={<EmployeeProfile />} />
+              <Route path="edit/profile/company" element={<CompanyProfile />} />
               <Route path="job/:jobId" element={<JobView />} />
               <Route path="profile/:profileId" element={<ProfileView />} />
               <Route path="requests" element={<RequestsView />} />

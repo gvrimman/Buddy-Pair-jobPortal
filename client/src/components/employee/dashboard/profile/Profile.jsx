@@ -7,7 +7,7 @@ import ProjectInfos from "./ProjectInfos";
 
 function Profile() {
   return (
-    <div className="grid gap-5">
+    <div className="grid gap-5 max-w-[900px] w-full">
       <PersonalInfos />
       <EducationInfos />
       {/* <CertificateInfos /> */}

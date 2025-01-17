@@ -1,5 +1,5 @@
 import React, { useState } from "react";
-import { NavLink, useNavigate, Link } from "react-router-dom";
+import { NavLink, useNavigate, Link, useLocation } from "react-router-dom";
 import { RiLogoutCircleLine, RiLoginCircleLine } from "react-icons/ri";
 import { MdArrowDropDown, MdArrowDropUp } from "react-icons/md";
 import { useSelector, useDispatch } from "react-redux";
@@ -8,6 +8,7 @@ import { clearUser } from "../Redux/reducers/userReducer";
 function RightSide() {
   const dispatch = useDispatch();
   const navigate = useNavigate();
+  const location = useLocation();
   const { userInfo } = useSelector((state) => state.user);
   const [showPolicySubMenu, setShowPolicySubMenu] = useState(false);
   // side bar links
@@ -63,6 +64,7 @@ function RightSide() {
 
   const logout = () => {
     dispatch(clearUser());
+    localStorage.setItem("redirectPath", location.pathname + location.search);
     navigate("/");
   };
 

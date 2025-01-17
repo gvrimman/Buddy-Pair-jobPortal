@@ -1,7 +1,7 @@
 import React, { useEffect, useState } from "react";
 import { HiMenuAlt1 } from "react-icons/hi";
 import { BsBell } from "react-icons/bs";
-import { NavLink, useNavigate, Link } from "react-router-dom";
+import { NavLink, useNavigate, Link, useLocation } from "react-router-dom";
 import { useSelector, useDispatch } from "react-redux";
 import { clearUser } from "../Redux/reducers/userReducer";
 import { RiLogoutCircleLine, RiLoginCircleLine } from "react-icons/ri";
@@ -86,6 +86,7 @@ const LeftLinks = [
 function TopNav() {
   const dispatch = useDispatch();
   const navigate = useNavigate();
+  const location = useLocation();
   const { userInfo } = useSelector((state) => state.user);
   const [show, setShow] = useState(false);
   const [leftShow, setLeftShow] = useState(false);
@@ -94,6 +95,7 @@ function TopNav() {
 
   const logout = () => {
     dispatch(clearUser());
+    localStorage.setItem("redirectPath", location.pathname + location.search);
     navigate("/");
   };
 

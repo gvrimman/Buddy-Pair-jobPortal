@@ -61,11 +61,11 @@ function PersonalInfos() {
 
 	return (
 		<div className="grid bg-white mx-2 p-4 rounded-md shadow">
-			<h2 className="py-2 text-lg tracking-wide font-semibold">
+			<h2 className="py-2 text-xl text-purple-500 tracking-wide font-semibold">
 				My Profile
 			</h2>
 			<form onSubmit={handleSubmit(onSubmit)}>
-				<div className=" rounded-full w-20 sm:w-24 aspect-square overflow-hidden mx-auto mb-8 relative">
+				<div className="rounded-full border border-purple-500 border-spacing-2 w-20 sm:w-24 aspect-square overflow-hidden mx-auto mb-8 relative">
 					<div className="absolute top-1/2 -translate-y-1/2 cursor-pointer opacity-0 scale-150">
 						<TextInput
 							type={"file"}
@@ -82,7 +82,7 @@ function PersonalInfos() {
 						}
 						alt=""
 						loading="lazy"
-						className="w-full h-full object-contain"
+						className="w-full h-full object-cover"
 					/>
 				</div>
 				<div className="mt-5 grid lg:grid-cols-2 gap-3 mb-3">
@@ -129,7 +129,7 @@ function PersonalInfos() {
 					registering={register("about")}
 					errors={errors.about}
 				/>
-				<Button type="submit" className="w-fit mt-3 text-end">
+				<Button type="submit" className="bg-purple-500 hover:bg-purple-400 w-fit mt-3 text-end">
 					Update
 				</Button>
 			</form>

@@ -1,32 +1,34 @@
 import React, { useEffect } from "react";
 import { Button } from "@material-tailwind/react";
-import { useParams } from "react-router-dom";
+import { Link, useParams } from "react-router-dom";
 import { useSelector, useDispatch } from "react-redux";
-import { FaUserPlus } from "react-icons/fa6";
+import { FaUserPlus, FaLink } from "react-icons/fa6";
+import { FaUserEdit } from "react-icons/fa";
+import { BiSolidBusiness } from "react-icons/bi";
 import { getProfileById } from "../../apis/employeeApi";
 import { TbLoader2 } from "react-icons/tb";
 
 function Container({ children }) {
-	return (
-		<div className="rounded-md shadow-md border py-2 px-2 text-gray-700 text-sm my-2">
-			{children}
-		</div>
-	);
+  return (
+    <div className="rounded-md shadow-md border py-2 px-2 text-gray-700 text-sm my-2">
+      {children}
+    </div>
+  );
 }
 
 function ProfileView() {
-	const { userInfo } = useSelector((state) => state.user);
-	const { profile, isLoading } = useSelector((state) => state.employee);
-	const { profileId } = useParams();
-	const dispatch = useDispatch();
+  const { userInfo } = useSelector((state) => state.user);
+  const { profile, isLoading } = useSelector((state) => state.employee);
+  const { profileId } = useParams();
+  const dispatch = useDispatch();
 
-	console.log("profile: ", profile);
+  const isOwnProfile = Boolean(!profileId);
 
-	useEffect(() => {
-		dispatch(getProfileById(profileId ? profileId : userInfo._id));
-	}, [profileId, dispatch]);
+  useEffect(() => {
+    dispatch(getProfileById(profileId ? profileId : userInfo._id));
+  }, [profileId, dispatch]);
 
-	return (
+  return (
     <div className="max-w-[900px] w-full">
       <Container>
         <div
@@ -53,10 +55,24 @@ function ProfileView() {
               alt=""
             />
           </div>
-
-          <Button className="text-2xl text-purple-800 w-fit bg-transparent shadow-none hover:shadow-none">
-            <FaUserPlus />
-          </Button>
+          <div className="flex gap">
+            <Button className="text-2xl p-2 text-purple-800 w-fit bg-transparent shadow-none hover:shadow-none">
+              <FaUserPlus />
+            </Button>
+            {isOwnProfile && (
+              <>
+                <Link title="Edit Profile" to={"../edit/profile"} className="text-2xl p-2 text-purple-800 w-fit bg-transparent shadow-none hover:shadow-none">
+                  <FaUserEdit />
+                </Link>
+                <Link title="Edit Company Profile" to={"../edit/profile/company"} className="text-2xl p-2 text-purple-800 w-fit bg-transparent shadow-none hover:shadow-none">
+                  <BiSolidBusiness />
+                </Link>
+                <Link title="Referral Program" to={"referral"} className="text-2xl p-2 text-purple-800 w-fit bg-transparent shadow-none hover:shadow-none">
+                  <FaLink />
+                </Link>
+              </>
+            )}
+          </div>
         </div>
         <div className="flex gap-2 items-center mb-1">
           <h4 className="font-semibold text-md">{profile?.username}</h4>

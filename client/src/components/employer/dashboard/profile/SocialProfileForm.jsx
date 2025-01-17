@@ -33,26 +33,29 @@ function SocialProfileForm() {
 	};
 
 	return (
-		<div className="grid bg-white mx-2 p-4 rounded-md shadow">
-			<h2 className="py-2 text-lg tracking-wide font-semibold">
-				Social Network
-			</h2>
-			<form onSubmit={handleSubmit(onSubmit)}>
-				<div className="mt-4 grid lg:grid-cols-2 gap-3">
-					<TextInput
-						type={"text"}
-						label={"LinkedIn"}
-						registering={register("companyLinkedin")}
-						errors={errors.companyLinkedin}
-						value={userInfo?.apps?.jobPortal?.companyLinkedin}
-					/>
-				</div>
-				<Button type="submit" className="my-3 w-fit">
-					update
-				</Button>
-			</form>
-		</div>
-	);
+    <div className="grid bg-white mx-2 p-4 rounded-md shadow">
+      <h2 className="py-2 text-xl text-purple-500 tracking-wide font-semibold">
+        Social Network
+      </h2>
+      <form onSubmit={handleSubmit(onSubmit)}>
+        <div className="mt-4 grid lg:grid-cols-2 gap-3">
+          <TextInput
+            type={"text"}
+            label={"LinkedIn"}
+            registering={register("companyLinkedin")}
+            errors={errors.companyLinkedin}
+            value={userInfo?.apps?.jobPortal?.companyLinkedin}
+          />
+        </div>
+        <Button
+          type="submit"
+          className="bg-purple-500 hover:bg-purple-400 my-3 w-fit"
+        >
+          update
+        </Button>
+      </form>
+    </div>
+  );
 }
 
 export default SocialProfileForm;

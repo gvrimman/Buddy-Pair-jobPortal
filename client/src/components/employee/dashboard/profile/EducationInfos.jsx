@@ -34,42 +34,45 @@ function EducationInfos() {
 		};
 
 	return (
-		<div className="grid bg-white mx-2 p-4 rounded-md shadow">
-			<h2 className="py-2 text-lg tracking-wide font-semibold">
-				My Education
-			</h2>
-			<form onSubmit={handleSubmit(onSubmit)}>
-				<div className="mt-5 grid lg:grid-cols-2 gap-3">
-					<SelectInput
-						label={"Qualification"}
-						options={qualificationOptions}
-						name={"qualification"}
-						control={control}
-						errors={errors.qualification}
-						value={userInfo?.apps?.jobPortal?.qualification}
-					/>
-					<TextInput
-						label={"Education Institution"}
-						type={"text"}
-						value={userInfo?.apps?.jobPortal?.educationInstitute}
-						registering={register("educationInstitute")}
-						errors={errors.educationInstitute}
-					/>
-					<SelectInput
-						label={"Education Type"}
-						options={educationType}
-						name={"educationType"}
-						control={control}
-						errors={errors.educationType}
-						value={userInfo?.apps?.jobPortal?.educationType}
-					/>
-				</div>
-				<Button type="submit" className="w-fit mt-3 text-end">
-					Update
-				</Button>
-			</form>
-		</div>
-	);
+    <div className="grid bg-white mx-2 p-4 rounded-md shadow">
+      <h2 className="py-2 text-xl text-purple-500 tracking-wide font-semibold">
+        My Education
+      </h2>
+      <form onSubmit={handleSubmit(onSubmit)}>
+        <div className="mt-5 grid lg:grid-cols-2 gap-3">
+          <SelectInput
+            label={"Qualification"}
+            options={qualificationOptions}
+            name={"qualification"}
+            control={control}
+            errors={errors.qualification}
+            value={userInfo?.apps?.jobPortal?.qualification}
+          />
+          <TextInput
+            label={"Education Institution"}
+            type={"text"}
+            value={userInfo?.apps?.jobPortal?.educationInstitute}
+            registering={register("educationInstitute")}
+            errors={errors.educationInstitute}
+          />
+          <SelectInput
+            label={"Education Type"}
+            options={educationType}
+            name={"educationType"}
+            control={control}
+            errors={errors.educationType}
+            value={userInfo?.apps?.jobPortal?.educationType}
+          />
+        </div>
+        <Button
+          type="submit"
+          className="bg-purple-500 hover:bg-purple-400 w-fit mt-3 text-end"
+        >
+          Update
+        </Button>
+      </form>
+    </div>
+  );
 }
 
 export default EducationInfos;
