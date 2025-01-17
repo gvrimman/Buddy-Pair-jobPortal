@@ -2,12 +2,12 @@
 import { Input, Tooltip } from "@material-tailwind/react";
 import { PiExclamationMarkBold } from "react-icons/pi";
 
-function TextInput({ type, label, registering, errors, value }) {
+function TextInput({ type, label, registering, errors, value, ...rest }) {
 
 
 	return (
 		<div className="relative">
-			<Input type={type} size="" label={label} defaultValue={value} {...registering} />
+			<Input type={type} label={label} defaultValue={value} {...registering} {...rest}/>
 			{errors && (
 				<Tooltip
 					content={errors?.message}

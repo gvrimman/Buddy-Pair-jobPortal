@@ -156,9 +156,9 @@ function TopNav() {
         <>
           <div
             onClick={() => setShow(false)}
-            className="fixed backdrop-blur inset-0"
+            className="fixed inset-0 bg-transparent backdrop-blur-sm"
           />
-          <div className="absolute right-0 left-10 top-0 bg-gradient-to-t from-purple-100 to-purple-200 p-4 rounded-lg drop-shadow">
+          <div className="absolute right-0 left-10 top-0 bg-purple-400 bg-opacity-50 p-4 rounded-lg shadow-lg">
             <div className="flex items-center gap-3 relative">
               {userInfo && (
                 <div className="w-14 border-pink-400 border-[3px] overflow-hidden aspect-square rounded-full">
@@ -277,9 +277,9 @@ function TopNav() {
         <>
           <div
             onClick={() => setLeftShow(false)}
-            className="fixed backdrop-blur inset-0"
+            className="fixed inset-0 bg-transparent backdrop-blur-sm"
           />
-          <div className="absolute right-10 left-0 top-0 bg-gradient-to-t from-purple-100 to-purple-200 p-4 rounded-lg drop-shadow">
+          <div className="absolute right-10 w-3/4 left-0 top-0 bg-purple-400 bg-opacity-50 p-4 rounded-lg shadow-lg">
             <span
               onClick={() => setLeftShow(false)}
               className="absolute right-3 top-3 text-purple-900 text-2xl"

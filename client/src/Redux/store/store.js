@@ -14,32 +14,13 @@ const userPersistConfig = {
 	storage,
 };
 
-const employerPersistConfig = {
-	key: "employer",
-	storage,
-};
-
-const employeePersistConfig = {
-	key: "employee",
-	storage,
-};
-
 const persistedUserReducer = persistReducer(userPersistConfig, userReducer);
-const persistedEmployerReducer = persistReducer(
-	employerPersistConfig,
-	employerReducer
-);
-const persistedEmployeeReducer = persistReducer(
-	employeePersistConfig,
-	employeeReducer
-);
-
 
 const store = configureStore({
 	reducer: {
 		user: persistedUserReducer,
-		employer: persistedEmployerReducer,
-		employee: persistedEmployeeReducer,
+		employer: employerReducer,
+		employee: employeeReducer,
 		chat: chatReducer,
 		socket: socketReducer,
 		notification: notificationReducer

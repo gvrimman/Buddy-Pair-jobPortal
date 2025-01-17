@@ -44,7 +44,7 @@ function SearchBar() {
 	return (
 		<div className="flex items-center gap-4 w-full">
 			<button
-				className="lg:hidden text-3xl text-slate-600"
+				className="lg:hidden text-purple-500 bg-white text-3xl text-slate-600"
 				onClick={() => navigate(-1)}>
 				<FaCircleChevronLeft />
 			</button>

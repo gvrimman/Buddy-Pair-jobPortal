@@ -158,6 +158,7 @@ function ExperienceInfos() {
               label={"Update Resume"}
               registering={register("resume")}
               errors={errors["resume"]}
+              accept="application/pdf"
             />
             {userInfo?.apps?.jobPortal?.resume ? (
               <a href={userInfo?.apps?.jobPortal?.resume}>

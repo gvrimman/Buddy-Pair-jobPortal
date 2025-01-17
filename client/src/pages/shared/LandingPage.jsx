@@ -19,7 +19,7 @@ function LandingPage() {
 							})
 						}
 						key={index}
-						className={`flex items-center gap-3 border-2 bg-customViolet px-4 py-4 rounded-lg transition-all ease-in-out duration-700 hover:scale-105 cursor-pointer ${
+						className={`flex items-center gap-3 border-2 bg-purple-500 px-4 py-4 rounded-lg transition-all ease-in-out duration-700 hover:scale-105 cursor-pointer ${
 							index === apps.length - 1 && apps.length % 2 !== 0
 								? "lg:mx-auto lg:col-span-2 "
 								: ""

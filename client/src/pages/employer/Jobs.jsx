@@ -54,142 +54,148 @@ function Jobs() {
 		setJobFormShow(false);
 	};
 
-	console.log(hasMore);
 	return (
 		<div className="max-w-[900px] w-full relative">
 			<div className="flex items-center justify-between my-3 mx-2">
-				<h5 className="font-semibold text-xl text-purple-500">
-					Posted Jobs
-				</h5>
-				<Button className="text-white bg-purple-500 hover:bg-purple-600" onClick={() => setJobFormShow(true)}>Post a Job</Button>
+				<h5 className="font-semibold text-xl text-purple-500">Posted Jobs</h5>
+				<Button
+				className="text-white bg-purple-500 hover:bg-purple-600"
+				onClick={() => setJobFormShow(true)}
+				>
+				Post a Job
+				</Button>
 			</div>
 
 			{/* job post form start */}
 			<div
 				className={`absolute inset-0 backdrop-blur ${
-					jobFormShow ? "block" : "hidden"
-				}`}></div>
+				jobFormShow ? "block" : "hidden"
+				}`}
+			></div>
 			<div
 				className={`absolute w-full pb-20 top-0 bg-white border-2 shadow rounded-lg p-3 ${
-					jobFormShow ? "block" : "hidden"
-				}`}>
+				jobFormShow ? "block" : "hidden"
+				}`}
+			>
 				<form onSubmit={handleSubmit(onSubmit)}>
-					<h4 className="text-center text-lg font-semibold mb-3">
-						Post a New Job
-					</h4>
-					<div className=" flex flex-col gap-3">
-						<TextInput
-							label={"Job Title"}
-							type={"text"}
-							placeText={"Title"}
-							registering={register("jobTitle")}
-							errors={errors.jobTitle}
-						/>
-						<TextAreaInput
-							label={"Job Description"}
-							type={"text"}
-							placeText={""}
-							registering={register("jobDescription")}
-							errors={errors.jobDescription}
-						/>
-					</div>
-					<div className="my-2 md:mb-3">
-						<MultiSelect
-							name={"skills"}
-							control={control}
-							options={skillOptions}
-							placeholder={"Select required skills"}
-							registering={register("skills")}
-							errors={errors["skills"]}
-						/>
-					</div>
-					<div className="mt-3 grid lg:grid-cols-2 gap-4">
-						<SelectInput
-							label={"Industry"}
-							options={industyTypeOptions}
-							name={"industry"}
-							control={control}
-							errors={errors.industry}
-						/>
-						<SelectInput
-							label={"Job Type"}
-							options={jobTypes}
-							name={"jobType"}
-							control={control}
-							errors={errors.jobType}
-						/>
-						<SelectInput
-							label={"Employment Type"}
-							name={"employmentType"}
-							options={preferredJobType}
-							control={control}
-							errors={errors.employmentType}
-						/>
-						<SelectInput
-							label={"Experience"}
-							name={"experience"}
-							options={experienceData}
-							control={control}
-							errors={errors.experience}
-						/>
+				<h4 className="text-center text-lg font-semibold mb-3">
+					Post a New Job
+				</h4>
+				<div className=" flex flex-col gap-3">
+					<TextInput
+					label={"Job Title"}
+					type={"text"}
+					placeText={"Title"}
+					registering={register("jobTitle")}
+					errors={errors.jobTitle}
+					/>
+					<TextAreaInput
+					label={"Job Description"}
+					type={"text"}
+					placeText={""}
+					registering={register("jobDescription")}
+					errors={errors.jobDescription}
+					/>
+				</div>
+				<div className="my-2 md:mb-3">
+					<MultiSelect
+					name={"skills"}
+					control={control}
+					options={skillOptions}
+					placeholder={"Select required skills"}
+					registering={register("skills")}
+					errors={errors["skills"]}
+					/>
+				</div>
+				<div className="mt-3 grid lg:grid-cols-2 gap-4">
+					<SelectInput
+					label={"Industry"}
+					options={industyTypeOptions}
+					name={"industry"}
+					control={control}
+					errors={errors.industry}
+					/>
+					<SelectInput
+					label={"Job Type"}
+					options={jobTypes}
+					name={"jobType"}
+					control={control}
+					errors={errors.jobType}
+					/>
+					<SelectInput
+					label={"Employment Type"}
+					name={"employmentType"}
+					options={preferredJobType}
+					control={control}
+					errors={errors.employmentType}
+					/>
+					<SelectInput
+					label={"Experience"}
+					name={"experience"}
+					options={experienceData}
+					control={control}
+					errors={errors.experience}
+					/>
 
-						<SelectInput
-							label={"Qualification"}
-							options={qualificationOptions}
-							name={"qualification"}
-							control={control}
-							errors={errors.qualification}
-						/>
-						<SelectInput
-							label={"Preferred Candidate Gender"}
-							name={"candidateGender"}
-							options={genderOptions}
-							control={control}
-							errors={errors.candidateGender}
-						/>
-						<SelectInput
-							label={"Location"}
-							options={categoryData}
-							name={"jobLocation"}
-							control={control}
-							errors={errors.jobLocation}
-						/>
-						<TextInput
-							label={"Offered Salary"}
-							type={"number"}
-							placeText={"Rs. 25000"}
-							registering={register("offeredSalary")}
-							errors={errors.offeredSalary}
-						/>
-						<TextInput
-							label={"Application Deadline Date"}
-							type={"date"}
-							placeText={"20-04-2024"}
-							registering={register("deadline")}
-							errors={errors.deadline}
-						/>
-						<div className="lg:col-span-2">
-							<TextInput
-								label={"Job Place"}
-								type={"text"}
-								placeText={
-									"S 107, 4th Floor Monlash Business Centre Crescens Tower, South Kalamassery, Kochi, Kerala 682033, India"
-								}
-								registering={register("jobPlace")}
-								errors={errors.jobPlace}
-							/>
-						</div>
+					<SelectInput
+					label={"Qualification"}
+					options={qualificationOptions}
+					name={"qualification"}
+					control={control}
+					errors={errors.qualification}
+					/>
+					<SelectInput
+					label={"Preferred Candidate Gender"}
+					name={"candidateGender"}
+					options={genderOptions}
+					control={control}
+					errors={errors.candidateGender}
+					/>
+					<SelectInput
+					label={"Location"}
+					options={categoryData}
+					name={"jobLocation"}
+					control={control}
+					errors={errors.jobLocation}
+					/>
+					<TextInput
+					label={"Offered Salary"}
+					type={"number"}
+					placeText={"Rs. 25000"}
+					registering={register("offeredSalary")}
+					errors={errors.offeredSalary}
+					/>
+					<TextInput
+					label={"Application Deadline Date"}
+					type={"date"}
+					placeText={"20-04-2024"}
+					registering={register("deadline")}
+					errors={errors.deadline}
+					/>
+					<div className="lg:col-span-2">
+					<TextInput
+						label={"Job Place"}
+						type={"text"}
+						placeText={
+						"S 107, 4th Floor Monlash Business Centre Crescens Tower, South Kalamassery, Kochi, Kerala 682033, India"
+						}
+						registering={register("jobPlace")}
+						errors={errors.jobPlace}
+					/>
 					</div>
-					<div className="flex items-center justify-between mt-4">
-						<Button
-							onClick={() => setJobFormShow(false)}
-							className="bg-red-800">
-							close
-						</Button>
-						<Button type="submit" className="">
-							Post
-						</Button>
-					</div>
+				</div>
+				<div className="flex items-center justify-between mt-4">
+					<Button
+					onClick={() => setJobFormShow(false)}
+					type="button"
+					className="bg-purple-500 hover:bg-red-800"
+					>
+					close
+					</Button>
+					<Button type="submit" className="bg-purple-500 hover:bg-purple-600">
+					Post
+					</Button>
+				</div>
 				</form>
 			</div>
 			{/* job post form end */}
@@ -200,22 +206,19 @@ function Jobs() {
 				dataLength={jobs?.length}
 				next={fetchMoreData}
 				hasMore={hasMore}
-				loader={
-					<h4 className="text-center font-semibold">Loading...</h4>
-				}
+				loader={<h4 className="text-center font-semibold">Loading...</h4>}
 				endMessage={
-					<p className="text-center font-semibold mt-5">
-						"No more jobs"
-					</p>
-				}>
+				<p className="text-center font-semibold mt-5">"No more jobs"</p>
+				}
+			>
 				<div className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-3 gap-4 py-5">
-					{jobs.map((job, i) => (
-						<JobCard key={i} data={job} />
-					))}
+				{jobs.map((job, i) => (
+					<JobCard key={i} data={job} />
+				))}
 				</div>
 			</InfiniteScroll>
 		</div>
-	);
+  );
 }
 
 export default Jobs;

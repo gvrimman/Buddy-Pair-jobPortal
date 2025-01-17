@@ -1,5 +1,6 @@
 import React, { useState, useEffect } from "react";
 import { useDispatch, useSelector } from "react-redux";
+import { useNavigate } from "react-router-dom";
 import InfiniteScroll from "react-infinite-scroll-component";
 import { getAppiedJobs, deleteAAppiedJob } from "../../apis/employeeApi";
 import { GrFormView } from "react-icons/gr";
@@ -12,6 +13,7 @@ function RequestsView() {
   );
   const [activeTab, setActiveTab] = useState(0);
   const dispatch = useDispatch();
+  const navigate = useNavigate();
   const [currentPage, setCurrentPage] = useState(1);
 
   useEffect(() => {
@@ -59,7 +61,7 @@ function RequestsView() {
         <InfiniteScroll
           dataLength={appliedJobs?.length}
           next={fetchMoreData}
-          hasMore={pagination.hasNext}
+          hasMore={pagination?.hasNext}
           loader={<h4>Loading...</h4>}
           endMessage={
             <p className="text-center font-semibold mt-5">No more requests</p>

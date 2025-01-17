@@ -1,23 +1,23 @@
 const express = require("express");
 const { upload } = require("../middlewares/multer");
 
-const { verifyJwt, authorize } = require("../middlewares/jwtAuth");
+const { verifyJwt } = require("../middlewares/jwtAuth");
 const {
-	signup,
-	employerSignup,
-	employeeSignup,
-	login,
-	updateProfileInfo,
-	updatePassword,
-	renewalOfAccessToken,
-	logout,
-	updateEmployerProfileInfo,
-	forgotPassword,
-	resetPassword,
+  signup,
+  employerSignup,
+  employeeSignup,
+  login,
+  updateProfileInfo,
+  updatePassword,
+  renewalOfAccessToken,
+  logout,
+  updateEmployerProfileInfo,
+  forgotPassword,
+  resetPassword,
 } = require("../controllers/auth/authController");
 const {
-	googleAuth,
-	googleAuthCallback,
+  googleAuth,
+  googleAuthCallback,
 } = require("../controllers/auth/googleAuth");
 
 const router = express.Router();
@@ -29,21 +29,21 @@ router.route("/refresh-token").post(renewalOfAccessToken);
 router.route("/signup").post(signup);
 
 router.route("/employee-signup").post(
-	upload.fields([
-		{ name: "resume", maxCount: 1 },
-		{ name: "profileImage", maxCount: 1 },
-	]),
-	verifyJwt,
-	employeeSignup
+  upload.fields([
+    { name: "resume", maxCount: 1 },
+    { name: "profileImage", maxCount: 1 },
+  ]),
+  verifyJwt,
+  employeeSignup
 );
 
 router.route("/employer-signup").post(
-	upload.fields([
-		{ name: "profileImage", maxCount: 1 },
-		{ name: "companyLogo", maxCount: 1 },
-	]),
-	verifyJwt,
-	employerSignup
+  upload.fields([
+    { name: "profileImage", maxCount: 1 },
+    { name: "companyLogo", maxCount: 1 },
+  ]),
+  verifyJwt,
+  employerSignup
 );
 
 // user sign in
@@ -51,30 +51,28 @@ router.route("/login").post(login);
 
 // update user profile [employee]
 router.route("/update-profile").put(
-	verifyJwt,
-	upload.any([
-		{ name: "resume", maxCount: 1 },
-		{ name: "profileImage", maxCount: 1 },
-	]),
-	authorize("employee"),
-	updateProfileInfo
+  verifyJwt,
+  upload.any([
+    { name: "resume", maxCount: 1 },
+    { name: "profileImage", maxCount: 1 },
+  ]),
+  updateProfileInfo
 );
 
 // update user profile [employer]
 router
-	.route("/update-employer-profile")
-	.put(
-		verifyJwt,
-		upload.any({ name: "profileImage", maxCount: 1 }),
-		authorize("employer"),
-		updateEmployerProfileInfo
-	);
+  .route("/update-employer-profile")
+  .put(
+    verifyJwt,
+    upload.any({ name: "profileImage", maxCount: 1 }),
+    updateEmployerProfileInfo
+  );
 
 // user logout
 router.route("/logout").post(verifyJwt, logout);
 
 // update user password
-router.route("/password").put(verifyJwt, authorize("employee"), updatePassword);
+router.route("/password").put(verifyJwt, updatePassword);
 
 // forgot password
 router.route("/forgot-password").post(forgotPassword);

@@ -69,6 +69,7 @@ function ProfileForm() {
           <div className="absolute top-1/2 -translate-y-1/2 cursor-pointer opacity-0 scale-150">
             <TextInput
               type={"file"}
+              accept="image/*"
               label={"Company Logo"}
               registering={register("companyLogo")}
               errors={errors["companyLogo"]}

@@ -32,8 +32,6 @@ const Home = () => {
       dispatch(clearJobs());
       dispatch(fetchPreferedJobs(query));
     }
-    console.log("jobs: ", jobs);
-    console.log("profiles: ", profiles);
   };
 
   const fetchMoreData = () => {

@@ -15,8 +15,6 @@ function JobView() {
   const dispatch = useDispatch();
   const { sendNotifications } = useListenNotification();
 
-  console.log("job: ", job);
-
   const handleJobApplying = (userId, id) => {
     sendNotifications(
       userId,

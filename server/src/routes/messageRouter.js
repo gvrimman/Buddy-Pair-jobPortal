@@ -1,6 +1,6 @@
 const express = require("express");
 
-const { verifyJwt, authorize } = require("../middlewares/jwtAuth");
+const { verifyJwt } = require("../middlewares/jwtAuth");
 const {
   getMessages,
   sendMessage,
