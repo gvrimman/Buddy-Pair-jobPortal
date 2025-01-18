@@ -7,7 +7,7 @@ import SignUp from "../auth/SignUp";
 import SignIn from "../auth/SignIn";
 import EmployerInfo from "../auth/EmployerInfo";
 import JobDetails from "../auth/JobDetails";
-import UserInfo from "../auth/userInfo";
+import UserInfo from "../auth/UserInfo";
 import UserAdditionInfo from "../auth/UserAdditionInfo";
 import UserResume from "../auth/userResume";
 import { setUser } from "../../Redux/reducers/userReducer";
