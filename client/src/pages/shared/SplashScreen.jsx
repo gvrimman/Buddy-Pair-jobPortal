@@ -9,7 +9,7 @@ import EmployerInfo from "../auth/EmployerInfo";
 import JobDetails from "../auth/JobDetails";
 import UserInfo from "../auth/UserInfo";
 import UserAdditionInfo from "../auth/UserAdditionInfo";
-import UserResume from "../auth/userResume";
+import UserResume from "../auth/UserResume";
 import { setUser } from "../../Redux/reducers/userReducer";
 import { useDispatch } from "react-redux";
 import { showError } from "../../utils/toast";
