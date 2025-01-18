@@ -5,7 +5,7 @@ import QRCode from "qrcode";
 
 const ShareLink = ({ referralCode }) => {
   const [qrCodeUrl, setQrCodeUrl] = useState("");
-  const referralLink = `http://localhost:5173/job-portal/referral/?code=${referralCode}`;
+  const referralLink = `${import.meta.env.VITE_CLIENT_URL}/job-portal/referral/?code=${referralCode}`;
 
   const copyToClipboard = () => {
     navigator.clipboard.writeText(referralLink);
