@@ -2,6 +2,7 @@ import React, { lazy, Suspense, useEffect } from "react";
 import { useDispatch } from "react-redux";
 import verifyUser from "./utils/verifyAuth";
 import { Routes, Route } from "react-router-dom";
+import NotFound from "./pages/shared/NotFound";
 import ProtectedRoute from "./router/ProtectedRoute";
 import EmployeeMessages from "./pages/employee/dashboard/EmployeeMessages";
 import Messages from "./pages/employer/dashboard/Messages";
@@ -248,6 +249,7 @@ function App() {
 							/>
 						</Route>
 					</Route> */}
+					<Route path="*" element={<NotFound />} />
         </Routes>
       </Suspense>
     </div>
