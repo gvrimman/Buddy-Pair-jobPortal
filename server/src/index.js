@@ -106,6 +106,8 @@ process.on("uncaughtException", (err, origin) => {
   console.log("[uncaughtException]: ", origin, err);
 });
 
+app.set("trust proxy", true);
+
 // Makes the app to listen port
 dbConfig().then(() => {
 	server.listen(PORT, () => {
