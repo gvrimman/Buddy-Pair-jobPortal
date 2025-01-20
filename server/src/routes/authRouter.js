@@ -29,20 +29,20 @@ router.route("/refresh-token").post(renewalOfAccessToken);
 router.route("/signup").post(signup);
 
 router.route("/employee-signup").post(
+  verifyJwt,
   upload.fields([
     { name: "resume", maxCount: 1 },
     { name: "profileImage", maxCount: 1 },
   ]),
-  verifyJwt,
   employeeSignup
 );
 
 router.route("/employer-signup").post(
+  verifyJwt,
   upload.fields([
     { name: "profileImage", maxCount: 1 },
     { name: "companyLogo", maxCount: 1 },
   ]),
-  verifyJwt,
   employerSignup
 );
 
