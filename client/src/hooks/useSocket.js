@@ -15,45 +15,50 @@ export const useSocket = () => {
   const dispatch = useDispatch();
   const socket = useSelector(selectSocket);
   const onlineUsers = useSelector(selectOnlineUsers);
+  const { isAuthenticated } = useSelector((state) => state.user);
 
   useEffect(() => {
-    // Initialize socket connection using cookies for authentication
-    const newSocket = io(import.meta.env.VITE_API_URL, {
-      withCredentials: true,
-    });
+    if (isAuthenticated) {
+      // Initialize socket connection using cookies for authentication
+      const newSocket = io(import.meta.env.VITE_API_URL, {
+        withCredentials: true,
+      });
 
-    dispatch(setSocket(newSocket));
+      dispatch(setSocket(newSocket));
 
-    newSocket.on("connect", () => {
-      console.log("Connected to socket server");
-    });
+      newSocket.on("connect", () => {
+        console.log("Connected to socket server");
+      });
 
-    newSocket.on("getOnlineUsers", (users) => {
-      dispatch(setOnlineUsers(users));
-    });
+      newSocket.on("getOnlineUsers", (users) => {
+        dispatch(setOnlineUsers(users));
+      });
 
-    newSocket.on("connect_error", (error) => {
-      if (newSocket.active) {
-        console.log("[Server]: A temporary failure occoured. will reconnect.");
-      } else {
-        console.log("[Server]: An error occoured on connection ", error);
-      }
-    });
+      newSocket.on("connect_error", (error) => {
+        if (newSocket.active) {
+          console.log(
+            "[Server]: A temporary failure occoured. will reconnect."
+          );
+        } else {
+          console.log("[Server]: An error occoured on connection ", error);
+        }
+      });
 
-    newSocket.on("disconnect", (reason, details) => {
-      console.log("[Server]: Disconnected...!");
-      console.log("[Server]: reason: ", reason);
-    });
+      newSocket.on("disconnect", (reason, details) => {
+        console.log("[Server]: Disconnected...!");
+        console.log("[Server]: reason: ", reason);
+      });
 
-    // newSocket.onAny((eventname, ...args) => {
-    //   console.log(`[Server]: Event triggered: ${eventname} `, ...args);
-    // });
+      // newSocket.onAny((eventname, ...args) => {
+      //   console.log(`[Server]: Event triggered: ${eventname} `, ...args);
+      // });
 
-    return () => {
-      newSocket.close();
-      dispatch(resetSocket());
-    };
-  }, [dispatch]);
+      return () => {
+        newSocket.close();
+        dispatch(resetSocket());
+      };
+    }
+  }, [dispatch, isAuthenticated]);
 
   const markOneMessageAsRead = useCallback(
     (message, userLists, messages) => {

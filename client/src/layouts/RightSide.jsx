@@ -4,6 +4,9 @@ import { RiLogoutCircleLine, RiLoginCircleLine } from "react-icons/ri";
 import { MdArrowDropDown, MdArrowDropUp } from "react-icons/md";
 import { useSelector, useDispatch } from "react-redux";
 import { clearUser } from "../Redux/reducers/userReducer";
+import axiosInstance from "../utils/axios";
+import { persistor } from "../Redux/store/store";
+import { showError, showSuccess } from "../utils/toast";
 
 function RightSide() {
   const dispatch = useDispatch();
@@ -62,10 +65,17 @@ function RightSide() {
     },
   ];
 
-  const logout = () => {
-    dispatch(clearUser());
-    localStorage.setItem("redirectPath", location.pathname + location.search);
-    navigate("/");
+  const logout = async () => {
+    try {
+			const response = await axiosInstance.post("auth/logout");
+			showSuccess(response?.data?.message);
+			dispatch(clearUser());
+			persistor.purge();
+      localStorage.setItem("redirectPath", location.pathname + location.search);
+			navigate("/");
+		} catch (error) {
+			showError(error?.response?.data?.message);
+		}
   };
 
   return (

@@ -53,7 +53,7 @@ function ContactUs() {
         Alternatively, you can use the contact form below to send us a message
         directly.
       </p>
-      <ContactUs />
+      {/* <ContactUs /> */}
       <p className="text-xs leading-6 mb-4">
         We aim to respond to all inquiries within 24-48 hours.
       </p>

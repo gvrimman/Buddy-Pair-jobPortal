@@ -58,7 +58,7 @@ function UserAdditionInfo({
 		setTimeout(() => {
 			if (userData.role === "fresher") {
 				openUserResumeModal();
-			} else if (userData.role === "employee") {
+			} else {
 				openJobDetailsModal();
 			}
 		}, 300);

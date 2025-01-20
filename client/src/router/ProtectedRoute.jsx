@@ -11,7 +11,7 @@ function ProtectedRoute({ roles }) {
   // ) : (
   // 	<Navigate to="/" />
   // );
-  if(isAuthenticated) {
+  if(isAuthenticated && userInfo?.apps?.jobPortal) {
     return <Outlet />
   } else {
     localStorage.setItem("redirectPath", location.pathname + location.search);

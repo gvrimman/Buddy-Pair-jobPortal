@@ -73,9 +73,13 @@ const signup = asyncHandler(async (req, res) => {
 
 	const userExist = await User.findOne({ email: email });
 
-	if (userExist?.email === email) {
+	if (userExist) {
 		throw new ApiError(409, "Email already used, try another..");
-	} else if (userExist?.phone === contactNumber) {
+	} 
+
+	const userExistPh = await User.findOne({ phone: contactNumber });
+	
+	if(userExistPh) {
 		throw new ApiError(409, "Contact number already exists..");
 	}
 

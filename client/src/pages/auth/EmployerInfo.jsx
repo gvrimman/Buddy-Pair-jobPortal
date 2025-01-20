@@ -17,7 +17,7 @@ import { showError, showSuccess } from "../../utils/toast";
 import axiosInstance from "../../utils/axios";
 import { RiLoader4Line } from "react-icons/ri";
 
-function EmployerInfo({ userData, onClose }) {
+function EmployerInfo({ userData, onClose, tempUserData }) {
 	const [isLoading, setIsLoading] = useState(false);
 
 	const navigate = useNavigate();
@@ -30,6 +30,13 @@ function EmployerInfo({ userData, onClose }) {
 
 	// get img before submit
 	const prfImg = watch("profileImage");
+
+	const SkipHandler = () => {
+		dispatch(setUser(tempUserData));
+		setIsLoading(false);
+		onClose();
+		showSuccess("Success!");
+	};
 
 	const handleImagePreview = () => {
 		const file = prfImg && prfImg[0];
@@ -74,8 +81,7 @@ function EmployerInfo({ userData, onClose }) {
 			dispatch(setUser(response?.data?.data));
 			setIsLoading(false);
 			onClose();
-			navigate("/job-portal/employer");
-			showSuccess(response.data?.message);
+			showSuccess("Success!");
 		} catch (error) {
 			console.log(error);
 			setIsLoading(false);
@@ -184,9 +190,9 @@ function EmployerInfo({ userData, onClose }) {
 						)}
 					</Button>
 					<Button
-						onClick={() => navigate("/")}
+						onClick={SkipHandler}
 						className=" py-2 px-3 sm:py-3 sm:px-4 mx-1 bg-red-400">
-						Close
+						Skip
 					</Button>
 				</div>
 			</form>

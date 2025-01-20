@@ -10,7 +10,7 @@ import { setUser } from "../../Redux/reducers/userReducer";
 import TextInput from "../../components/common/TextInput";
 import { RiLoader4Line } from "react-icons/ri";
 
-function UserResume({ onClose, setUserData, userData }) {
+function UserResume({ onClose, setUserData, userData, openEmployerInfoModal }) {
 	const [isLoading, setIsLoading] = useState(false);
 	const navigate = useNavigate();
 	const dispatch = useDispatch();
@@ -48,16 +48,14 @@ function UserResume({ onClose, setUserData, userData }) {
 					},
 				}
 			);
-			dispatch(setUser(response?.data?.data));
+			if (userData.role === "employer") {
+				openEmployerInfoModal(response?.data?.data);
+			}else {
+				dispatch(setUser(response?.data?.data));
+				showSuccess("Success...!");
+			}
 			setIsLoading(false);
 			onClose();
-			const redirectPath = localStorage.getItem("redirectPath");
-
-			if (redirectPath) {
-				localStorage.removeItem("redirectPath");
-				navigate(redirectPath);
-			} else navigate("/job-portal");
-			showSuccess(response.data?.message);
 		} catch (error) {
 			setIsLoading(false);
 			console.log(error);
@@ -81,7 +79,7 @@ function UserResume({ onClose, setUserData, userData }) {
 			{pdfPreviewUrl && (
 				<div className="h-[50vh] overflow-hidden pdf-scroll">
 					<Worker
-						workerUrl={`https://unpkg.com/pdfjs-dist@3.4.120/build/pdf.worker.min.js`}>
+						workerUrl={`https://unpkg.com/pdfjs-dist@3.11.174/build/pdf.worker.min.js`}>
 						<Viewer
 							initialPage={0}
 							pageLayout={"single"}

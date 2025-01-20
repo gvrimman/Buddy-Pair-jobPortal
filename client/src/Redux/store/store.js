@@ -32,6 +32,7 @@ const store = configureStore({
 				ignoredActions: [
 					"persist/PERSIST",
 					"persist/REHYDRATE",
+					"persist/PURGE",
 					"socket/setSocket",
 				],
 				ignoredPaths: ["socket.socket"],

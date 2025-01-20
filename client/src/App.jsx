@@ -1,7 +1,7 @@
 import React, { lazy, Suspense, useEffect } from "react";
 import { useDispatch } from "react-redux";
 import verifyUser from "./utils/verifyAuth";
-import { Routes, Route } from "react-router-dom";
+import { Routes, Route, useLocation } from "react-router-dom";
 import NotFound from "./pages/shared/NotFound";
 import ProtectedRoute from "./router/ProtectedRoute";
 import EmployeeMessages from "./pages/employee/dashboard/EmployeeMessages";
@@ -93,10 +93,11 @@ function App() {
   //FetchCSRFToken();
 
   const dispatch = useDispatch();
+  const location = useLocation();
 
   useEffect(() => {
     // Verify user authentication on app load
-    verifyUser(dispatch);
+    verifyUser(dispatch, location);
   }, [dispatch]);
 
   return (

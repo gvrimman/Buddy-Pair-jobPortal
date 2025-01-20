@@ -1,8 +1,6 @@
 import React, { useEffect, useState } from "react";
-import { Link, useNavigate } from "react-router-dom";
-import { AiOutlineHome } from "react-icons/ai";
-import { FcGoogle, FcPhoneAndroid } from "react-icons/fc";
-import { useDispatch, useSelector } from "react-redux";
+import { Link } from "react-router-dom";
+import { useDispatch } from "react-redux";
 import { Button, Typography } from "@material-tailwind/react";
 import TextInput from "../../components/common/TextInput";
 import useFormHandler from "../../hooks/ReactHookForm/Index";
@@ -19,7 +17,6 @@ function SignIn({
 	openForgotPasswordModal,
 }) {
 	const [isLoading, setIsLoading] = useState(false);
-	const navigate = useNavigate();
 	const dispatch = useDispatch();
 	// validate inputs
 	const { register, handleSubmit, errors, reset } =
@@ -31,21 +28,17 @@ function SignIn({
 			const response = await axiosInstance.post("/auth/login", data);
 			const userData = response?.data?.data;
 			setIsLoading(false);
-			dispatch(setUser(response?.data?.data));
 			showSuccess(response?.data?.message);
 
 			// if user hasn't complete total registration redirect to user info modal
 			if (!userData?.apps?.jobPortal) {
 				setTimeout(() => {
+					dispatch(setUser(userData));
 					openUserInfoModal();
 				}, 300);
+			}else {
+				dispatch(setUser(userData));
 			}
-			const redirectPath = localStorage.getItem("redirectPath");
-
-			if (redirectPath) {
-				localStorage.removeItem("redirectPath");
-				navigate(redirectPath);
-			} else navigate("/job-portal");
 		} catch (error) {
 			setIsLoading(false);
 			console.error("Login Error:", error);
@@ -56,11 +49,6 @@ function SignIn({
 	return (
 		<div className=" flex flex-col gap-4 px-1 py-10">
 			<div className="relative text-center">
-				{/* <Link
-					to={"/"}
-					className="absolute -top-4 -left-1 border rounded-md p-1 bg-transparent text-2xl text-cyan-500 hover:text-blue-700 hover:border-blue-500 cursor-pointer">
-					<AiOutlineHome />
-				</Link> */}
 				<Typography variant="h4" color="blue-gray">
 					Login
 				</Typography>
@@ -84,11 +72,11 @@ function SignIn({
 						registering={register("password")}
 					/>
 
-					{/* <p
+					<p
 						onClick={() => openForgotPasswordModal()}
 						className="capitalize font-semibold text-xs md:text-sm cursor-pointer ">
 						forgot password?
-					</p> */}
+					</p>
 
 					<div className="flex gap-5 justify-end">
 						<Button
@@ -106,29 +94,6 @@ function SignIn({
 						<Button className="bg-red-600 text-xs">close</Button>
 					</div>
 				</div>
-
-				{/* <Button
-					disabled={isLoading}
-					type="submit"
-					className="bg-customViolet w-full py-2 md:py-3 rounded capitalize font-normal text-sm flex justify-center">
-					{isLoading ? (
-						<span>
-							<RiLoader4Line className="animate-spin text-xl" />
-						</span>
-					) : (
-						"Sign in"
-					)}
-				</Button> */}
-
-				{/* <p className="mt-2 subpixel-antialiased text-center text-sm font-semibold">
-					Don't have an account?
-					<span
-						className="cursor-pointer underline"
-						onClick={openSignUpModal}>
-						Sign Up
-					</span>
-				</p> */}
-
 				<Typography
 					color="gray"
 					className="mt-4 text-center font-normal">

@@ -4,6 +4,9 @@ import { BsBell } from "react-icons/bs";
 import { NavLink, useNavigate, Link, useLocation } from "react-router-dom";
 import { useSelector, useDispatch } from "react-redux";
 import { clearUser } from "../Redux/reducers/userReducer";
+import axiosInstance from "../utils/axios";
+import { persistor } from "../Redux/store/store";
+import { showError, showSuccess } from "../utils/toast";
 import { RiLogoutCircleLine, RiLoginCircleLine } from "react-icons/ri";
 import { IoMdCloseCircleOutline } from "react-icons/io";
 import { MdArrowDropDown, MdArrowDropUp } from "react-icons/md";
@@ -93,10 +96,17 @@ function TopNav() {
   const [hideNav, setHideNav] = useState(false);
   const [showPolicySubMenu, setShowPolicySubMenu] = useState(false);
 
-  const logout = () => {
-    dispatch(clearUser());
-    localStorage.setItem("redirectPath", location.pathname + location.search);
-    navigate("/");
+  const logout = async () => {
+    try {
+      const response = await axiosInstance.post("auth/logout");
+      showSuccess(response?.data?.message);
+      dispatch(clearUser());
+      persistor.purge();
+      localStorage.setItem("redirectPath", location.pathname + location.search);
+      navigate("/");
+    } catch (error) {
+      showError(error?.response?.data?.message);
+    }
   };
 
   useEffect(() => {

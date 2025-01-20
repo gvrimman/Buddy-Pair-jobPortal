@@ -187,11 +187,7 @@ function UserLocation({
 			}));
 			onClose();
 			setTimeout(() => {
-				if (userData.role === "employer") {
-					openEmployerInfoModal();
-				} else {
-					openUserAdditionInfoModal();
-				}
+				openUserAdditionInfoModal();
 			}, 300);
 		}
 	};

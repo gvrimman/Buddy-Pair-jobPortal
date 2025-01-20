@@ -1,5 +1,6 @@
 import React, { useEffect, useState } from "react";
 import { useLocation, useNavigate, useSearchParams } from "react-router-dom";
+import { useSelector } from "react-redux";
 import TitleRendering from "./TitleRendering";
 import DialogModal from "../../components/common/DialogModal";
 import UserLocation from "../auth/UserLocation";
@@ -19,11 +20,13 @@ import ResetPassword from "../auth/ResetPassword";
 function SplashScreen() {
 	const dispatch = useDispatch();
 	const navigate = useNavigate();
-	// ====================================================================
 	const location = useLocation().state;
+	const { isAuthenticated, userInfo } = useSelector((state) => state.user);
+	// ====================================================================
 	const [isTitleRender, setIsTitleRender] = useState(false);
 
 	const [userData, setUserData] = useState({});
+	const [userTempData, setUserTempData] = useState({});
 
 	const [isSignInModalOpen, setIsSignInModalOpen] = useState(false);
 	const [isSignUpModalOpen, setIsSignUpModalOpen] = useState(false);
@@ -45,13 +48,9 @@ function SplashScreen() {
 	// ====================================================================
 
 	const [searchParams] = useSearchParams();
-	const params = new URLSearchParams(window.location.search);
 
-	const modal = searchParams.get("modal");
-
-	const user = params.get("user");
-
-	const error = params.get("error");
+	const error = searchParams.get("error");
+	
 	if (error) {
 		// Display the error message to the user
 		showError(`Error: ${error}`);
@@ -61,38 +60,16 @@ function SplashScreen() {
 	}
 
 	useEffect(() => {
-		if (modal === "userinfo") {
-			setIsUserInfoModal(true);
-		}
-	}, [modal]);
-
-	if (user) {
-		const parsedUser = JSON.parse(decodeURIComponent(user));
-		dispatch(setUser(parsedUser));
-
-		// if user hasn't complete total registration redirect to user info modal
-		if (!parsedUser?.apps?.jobPortal) {
-			setTimeout(() => {
-				setIsUserInfoModal(true);
-			}, 300);
-		}
-		if (parsedUser?.apps?.jobPortal?.role === "employee") {
-			navigate("/job-portal/employee");
-		} else if (parsedUser?.apps?.jobPortal?.role === "employer") {
-			navigate("/job-portal/employer");
-		}
-	}
-
-	useEffect(() => {
 		if (location?.landValue) {
 			setIsTitleRender(true);
 
 			const timeout = setTimeout(() => {
 				setIsTitleRender(false);
-				setIsSignInModalOpen(true);
+				if (isAuthenticated && userInfo && !userInfo?.apps?.jobPortal) setIsUserInfoModal(true);
+          		else setIsSignInModalOpen(true);
 			}, 4000);
 			return () => clearTimeout(timeout);
-		}
+		}else navigate("/");
 	}, [location?.landValue]);
 
 	return (
@@ -239,6 +216,11 @@ function SplashScreen() {
 						isOpen={isUserResumeModalOpen}>
 						<UserResume
 							onClose={() => setIsUserResumeModalOpen(false)}
+							openEmployerInfoModal={(data) => {
+								setUserTempData(data);
+								setIsUserResumeModalOpen(false);
+								setIsEmployerInfoModalOpen(true);
+							}}
 							setUserData={setUserData}
 							userData={userData}
 						/>
@@ -252,6 +234,7 @@ function SplashScreen() {
 							onClose={() => setIsEmployerInfoModalOpen(false)}
 							setUserData={setUserData}
 							userData={userData}
+							tempUserData={userTempData}
 						/>
 					</DialogModal>
 

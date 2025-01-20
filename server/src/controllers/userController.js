@@ -189,8 +189,6 @@ const fetchMatchedJobs = asyncHandler(async (req, res) => {
     sortOrder.createdAt = 1;
   }
 
-  console.log(query);
-
   // total count of results
   const totalCount = await Job.countDocuments(query);
 
@@ -274,7 +272,7 @@ const fetchSimilarProfiles = asyncHandler(async (req, res) => {
   } = req.query;
 
   // Construct the query for similar profiles
-  const query = {};
+  const query = {_id: { $ne: jobPortalId}};
   if(name) {
     query.profession = { $regex: name, $options: "i" };
   }

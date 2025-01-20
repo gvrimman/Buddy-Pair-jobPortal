@@ -5,7 +5,7 @@ import { Navigate, Outlet } from "react-router-dom";
 function PublicRoute() {
   const { isAuthenticated, userInfo } = useSelector((state) => state.user);
 
-  if (isAuthenticated) {
+  if (isAuthenticated && userInfo?.apps?.jobPortal) {
     // const role = userInfo?.apps?.jobPortal?.role;
     // if (role === "employer") return <Navigate to="/job-portal/employer" />;
     // if (role === "employee") return <Navigate to="/job-portal/employee" />;

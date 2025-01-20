@@ -7,40 +7,43 @@ import { setChat, setUnreadMessages } from "../Redux/reducers/chatReducer";
 function useListenMessage() {
   const socket = useSelector((state) => state.socket.socket);
   const { chats, selectedUser } = useSelector((state) => state.chat);
+  const { isAuthenticated } = useSelector((state) => state.user);
   const dispatch = useDispatch();
 
   useEffect(() => {
-    //Sending Message:
-    socket?.on("newMessage", (newMessage) => {
-      newMessage.shouldShake = true;
-      const audio = new Audio(notificationSound);
-      audio.play();
-      console.log(
-        selectedUser.userId === newMessage.senderId,
-        selectedUser.userId,
-        newMessage.senderId,
-        newMessage.receiverId
-      );
-      const isChatOpen =
-        selectedUser.userId === newMessage.senderId ? true : false;
-      if (isChatOpen) {
-        dispatch(setChat(newMessage));
-      }
-    });
+    if (isAuthenticated) {
+      //Sending Message:
+      socket?.on("newMessage", (newMessage) => {
+        newMessage.shouldShake = true;
+        const audio = new Audio(notificationSound);
+        audio.play();
+        console.log(
+          selectedUser.userId === newMessage.senderId,
+          selectedUser.userId,
+          newMessage.senderId,
+          newMessage.receiverId
+        );
+        const isChatOpen =
+          selectedUser.userId === newMessage.senderId ? true : false;
+        if (isChatOpen) {
+          dispatch(setChat(newMessage));
+        }
+      });
 
-    // Setting Notification As Read or Unread:
-    socket?.on("getNotification", (res) => {
-      const isChatOpen = selectedUser?._id === res.senderId ? true : false;
-      if (!isChatOpen) {
-        dispatch(setUnreadMessages(res));
-      }
-    });
+      // Setting Notification As Read or Unread:
+      socket?.on("getNotification", (res) => {
+        const isChatOpen = selectedUser?._id === res.senderId ? true : false;
+        if (!isChatOpen) {
+          dispatch(setUnreadMessages(res));
+        }
+      });
 
-    return () => {
-      socket?.off("newMessage");
-      socket?.off("getNotification");
-    };
-  }, [socket, chats, selectedUser]);
+      return () => {
+        socket?.off("newMessage");
+        socket?.off("getNotification");
+      };
+    }
+  }, [socket, chats, selectedUser, isAuthenticated]);
 }
 
 export default useListenMessage;

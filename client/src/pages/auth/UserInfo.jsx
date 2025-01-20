@@ -27,6 +27,7 @@ import { useNavigate } from "react-router-dom";
 function UserInfo({ onClose, setUserData, openUserLocationModal }) {
 	const navigate = useNavigate();
 	const [previewSrc, setPreviewSrc] = useState(null);
+	const [imageErrorShown, setImageErrorShown] = useState(false);
 
 	// hook form validation
 	const { register, handleSubmit, errors, reset, control, watch } =
@@ -66,6 +67,11 @@ function UserInfo({ onClose, setUserData, openUserLocationModal }) {
 			? data.profileImage[0]
 			: null;
 
+		if(!imageErrorShown && !profileImageFile) {
+			setImageErrorShown(true);
+			showError("Please select your Profile Picture");
+      		return;
+		}
 		const dob = data.dob;
 		const gender = data.gender;
 		const qualification = data.qualification;
@@ -103,6 +109,7 @@ function UserInfo({ onClose, setUserData, openUserLocationModal }) {
 						<TextInput
 							type={"file"}
 							label={"ProfileImage"}
+							accept={"image/*"}
 							registering={register("profileImage")}
 							errors={errors["profileImage"]}
 						/>

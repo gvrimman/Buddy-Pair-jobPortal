@@ -13,7 +13,6 @@ function JobDetails({ setUserData, onClose, openUserResumeModal }) {
 		useFormHandler(jobValidation);
 
 	const onSubmit = (data) => {
-		console.log(data);
 		setUserData((prev) => ({ ...prev, jobDetails: data }));
 		onClose();
 		reset();
