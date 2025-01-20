@@ -34,9 +34,9 @@ app.use(express.urlencoded({ extended: true }));
 app.use(
 	cors({
 		origin: process.env.CLIENT_URL,
-		methods: "GET,POST,PUT,PATCH,DELETE,OPTIONS",
+		//methods: "GET,POST,PUT,PATCH,DELETE,OPTIONS",
 		credentials: true,
-		allowedHeaders: ["Content-Type", "Authorization", "x-csrf-token", "Accept"],
+		//allowedHeaders: ["Content-Type", "Authorization", "x-csrf-token", "Accept"],
 	})
 );
 if (process.env.NODE_ENV === "production") {
