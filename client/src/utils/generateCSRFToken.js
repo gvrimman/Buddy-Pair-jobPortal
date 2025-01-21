@@ -1,7 +1,6 @@
 import axios from "./axios";
 
 const FetchCSRFToken = async() => {
-    console.log("> Generating CSRF token...");
     try {
         await axios.get('csrf-token');
     } catch (error) {

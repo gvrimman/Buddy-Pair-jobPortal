@@ -13,6 +13,9 @@ const postJob = asyncHandler(async (req, res) => {
 	if (!employer) {
 		throw new ApiError(400, "employer not found");
 	}
+	if(!employer.companyEmail) {
+		throw new ApiError(400, "Complete company registration first to proceed");
+	}
 
 	const {
 		jobTitle,

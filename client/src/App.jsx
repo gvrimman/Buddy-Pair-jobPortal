@@ -90,7 +90,7 @@ const SingleEmployerCompany = lazy(() =>
 function App() {
   useSocket(); // Initializes the socket
   useListenNotification(); // Listens for notifications globally
-  //FetchCSRFToken();
+  FetchCSRFToken();
 
   const dispatch = useDispatch();
   const location = useLocation();
