@@ -38,6 +38,22 @@ const userSchema = new mongoose.Schema(
     },
     referrals: { type: Number, default: 0 }, // Total referrals count
     eligibleCourses: [String], // List of courses eligible for free
+    emailVerifyOtp: {
+      type: String,
+    },
+    emailVerifyExpire: {
+      type: Date,
+    },
+    emailVerified: {
+      type: Boolean,
+      default: false,
+    },
+    resetPasswordOtp: {
+      type: String,
+    },
+    resetPasswordExpire: {
+      type: Date,
+    },
   },
   { timestamps: true }
 );

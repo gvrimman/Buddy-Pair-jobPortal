@@ -1,10 +1,6 @@
 import React, { useEffect } from "react";
-import { Button } from "@material-tailwind/react";
 import { Link, useParams } from "react-router-dom";
 import { useSelector, useDispatch } from "react-redux";
-import { FaUserPlus, FaLink } from "react-icons/fa6";
-import { FaUserEdit } from "react-icons/fa";
-import { BiSolidBusiness } from "react-icons/bi";
 import { getProfileById } from "../../apis/employeeApi";
 import { TbLoader2 } from "react-icons/tb";
 
@@ -55,24 +51,6 @@ function ProfileView() {
               alt=""
             />
           </div>
-          <div className="flex gap">
-            <Button className="text-2xl p-2 text-purple-800 w-fit bg-transparent shadow-none hover:shadow-none">
-              <FaUserPlus />
-            </Button>
-            {isOwnProfile && (
-              <>
-                <Link title="Edit Profile" to={"../edit/profile"} className="text-2xl p-2 text-purple-800 w-fit bg-transparent shadow-none hover:shadow-none">
-                  <FaUserEdit />
-                </Link>
-                <Link title="Edit Company Profile" to={"../edit/profile/company"} className="text-2xl p-2 text-purple-800 w-fit bg-transparent shadow-none hover:shadow-none">
-                  <BiSolidBusiness />
-                </Link>
-                <Link title="Referral Program" to={"referral"} className="text-2xl p-2 text-purple-800 w-fit bg-transparent shadow-none hover:shadow-none">
-                  <FaLink />
-                </Link>
-              </>
-            )}
-          </div>
         </div>
         <div className="flex gap-2 items-center mb-1">
           <h4 className="font-semibold text-md">{profile?.username}</h4>
@@ -81,10 +59,39 @@ function ProfileView() {
             {profile?.apps?.jobPortal?.locationName}
           </h5>
         </div>
-        <p className="text-xs">{profile?.apps?.jobPortal?.profession[0]}</p>
         {/* <p className="text-xs my-2 font-medium px-2 rounded-xl bg-gray-300 text-gray-800 w-fit">
           2.5 Year
         </p> */}
+        <div className="flex justify-between items-center flex-wrap">
+          <p className="text-xs">{profile?.apps?.jobPortal?.profession[0]}</p>
+          <div className="flex items-center gap-2 ml-auto">
+            {isOwnProfile && (
+              <>
+                <Link
+                  title="Edit Profile"
+                  to={"../edit/profile"}
+                  className="text-xs text-nowrap text-purple-800 underline"
+                >
+                  Edit Profile
+                </Link>
+                <Link
+                  title="Edit Company Profile"
+                  to={"../edit/profile/company"}
+                  className="text-xs text-nowrap text-purple-800 underline"
+                >
+                  Edit Company Profile
+                </Link>
+                <Link
+                  title="Referral Program"
+                  to={"referral"}
+                  className="text-xs text-nowrap text-purple-800 underline"
+                >
+                  Referral Program
+                </Link>
+              </>
+            )}
+          </div>
+        </div>
       </Container>
       <Container>
         <h4 className="font-medium text-sm my-2">About</h4>

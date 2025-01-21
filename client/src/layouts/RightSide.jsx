@@ -79,7 +79,7 @@ function RightSide() {
   };
 
   return (
-    <div className="w-[20vw] p-3 rounded-lg bg-gradient-to-t from-purple-50 to-purple-100 hidden md:block h-screen sticky top-1">
+    <div className="w-[20vw] p-3 rounded-lg bg-white border-2 border-purple-500 hidden md:block h-screen sticky top-1">
       <div className="flex items-center gap-3">
         {userInfo && (
           <div className="w-14 border-pink-400 border-[3px] overflow-hidden aspect-square rounded-full">
@@ -110,14 +110,14 @@ function RightSide() {
           {Links.map((link, i) => (
             <li
               key={i}
-              className="font-semibold text-gray-600 my-1 hover:bg-purple-200 rounded-lg hover:text-white transition-all ease-in-out duration-300"
+              className="font-semibold text-gray-800 my-1 hover:bg-purple-200 rounded-lg hover:text-white transition-all ease-in-out duration-300"
             >
               <NavLink
                 end={true}
                 to={link?.link}
                 className={({ isActive }) =>
                   isActive
-                    ? " block p-2 bg-purple-500 text-white rounded-lg"
+                    ? "block p-2 bg-white border-2 border-purple-500 rounded-lg text-purple-500 hover:bg-purple-100"
                     : "block p-2"
                 }
               >
@@ -125,7 +125,7 @@ function RightSide() {
               </NavLink>
             </li>
           ))}
-          <li className="font-semibold text-gray-600 my-1 hover:bg-purple-200 rounded-lg hover:text-white transition-all ease-in-out duration-300">
+          <li className="font-semibold text-gray-800 my-1 hover:bg-purple-200 rounded-lg hover:text-white transition-all ease-in-out duration-300">
             <button
               className="w-full text-left block p-2 rounded-lg"
               onClick={() => setShowPolicySubMenu(!showPolicySubMenu)}
@@ -140,14 +140,14 @@ function RightSide() {
             SubMenuLinks.map((link, i) => (
               <li
                 key={i}
-                className="font-semibold ml-3 text-gray-600 my-1 hover:bg-purple-200 rounded-lg hover:text-white transition-all ease-in-out duration-300"
+                className="font-semibold ml-3 text-gray-800 my-1 hover:bg-purple-200 rounded-lg hover:text-white transition-all ease-in-out duration-300"
               >
                 <NavLink
                   end={true}
                   to={link?.link}
                   className={({ isActive }) =>
                     isActive
-                      ? " block p-2 bg-purple-500 text-white rounded-lg"
+                      ? "block p-2 bg-white border-2 border-purple-500 rounded-lg text-purple-500 hover:bg-purple-100"
                       : "block p-2"
                   }
                 >

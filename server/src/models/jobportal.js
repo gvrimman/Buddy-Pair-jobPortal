@@ -46,10 +46,10 @@ const jobPortalSchema = new mongoose.Schema(
       QuitReason: String,
       workExperience: String,
     },
-	preferenceStatus: {
-		type: Boolean,
-		default: false
-	},
+    preferenceStatus: {
+      type: Boolean,
+      default: false,
+    },
     preferences: {
       jobTitle: String,
       jobType: {
@@ -155,12 +155,6 @@ const jobPortalSchema = new mongoose.Schema(
     notifications: [
       { type: mongoose.Schema.Types.ObjectId, ref: "Notification" },
     ],
-    resetPasswordOtp: {
-      type: String,
-    },
-    resetPasswordExpire: {
-      type: Date,
-    },
   },
   { timestamps: true }
 );

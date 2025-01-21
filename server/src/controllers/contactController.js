@@ -1,18 +1,8 @@
 const ApiError = require("../utils/apiError");
 const ApiResponse = require("../utils/apiResponse");
 const asyncHandler = require("../utils/asyncHandler");
-const nodemailer = require("nodemailer");
+const SendMail = require("../config/mailer");
 const validator = require("validator");
-
-// Email configuration
-const transporter = nodemailer.createTransport({
-  host: process.env.EMAIL_HOST,
-  port: process.env.EMAIL_PORT,
-  auth: {
-    user: process.env.EMAIL_USER,
-    pass: process.env.EMAIL_PASSWORD,
-  },
-});
 
 const SendContactForm = asyncHandler(async (req, res) => {
   let { name, email, message } = req.body;
@@ -33,16 +23,16 @@ const SendContactForm = asyncHandler(async (req, res) => {
 
   try {
     // Send email to the owner
-    await transporter.sendMail({
-      from: process.env.EMAIL_USER,
+    await SendMail({
+      from: `"BuddyPair Jobs" <${process.env.EMAIL_USER}>`,
       to: process.env.OWNER_EMAIL,
       subject: `New Contact Form Submission from ${name}`,
       text: `Name: ${name}\nEmail: ${email}\nMessage: ${message}`,
     });
 
     // Send confirmation email to the sender
-    await transporter.sendMail({
-      from: process.env.EMAIL_USER,
+    await SendMail({
+      from: `"BuddyPair Jobs" <${process.env.EMAIL_USER}>`,
       to: email,
       subject: "Thank you for contacting us!",
       text: `Hi ${name},\n\nThank you for reaching out to us. We have received your message and will get back to you shortly.\n\nBest regards,\nBuddy Pair Team`,

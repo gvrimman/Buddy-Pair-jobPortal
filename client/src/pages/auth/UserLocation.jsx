@@ -5,7 +5,6 @@ import {
 	Marker,
 	useJsApiLoader,
 } from "@react-google-maps/api";
-import { useNavigate } from "react-router-dom";
 
 function UserLocation({
 	onClose,
@@ -13,8 +12,8 @@ function UserLocation({
 	userData,
 	openUserAdditionInfoModal,
 	openEmployerInfoModal,
+	goBack
 }) {
-	const navigate = useNavigate()
 	const { isLoaded } = useJsApiLoader({
 		id: "google-map-script",
 		googleMapsApiKey: import.meta.env.VITE_GOOGLE_MAPS_API_KEY,
@@ -187,7 +186,8 @@ function UserLocation({
 			}));
 			onClose();
 			setTimeout(() => {
-				openUserAdditionInfoModal();
+				if (userData.role === "employer") openEmployerInfoModal();
+				else openUserAdditionInfoModal();
 			}, 300);
 		}
 	};
@@ -253,14 +253,14 @@ function UserLocation({
 			</>
 			<div className="text-end">
 				<Button
-					onClick={handleSubmit}
-					className=" py-2 px-3 sm:py-3 sm:px-4 mx-1 ">
-					Next
+					onClick={goBack}
+					className=" py-2 px-3 sm:py-3 sm:px-4 mx-1">
+					Back
 				</Button>
 				<Button
-					onClick={() => navigate("/")}
+					onClick={handleSubmit}
 					className=" py-2 px-3 sm:py-3 sm:px-4 mx-1 bg-red-400">
-					Close
+					Next
 				</Button>
 			</div>
 		</div>

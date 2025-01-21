@@ -130,12 +130,15 @@ function TopNav() {
         >
           <HiMenuAlt1 />
         </span>
-        <h2 className="font-bold text-2xl text-purple-700">BuddyPair</h2>
+        <h2 className="font-bold text-2xl text-purple-500">BuddyPair</h2>
       </div>
       <div className="flex items-center gap-3">
-        <span className="text-3xl text-purple-600">
+        <NavLink
+          to="/job-portal/notifications"
+          className="text-3xl text-purple-600"
+        >
           <BsBell />
-        </span>
+        </NavLink>
         {userInfo ? (
           <div
             onClick={() => setShow(!show)}
@@ -168,7 +171,7 @@ function TopNav() {
             onClick={() => setShow(false)}
             className="fixed inset-0 bg-transparent backdrop-blur-sm"
           />
-          <div className="absolute right-0 left-10 top-0 bg-purple-400 bg-opacity-50 p-4 rounded-lg shadow-lg">
+          <div className="absolute right-0 left-10 top-0 bg-purple-400 bg-opacity-95 p-4 rounded-lg shadow-lg">
             <div className="flex items-center gap-3 relative">
               {userInfo && (
                 <div className="w-14 border-pink-400 border-[3px] overflow-hidden aspect-square rounded-full">
@@ -188,7 +191,7 @@ function TopNav() {
                   <h5 className="font-bold text-sm text-pink-600">
                     {userInfo?.username}
                   </h5>
-                  <span className="text-xs font-medium text-green-700 leading-2">
+                  <span className="text-xs font-medium text-gray-800 leading-2">
                     Online
                   </span>
                 </div>
@@ -208,7 +211,7 @@ function TopNav() {
                 {RightLinks.map((link, i) => (
                   <li
                     key={i}
-                    className="font-semibold text-gray-600 my-1 hover:bg-purple-200 rounded-lg hover:text-white transition-all ease-in-out duration-300"
+                    className="font-semibold text-gray-800 my-1 hover:bg-purple-200 rounded-lg hover:text-white transition-all ease-in-out duration-300"
                   >
                     <NavLink
                       end={true}
@@ -223,7 +226,7 @@ function TopNav() {
                     </NavLink>
                   </li>
                 ))}
-                <li className="font-semibold text-gray-600 my-1 hover:bg-purple-200 rounded-lg hover:text-white transition-all ease-in-out duration-300">
+                <li className="font-semibold text-gray-800 my-1 hover:bg-purple-200 rounded-lg hover:text-white transition-all ease-in-out duration-300">
                   <button
                     className="w-full text-left block p-2 rounded-lg"
                     onClick={() => setShowPolicySubMenu(!showPolicySubMenu)}
@@ -242,7 +245,7 @@ function TopNav() {
                   RightSubMenuLinks.map((link, i) => (
                     <li
                       key={i}
-                      className="font-semibold ml-3 text-gray-600 my-1 hover:bg-purple-200 rounded-lg hover:text-white transition-all ease-in-out duration-300"
+                      className="font-semibold ml-3 text-gray-800 my-1 hover:bg-purple-200 rounded-lg hover:text-white transition-all ease-in-out duration-300"
                     >
                       <NavLink
                         end={true}
@@ -289,7 +292,7 @@ function TopNav() {
             onClick={() => setLeftShow(false)}
             className="fixed inset-0 bg-transparent backdrop-blur-sm"
           />
-          <div className="absolute right-10 w-3/4 left-0 top-0 bg-purple-400 bg-opacity-50 p-4 rounded-lg shadow-lg">
+          <div className="absolute right-10 w-3/4 left-0 top-0 bg-purple-400 bg-opacity-95 p-4 rounded-lg shadow-lg">
             <span
               onClick={() => setLeftShow(false)}
               className="absolute right-3 top-3 text-purple-900 text-2xl"
@@ -302,7 +305,7 @@ function TopNav() {
                 {LeftLinks.map((link, i) => (
                   <li
                     key={i}
-                    className="font-semibold text-gray-600 my-1 hover:bg-purple-200 rounded-lg hover:text-white transition-all ease-in-out duration-300"
+                    className="font-semibold text-gray-800 my-1 hover:bg-purple-200 rounded-lg hover:text-white transition-all ease-in-out duration-300"
                   >
                     <NavLink
                       to={link?.link}

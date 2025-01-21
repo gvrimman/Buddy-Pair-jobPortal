@@ -2,20 +2,18 @@ import React, { useState } from "react";
 import { Worker, Viewer } from "@react-pdf-viewer/core";
 import "@react-pdf-viewer/core/lib/styles/index.css";
 import { Button, Typography } from "@material-tailwind/react";
-import { useNavigate } from "react-router-dom";
 import { useDispatch } from "react-redux";
 import axiosInstance from "../../utils/axios";
 import { showError, showSuccess } from "../../utils/toast";
 import { setUser } from "../../Redux/reducers/userReducer";
-import TextInput from "../../components/common/TextInput";
 import { RiLoader4Line } from "react-icons/ri";
 
-function UserResume({ onClose, setUserData, userData, openEmployerInfoModal }) {
+function UserResume({ onClose, setUserData, userData, goBack }) {
 	const [isLoading, setIsLoading] = useState(false);
-	const navigate = useNavigate();
 	const dispatch = useDispatch();
 	const [pdfFile, setPdfFile] = useState(null);
 	const [pdfPreviewUrl, setPdfPreviewUrl] = useState(null);
+	const [fileErrorShown, setFileErrorShown] = useState(false);
 
 	const handleFileChange = (e) => {
 		const file = e.target.files[0];
@@ -29,8 +27,9 @@ function UserResume({ onClose, setUserData, userData, openEmployerInfoModal }) {
 
 	const handleSubmit = async () => {
 		try {
-			if (!pdfFile) {
-				showError("pls select pdf file");
+			if (!pdfFile && !fileErrorShown) {
+				setFileErrorShown(true);
+				showError("please select Resume to continue. if you need to skip, click next");
 				return;
 			}
 			const finalData = {
@@ -48,12 +47,8 @@ function UserResume({ onClose, setUserData, userData, openEmployerInfoModal }) {
 					},
 				}
 			);
-			if (userData.role === "employer") {
-				openEmployerInfoModal(response?.data?.data);
-			}else {
-				dispatch(setUser(response?.data?.data));
-				showSuccess("Success...!");
-			}
+			dispatch(setUser(response?.data?.data));
+			showSuccess(response?.data?.message);
 			setIsLoading(false);
 			onClose();
 		} catch (error) {
@@ -99,10 +94,15 @@ function UserResume({ onClose, setUserData, userData, openEmployerInfoModal }) {
 
 			<div className="text-end">
 				<Button
+					onClick={goBack}
+					className=" py-2 px-3 sm:py-3 sm:px-4 mx-1">
+					Back
+				</Button>
+				<Button
 					disabled={isLoading}
 					onClick={handleSubmit}
 					type="submit"
-					className=" py-2 px-3 sm:py-3 sm:px-4 mx-1 ">
+					className=" py-2 px-3 sm:py-3 sm:px-4 mx-1 bg-red-400">
 					{isLoading ? (
 						<span>
 							<RiLoader4Line className="animate-spin text-xl" />
@@ -110,11 +110,6 @@ function UserResume({ onClose, setUserData, userData, openEmployerInfoModal }) {
 					) : (
 						"Next"
 					)}
-				</Button>
-				<Button
-					onClick={() => navigate("/")}
-					className=" py-2 px-3 sm:py-3 sm:px-4 mx-1 bg-red-400">
-					Close
 				</Button>
 			</div>
 		</div>

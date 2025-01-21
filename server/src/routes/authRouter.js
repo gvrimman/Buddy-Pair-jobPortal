@@ -4,6 +4,8 @@ const { upload } = require("../middlewares/multer");
 const { verifyJwt } = require("../middlewares/jwtAuth");
 const {
   signup,
+  VerifyEmailOTP,
+  ResendEmailOTP,
   employerSignup,
   employeeSignup,
   login,
@@ -27,6 +29,9 @@ router.route("/refresh-token").post(renewalOfAccessToken);
 
 // user sign up
 router.route("/signup").post(signup);
+
+router.route("/signup/verifyotp").post(VerifyEmailOTP);
+router.route("/signup/resendotp").post(ResendEmailOTP);
 
 router.route("/employee-signup").post(
   verifyJwt,

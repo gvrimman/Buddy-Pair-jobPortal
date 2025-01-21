@@ -5,7 +5,7 @@ const ApiError = require("../../utils/apiError");
 const ApiResponse = require("../../utils/apiResponse");
 const asyncHandler = require("../../utils/asyncHandler");
 const generateAccessAndRefreshToken = require("../../utils/generateAccessAndRefreshToken");
-const nodemailer = require("nodemailer");
+const SendMail = require("../../config/mailer");
 
 const renewalOfAccessToken = asyncHandler(async (req, res) => {
 	const currentRefreshToken = req.cookies.refreshToken;
@@ -96,10 +96,24 @@ const signup = asyncHandler(async (req, res) => {
 		userData._id
 	);
 	// userData.refreshToken = refreshToken;
+
+	// Generate a 4-digit OTP
+	const otp = Math.floor(1000 + Math.random() * 9000).toString();
+	userData.emailVerifyOtp = otp;
+	userData.emailVerifyExpire = Date.now() + 10 * 60 * 1000;
+
+	const mailOptions = {
+		from: `"BuddyPair Jobs" <${process.env.EMAIL_USER}>`,
+		to: email,
+		subject: "Email Verification",
+		text: `Your OTP is ${otp}. It will expire in 10 minutes.`,
+	};
+
+  	await SendMail(mailOptions);
 	await userData.save();
 
-	const createdUser = await User.findById(userData._id).select(
-		"-password -refreshToken"
+  	const createdUser = await User.findById(userData._id).select(
+		"-password -refreshToken -emailVerifyOtp"
 	);
 
 	const options = {
@@ -110,7 +124,65 @@ const signup = asyncHandler(async (req, res) => {
 
 	res.cookie("accessToken", accessToken, options)
 		.cookie("refreshToken", refreshToken, options)
-		.json(new ApiResponse(200, createdUser, "Signup Successful"));
+		.json(new ApiResponse(200, createdUser, "Signup successful and verification otp is send to mail."));
+});
+
+// verify otp
+const VerifyEmailOTP = asyncHandler(async (req, res) => {
+	const { email, otp } = req.body;
+
+	const user = await User.findOne({ email }).select("-password");
+
+	if (!user) {
+		throw new ApiError(400, "user not found");
+	}
+
+	if(user.emailVerified) {
+		throw new ApiError(400, "Email already Verified");
+	}
+
+	if (
+		user.emailVerifyOtp !== otp ||
+		user.emailVerifyExpire < Date.now()
+	) {
+		throw new ApiError(400, "Invalid or expired OTP");
+	}
+
+	user.emailVerified = true;
+	await user.save();
+
+	res.json(new ApiResponse(200, user, "Email verified"));
+});
+
+// resend otp
+const ResendEmailOTP = asyncHandler(async (req, res) => {
+	const { email } = req.body;
+
+	const user = await User.findOne({ email }).select("-password");
+
+	if (!user) {
+		throw new ApiError(400, "user not found");
+	}
+	if(user.emailVerified) {
+		throw new ApiError(400, "Email already Verified");
+	}
+
+	// Generate a 4-digit OTP
+	const otp = Math.floor(1000 + Math.random() * 9000).toString();
+	user.emailVerifyOtp = otp;
+	user.emailVerifyExpire = Date.now() + 10 * 60 * 1000;
+
+	const mailOptions = {
+		from: `"BuddyPair Jobs" <${process.env.EMAIL_USER}>`,
+		to: email,
+		subject: "Email Verification",
+		text: `Your OTP is ${otp}. It will expire in 10 minutes.`,
+	};
+
+  	await SendMail(mailOptions);
+	await user.save();
+
+	res.json(new ApiResponse(200, null, "OTP resended to your given mail"));
 });
 
 // add employee data
@@ -179,9 +251,9 @@ const employeeSignup = asyncHandler(async (req, res) => {
 	}
 
 	//Validate Resume
-	if (!req.files || !req.files.resume) {
-		throw new ApiError(400, "Resume not found");
-	}
+	// if (!req.files || !req.files.resume) {
+	// 	throw new ApiError(400, "Resume not found");
+	// }
 
 	// age calculation
 	let age = new Date().getFullYear() - new Date(dob).getFullYear();
@@ -216,7 +288,7 @@ const employeeSignup = asyncHandler(async (req, res) => {
 		skills,
 		jobDetails: jobDetails ? jobDetails : { workExperience: "fresher" },
 		profileImage: profileImage ? profileImage[0]?.location : "",
-		resume: resume[0]?.location,
+		resume: resume ? resume[0]?.location : "",
 		role: "employee",
 	});
 
@@ -380,7 +452,7 @@ const login = asyncHandler(async (req, res) => {
 	await isUser.save();
 
 	const loggedInUser = await User.findById(isUser._id)
-		.select("-password -refreshToken")
+		.select("-password -refreshToken -emailVerifyOtp -resetPasswordOtp")
 		.populate({
 			path: "apps.jobPortal",
 		});
@@ -577,9 +649,7 @@ const updateEmployerProfileInfo = asyncHandler(async (req, res) => {
 const forgotPassword = asyncHandler(async (req, res) => {
 	const { email } = req.body;
 
-	const user = await User.findOne({ email })
-		.select("apps.jobPortal")
-		.populate("apps.jobPortal");
+	const user = await User.findOne({ email });
 	if (!user) {
 		throw new ApiError(400, "user not found");
 	}
@@ -587,78 +657,39 @@ const forgotPassword = asyncHandler(async (req, res) => {
 	// Generate a 4-digit OTP
 	const otp = Math.floor(1000 + Math.random() * 9000).toString();
 
-	if (!user.apps || !user.apps.jobPortal) {
-		throw new ApiError(400, "Job Portal details not found for this user");
-	}
-
-	// Update JobPortal collection directly
-	await JobPortal.findByIdAndUpdate(user.apps.jobPortal._id, {
-		resetPasswordOtp: otp,
-		resetPasswordExpire: Date.now() + 10 * 60 * 1000, // 10 minutes
-	});
-
-	// Configure nodemailer
-	const transporter = nodemailer.createTransport({
-		host: process.env.EMAIL_HOST,
-		port: process.env.EMAIL_PORT,
-		auth: {
-			user: process.env.EMAIL_USER,
-			pass: process.env.EMAIL_PASSWORD,
-		},
-	});
+	// Update user collection directly
+	user.resetPasswordOtp = otp;
+  	user.resetPasswordExpire = Date.now() + 10 * 60 * 1000;
+	await user.save();
 
 	const mailOptions = {
-		from: '"Job Portal Support" <support@jobportal.com>',
+		from: `"BuddyPair Jobs" <${process.env.EMAIL_USER}>`,
 		to: email,
 		subject: "Your Password Reset OTP for Job Portal",
 		text: `Your OTP is ${otp}. It will expire in 10 minutes.`,
 	};
 
-	await transporter.sendMail(mailOptions);
+	await SendMail(mailOptions);
 	res.json(new ApiResponse(200, { email }, "OTP sent to your email"));
 });
 
 // reset password
 const resetPassword = asyncHandler(async (req, res) => {
 	const { email, otp, newPassword } = req.body;
-
-	const user = await User.findOne({ email })
-		.select("apps.jobPortal")
-		.populate("apps.jobPortal");
+	const user = await User.findOne({ email });
 	if (!user) {
 		throw new ApiError(400, "user not found");
 	}
 
-	if (!user.apps || !user.apps.jobPortal) {
-		throw new ApiError(400, "Job Portal details not found for this user");
-	}
-
 	if (
-		user.apps.jobPortal.resetPasswordOtp !== otp ||
-		user.apps.jobPortal.resetPasswordExpire < Date.now()
+		user.resetPasswordOtp !== otp ||
+		user.resetPasswordExpire < Date.now()
 	) {
 		throw new ApiError(400, "Invalid or expired OTP");
 	}
 
-	// Update JobPortal collection directly
-	const updatedJobPortal = await JobPortal.findByIdAndUpdate(
-		user.apps.jobPortal._id,
-		{
-			$unset: {
-				resetPasswordOtp: 1,
-				resetPasswordExpire: 1
-			}
-		},
-		{
-			new: true
-		}
-	);
-
-	if (!updatedJobPortal) {
-		throw new ApiError(400, "Failed to update job portal");
-	}
-
 	user.password = newPassword;
+	user.resetPasswordOtp = null;
 	await user.save();
 
 	res.json(new ApiResponse(200, user, "password updated"));
@@ -666,6 +697,8 @@ const resetPassword = asyncHandler(async (req, res) => {
 
 module.exports = {
 	signup,
+	VerifyEmailOTP,
+	ResendEmailOTP,
 	employeeSignup,
 	employerSignup,
 	login,

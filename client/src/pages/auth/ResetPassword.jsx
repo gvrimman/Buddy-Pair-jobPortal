@@ -7,7 +7,7 @@ import { Button } from '@material-tailwind/react';
 import { showError, showSuccess } from '../../utils/toast';
 import axiosInstance from '../../utils/axios';
 
-function ResetPassword({ mail, openSignInModal }) {
+function ResetPassword({ mail, openSignInModal, goBack }) {
 	const navigate = useNavigate();
 	const { register, handleSubmit, errors, reset } = useFormHandler(
 		resetPasswordValidation
@@ -67,13 +67,13 @@ function ResetPassword({ mail, openSignInModal }) {
 
 				<div className="text-end mt-3">
 					<Button
-						onClick={() => navigate("/")}
-						className="rounded py-2 px-3 sm:py-3 sm:px-4 mx-1 bg-red-400">
+						onClick={goBack}
+						className="rounded py-2 px-3 sm:py-3 sm:px-4 mx-1">
 						Close
 					</Button>
 					<Button
 						type="submit"
-						className="rounded py-2 px-3 sm:py-3 sm:px-4 mx-1 bg-customViolet">
+						className="rounded py-2 px-3 sm:py-3 sm:px-4 mx-1 bg-red-400">
 						Next
 					</Button>
 				</div>

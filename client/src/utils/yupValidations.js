@@ -256,13 +256,22 @@ const forgotPasswordValidation = Yup.object().shape({
 
 // reset password validation
 const resetPasswordValidation = Yup.object().shape({
-	otp: Yup.string().required("OTP is required"),
+	otp: Yup.string()
+		.required("OTP is required")
+		.matches(/^\d{4}$/,"OTP must be exactly 4 digits and only contains numbers"),
 	password: Yup.string()
 		.required("Password is required")
 		.min(3, "Minimum 8 characters"),
 	confirmPassword: Yup.string()
 		.required("Confirm Password is required")
 		.oneOf([Yup.ref("password"), null], "Passwords must match"),
+});
+
+// otp validation
+const otpVerifyValidation = Yup.object().shape({
+	otp: Yup.string()
+		.required("OTP is required")
+		.matches(/^\d{4}$/,"OTP must be exactly 4 digits and only contains numbers"),
 });
 
 export {
@@ -282,4 +291,5 @@ export {
 	employerLinkedinValidation,
 	forgotPasswordValidation,
 	resetPasswordValidation,
+	otpVerifyValidation,
 };

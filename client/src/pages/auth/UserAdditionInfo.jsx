@@ -10,7 +10,6 @@ import SelectInput from "../../components/common/SelectInput";
 import TextInput from "../../components/common/TextInput";
 import MultiSelect from "../../components/common/MultiSelect";
 import { userAdditionInfoValidation } from "../../utils/yupValidations";
-import { useNavigate } from "react-router-dom";
 
 function UserAdditionInfo({
 	onClose,
@@ -18,9 +17,9 @@ function UserAdditionInfo({
 	userData,
 	openJobDetailsModal,
 	openUserResumeModal,
+	goBack
 }) {
 
-	const navigate = useNavigate()
 	// hook form validation
 	const { register, handleSubmit, errors, reset, control, watch } =
 		useFormHandler(userAdditionInfoValidation);
@@ -56,11 +55,8 @@ function UserAdditionInfo({
 		reset();
 
 		setTimeout(() => {
-			if (userData.role === "fresher") {
-				openUserResumeModal();
-			} else {
-				openJobDetailsModal();
-			}
+			if (userData.role === "fresher") openUserResumeModal();
+			else openJobDetailsModal();
 		}, 300);
 	};
 
@@ -145,14 +141,14 @@ function UserAdditionInfo({
 				</div>
 				<div className="text-end">
 					<Button
-						type="submit"
-						className=" py-2 px-3 sm:py-3 sm:px-4 mx-1 ">
-						Next
+						onClick={goBack}
+						className=" py-2 px-3 sm:py-3 sm:px-4 mx-1">
+						Back
 					</Button>
 					<Button
-						onClick={() => navigate("/")}
+						type="submit"
 						className=" py-2 px-3 sm:py-3 sm:px-4 mx-1 bg-red-400">
-						Close
+						Next
 					</Button>
 				</div>
 			</form>

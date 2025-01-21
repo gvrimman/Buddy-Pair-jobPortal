@@ -5,10 +5,8 @@ import SelectInput from "../../components/common/SelectInput";
 import useFormHandler from "../../hooks/ReactHookForm/Index";
 import { jobValidation } from "../../utils/yupValidations";
 import { experienceData } from "../../utils/constants";
-import { useNavigate } from 'react-router-dom';
 
-function JobDetails({ setUserData, onClose, openUserResumeModal }) {
-	const navigate = useNavigate()
+function JobDetails({ setUserData, onClose, openUserResumeModal, goBack }) {
 	const { register, handleSubmit, errors, reset, control, watch } =
 		useFormHandler(jobValidation);
 
@@ -82,14 +80,14 @@ function JobDetails({ setUserData, onClose, openUserResumeModal }) {
 				</div>
 				<div className="text-end">
 					<Button
-						type="submit"
-						className=" py-2 px-3 sm:py-3 sm:px-4 mx-1 ">
-						Next
+						onClick={goBack}
+						className="py-2 px-3 sm:py-3 sm:px-4 mx-1">
+						Back
 					</Button>
 					<Button
-						onClick={() => navigate("/")}
-						className=" py-2 px-3 sm:py-3 sm:px-4 mx-1 bg-red-400">
-						Close
+						type="submit"
+						className="py-2 px-3 sm:py-3 sm:px-4 mx-1 bg-red-400">
+						Next
 					</Button>
 				</div>
 			</form>

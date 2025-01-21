@@ -8,7 +8,7 @@ const asyncHandler = require("../utils/asyncHandler");
 const getProfile = asyncHandler(async (req, res) => {
 	const userId = req.user._id;
 	const user = await User.findById(userId)
-		.select("-password -refreshToken")
+		.select("-password -refreshToken -emailVerifyOtp -resetPasswordOtp")
 		.populate("apps.jobPortal")
 		.exec();
 
@@ -19,7 +19,7 @@ const getProfile = asyncHandler(async (req, res) => {
 const getProfileByID = asyncHandler(async (req, res) => {
   const userId = req.params.id;
   const user = await User.findById(userId)
-    .select("-password -refreshToken")
+    .select("-password -refreshToken -emailVerifyOtp -resetPasswordOtp")
     .populate("apps.jobPortal")
     .exec();
 
@@ -30,7 +30,7 @@ const getProfileByID = asyncHandler(async (req, res) => {
 const checkPreferenceStatus = asyncHandler(async (req, res) => {
 	const userId = req.user._id;
 	const user = await User.findById(userId)
-		.select("-password -refreshToken")
+		.select("-password -refreshToken -emailVerifyOtp -resetPasswordOtp")
 		.populate("apps.jobPortal")
 		.exec();
 

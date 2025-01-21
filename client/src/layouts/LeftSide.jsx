@@ -26,9 +26,9 @@ function LeftSide() {
 		},
 	];
 	return (
-		<div className="w-[20vw] p-3 rounded-lg bg-gradient-to-t from-purple-50 to-purple-100 hidden md:block h-screen sticky top-1">
+		<div className="w-[20vw] p-3 rounded-lg bg-white border-2 border-purple-500 hidden md:block h-screen sticky top-1">
 			<div>
-				<h2 className="font-bold text-2xl text-purple-700">
+				<h2 className="font-bold text-2xl text-purple-500">
 					BuddyPair
 				</h2>
 			</div>
@@ -37,12 +37,12 @@ function LeftSide() {
 					{Links.map((link, i) => (
 						<li
 							key={i}
-							className="font-semibold text-gray-600 my-1 hover:bg-purple-200 rounded-lg hover:text-white transition-all ease-in-out duration-300">
+							className="font-semibold text-gray-800 my-1 hover:bg-purple-200 rounded-lg hover:text-white transition-all ease-in-out duration-300">
 							<NavLink
 								to={link?.link}
 								className={({ isActive }) =>
 									isActive
-										? " block p-2 bg-purple-500 text-white rounded-lg"
+										? " block p-2 bg-white border-2 border-purple-500 rounded-lg text-purple-500 hover:bg-purple-100"
 										: "block p-2"
 								}>
 								{link?.title}

@@ -1,7 +1,6 @@
 import React, { useEffect, useState } from "react";
 import avatar from "/assets/images/office.png";
 import { Button, Typography } from "@material-tailwind/react";
-import { useNavigate } from "react-router-dom";
 import { useDispatch } from "react-redux";
 import {
 	companySizeOptions,
@@ -17,10 +16,9 @@ import { showError, showSuccess } from "../../utils/toast";
 import axiosInstance from "../../utils/axios";
 import { RiLoader4Line } from "react-icons/ri";
 
-function EmployerInfo({ userData, onClose, tempUserData }) {
+function EmployerInfo({ userData, onClose, goBack }) {
 	const [isLoading, setIsLoading] = useState(false);
 
-	const navigate = useNavigate();
 	const dispatch = useDispatch();
 	const [previewSrc, setPreviewSrc] = useState(null);
 
@@ -30,13 +28,6 @@ function EmployerInfo({ userData, onClose, tempUserData }) {
 
 	// get img before submit
 	const prfImg = watch("profileImage");
-
-	const SkipHandler = () => {
-		dispatch(setUser(tempUserData));
-		setIsLoading(false);
-		onClose();
-		showSuccess("Success!");
-	};
 
 	const handleImagePreview = () => {
 		const file = prfImg && prfImg[0];
@@ -81,7 +72,7 @@ function EmployerInfo({ userData, onClose, tempUserData }) {
 			dispatch(setUser(response?.data?.data));
 			setIsLoading(false);
 			onClose();
-			showSuccess("Success!");
+			showSuccess(response?.data?.message);
 		} catch (error) {
 			console.log(error);
 			setIsLoading(false);
@@ -178,9 +169,14 @@ function EmployerInfo({ userData, onClose, tempUserData }) {
 				</div>
 				<div className="text-end">
 					<Button
+						onClick={goBack}
+						className=" py-2 px-3 sm:py-3 sm:px-4 mx-1">
+						Back
+					</Button>
+					<Button
 						disabled={isLoading}
 						type="submit"
-						className=" py-2 px-3 sm:py-3 sm:px-4 mx-1 ">
+						className=" py-2 px-3 sm:py-3 sm:px-4 mx-1 bg-red-400">
 						{isLoading ? (
 							<span>
 								<RiLoader4Line className="animate-spin text-xl" />
@@ -188,11 +184,6 @@ function EmployerInfo({ userData, onClose, tempUserData }) {
 						) : (
 							"Next"
 						)}
-					</Button>
-					<Button
-						onClick={SkipHandler}
-						className=" py-2 px-3 sm:py-3 sm:px-4 mx-1 bg-red-400">
-						Skip
 					</Button>
 				</div>
 			</form>

@@ -24,7 +24,7 @@ import MultiSelect from "../../components/common/MultiSelect";
 import { showError } from "../../utils/toast";
 import { useNavigate } from "react-router-dom";
 
-function UserInfo({ onClose, setUserData, openUserLocationModal }) {
+function UserInfo({ onClose, setUserData, openUserLocationModal, logout }) {
 	const navigate = useNavigate();
 	const [previewSrc, setPreviewSrc] = useState(null);
 	const [imageErrorShown, setImageErrorShown] = useState(false);
@@ -69,7 +69,7 @@ function UserInfo({ onClose, setUserData, openUserLocationModal }) {
 
 		if(!imageErrorShown && !profileImageFile) {
 			setImageErrorShown(true);
-			showError("Please select your Profile Picture");
+			showError("Please select profile image to continue. if you need to skip, click next");
       		return;
 		}
 		const dob = data.dob;
@@ -232,14 +232,19 @@ function UserInfo({ onClose, setUserData, openUserLocationModal }) {
 				</div>
 				<div className="text-end">
 					<Button
-						type="submit"
-						className=" py-2 px-3 sm:py-3 sm:px-4 mx-1 ">
-						Next
+						onClick={logout}
+						className="py-2 px-3 sm:py-3 sm:px-4 mx-1">
+						Logout
 					</Button>
 					<Button
 						onClick={() => navigate("/")}
-						className="py-2 px-3 sm:py-3 sm:px-4 mx-1 bg-red-400">
+						className="py-2 px-3 sm:py-3 sm:px-4 mx-1">
 						Close
+					</Button>
+					<Button
+						type="submit"
+						className=" py-2 px-3 sm:py-3 sm:px-4 mx-1 bg-red-400">
+						Next
 					</Button>
 				</div>
 			</form>

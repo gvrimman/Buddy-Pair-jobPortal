@@ -55,7 +55,7 @@ function BottomNav() {
 							to={item?.link}
 							className={({ isActive }) =>
 								isActive
-									? "text-white bg-purple-900 block p-2 rounded-full"
+									? "text-white bg-purple-500 block p-2 rounded-full"
 									: "bg-purple-50 block p-2 rounded-full"
 							}>
 							{item?.icon}

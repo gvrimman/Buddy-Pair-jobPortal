@@ -15,6 +15,8 @@ function SignIn({
 	openSignUpModal,
 	openUserInfoModal,
 	openForgotPasswordModal,
+	openOTPVerifyModal,
+	onClose
 }) {
 	const [isLoading, setIsLoading] = useState(false);
 	const dispatch = useDispatch();
@@ -31,12 +33,19 @@ function SignIn({
 			showSuccess(response?.data?.message);
 
 			// if user hasn't complete total registration redirect to user info modal
-			if (!userData?.apps?.jobPortal) {
+			if(!userData.emailVerified) {
+				setTimeout(() => {
+					dispatch(setUser(userData));
+					openOTPVerifyModal();
+					showError("Email verification is pending...")
+				}, 300);
+			} else if (!userData?.apps?.jobPortal) {
 				setTimeout(() => {
 					dispatch(setUser(userData));
 					openUserInfoModal();
+					showError("Profile completion is pending...")
 				}, 300);
-			}else {
+			} else {
 				dispatch(setUser(userData));
 			}
 		} catch (error) {
@@ -79,10 +88,11 @@ function SignIn({
 					</p>
 
 					<div className="flex gap-5 justify-end">
+						<Button onClick={onClose} className="text-xs">close</Button>
 						<Button
 							disabled={isLoading}
 							type="submit"
-							className=" font-normal text-xs flex justify-center">
+							className="bg-red-600 font-normal text-xs flex justify-center">
 							{isLoading ? (
 								<span>
 									<RiLoader4Line className="animate-spin text-xl" />
@@ -91,7 +101,6 @@ function SignIn({
 								"Next"
 							)}
 						</Button>
-						<Button className="bg-red-600 text-xs">close</Button>
 					</div>
 				</div>
 				<Typography

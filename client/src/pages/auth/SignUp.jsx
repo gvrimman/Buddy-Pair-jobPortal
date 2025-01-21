@@ -13,7 +13,7 @@ import { useDispatch } from "react-redux";
 import handleGoogleAuthentication from "./../../Services/googleAuth";
 import { RiLoader4Line } from "react-icons/ri";
 
-function SignUp({ onClose, openSignInModal, openUserInfoModal }) {
+function SignUp({ onClose, openSignInModal, openOTPVerifyModal, closeBtnClick, setMail }) {
 	const [isLoading, setIsLoading] = useState(false);
 
 	const dispatch = useDispatch();
@@ -25,14 +25,15 @@ function SignUp({ onClose, openSignInModal, openUserInfoModal }) {
 		try {
 			setIsLoading(true);
 			const response = await axiosInstance.post("/auth/signup", data);
-			setIsLoading(false);
 			dispatch(setUser(response?.data?.data));
+			showSuccess(response.data?.message);
+			setMail(data.email);
+			setIsLoading(false);
 			reset();
 			onClose();
-			showSuccess(response.data?.message);
 
 			setTimeout(() => {
-				openUserInfoModal();
+				openOTPVerifyModal();
 			}, 300);
 		} catch (error) {
 			console.log(error);
@@ -91,10 +92,11 @@ function SignUp({ onClose, openSignInModal, openUserInfoModal }) {
 					/>
 
 					<div className="flex gap-5 justify-end">
+						<Button onClick={closeBtnClick} className="text-xs">close</Button>
 						<Button
 							disabled={isLoading}
 							type="submit"
-							className=" font-normal text-xs flex justify-center">
+							className="bg-red-600 font-normal text-xs flex justify-center">
 							{isLoading ? (
 								<span>
 									<RiLoader4Line className="animate-spin text-xl" />
@@ -103,7 +105,6 @@ function SignUp({ onClose, openSignInModal, openUserInfoModal }) {
 								"Next"
 							)}
 						</Button>
-						<Button className="bg-red-600 text-xs">close</Button>
 					</div>
 				</div>
 

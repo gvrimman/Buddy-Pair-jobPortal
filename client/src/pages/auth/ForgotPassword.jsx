@@ -9,7 +9,7 @@ import axiosInstance from "../../utils/axios";
 import { showError, showSuccess } from "../../utils/toast";
 import { RiLoader4Line } from "react-icons/ri";
 
-function ForgotPassword({ setMail, openResetPasswordModal }) {
+function ForgotPassword({ setMail, openResetPasswordModal, goBack }) {
 	const navigate = useNavigate();
     const [isLoading, setIsLoading] = useState(false);
 	const { register, handleSubmit, errors, reset } = useFormHandler(
@@ -58,9 +58,14 @@ function ForgotPassword({ setMail, openResetPasswordModal }) {
 
 					<div className="text-end mt-3">
 						<Button
+							onClick={goBack}
+							className="py-2 px-3 sm:py-3 sm:px-4 mx-1">
+							Back
+						</Button>
+						<Button
 							disabled={isLoading}
 							type="submit"
-							className=" py-2 px-3 sm:py-3 sm:px-4 mx-1 ">
+							className="py-2 px-3 sm:py-3 sm:px-4 mx-1 bg-red-400">
 							{isLoading ? (
 								<span>
 									<RiLoader4Line className="animate-spin text-xl" />
@@ -68,11 +73,6 @@ function ForgotPassword({ setMail, openResetPasswordModal }) {
 							) : (
 								"Next"
 							)}
-						</Button>
-						<Button
-							onClick={() => navigate("/")}
-							className=" py-2 px-3 sm:py-3 sm:px-4 mx-1 bg-red-400">
-							Close
 						</Button>
 					</div>
 				</div>
