@@ -134,7 +134,7 @@ function ProfileView() {
           </p>
         </div>
       </Container>
-      <Container>
+      {isOwnProfile && <Container>
         <h4 className="font-medium text-sm my-2">Contact</h4>
         <div>
           <p className="text-xs my-1">
@@ -144,7 +144,7 @@ function ProfileView() {
             Phone: <span className="font-semibold">{profile?.phone}</span>
           </p>
         </div>
-      </Container>
+      </Container>}
     </div>
   );
 }

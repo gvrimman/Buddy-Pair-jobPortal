@@ -16,6 +16,7 @@ export default withMT({
 			},
 			colors: {
 				primary: "#f7f7f8",
+				theme: "#1a86b6",
 				customViolet: "#673ab7",
 				customBgColor: "#f7f7f8",
 				studyOrangeColor: "#fb4927",

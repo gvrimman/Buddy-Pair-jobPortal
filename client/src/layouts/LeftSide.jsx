@@ -5,7 +5,7 @@ function LeftSide() {
 	// side bar links
 	const Links = [
 		{
-			title: "Proffessional Community",
+			title: "Professional Community",
 			link: "/",
 		},
 		{
@@ -13,7 +13,7 @@ function LeftSide() {
 			link: "/job-portal",
 		},
 		{
-			title: "Matirimony",
+			title: "Matrimony",
 			link: "/",
 		},
 		{

@@ -14,6 +14,8 @@ const {
   renewalOfAccessToken,
   logout,
   updateEmployerProfileInfo,
+  VerifyCompanyEmailOTP,
+  ResendCompanyEmailOTP,
   forgotPassword,
   resetPassword,
 } = require("../controllers/auth/authController");
@@ -72,6 +74,8 @@ router
     upload.any({ name: "profileImage", maxCount: 1 }),
     updateEmployerProfileInfo
   );
+router.route("/update-employer-profile/verifyotp").post(VerifyCompanyEmailOTP);
+router.route("/update-employer-profile/resendotp").post(ResendCompanyEmailOTP);
 
 // user logout
 router.route("/logout").post(verifyJwt, logout);

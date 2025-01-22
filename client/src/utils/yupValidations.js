@@ -98,9 +98,6 @@ const emplyerInfoValidation = Yup.object().shape({
 			return value[0]?.size <= 5 * 1024 * 1024;
 		}),
 	companyName: Yup.string().required("Please Enter your company name"),
-	companyEmail: Yup.string()
-		.email("Invalid email format")
-		.required("Email is required"),
 	companySite: Yup.string().required("Please Enter your company website"),
 	companyAddress: Yup.string().required("Please Enter your company address"),
 	companyDescription: Yup.string().required(
@@ -118,13 +115,7 @@ const emplyerInfoValidation = Yup.object().shape({
 // update employer profile
 const employerProfileValidation = Yup.object().shape({
 	companyLogo: Yup.mixed()
-		.notRequired(true)
-		.test("fileType", "Only image files are allowed", (value) => {
-			return value && value[0] && value[0].type.startsWith("image/");
-		})
-		.test("fileSize", "File is too large, max size is 20MB", (value) => {
-			return value && value[0] && value[0].size <= 5 * 1024 * 1024;
-		}),
+		.notRequired(true),
 	companyName: Yup.string().required("Please Enter your company name"),
 	companyEmail: Yup.string()
 		.email("Invalid email format")
@@ -137,7 +128,7 @@ const employerProfileValidation = Yup.object().shape({
 	companySize: Yup.string().required("Please Select your company size"),
 	industryType: Yup.string().required("Please Select your company type"),
 	employmentType: Yup.string().required("Please Select your employment type"),
-	phone: Yup.string().min(10, "Minimum 10 characters"),
+	companyNumber: Yup.string().min(10, "Minimum 10 characters"),
 });
 
 const employerLinkedinValidation = Yup.object().shape({

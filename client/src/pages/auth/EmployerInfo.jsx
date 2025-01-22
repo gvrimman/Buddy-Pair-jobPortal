@@ -50,7 +50,6 @@ function EmployerInfo({ userData, onClose, goBack }) {
 				...userData,
 				companyLogo: data.profileImage ? data.profileImage[0] : null,
 				companyName: data.companyName,
-				companyEmail: data.companyEmail,
 				companySite: data.companySite,
 				companyAddress: data.companyAddress,
 				companyDescription: data.companyDescription,
@@ -111,12 +110,6 @@ function EmployerInfo({ userData, onClose, goBack }) {
 						label={"Company Name"}
 						registering={register("companyName")}
 						errors={errors.companyName}
-					/>
-					<TextInput
-						type={"email"}
-						label={"Company Email"}
-						registering={register("companyEmail")}
-						errors={errors.companyEmail}
 					/>
 					<TextInput
 						type={"text"}

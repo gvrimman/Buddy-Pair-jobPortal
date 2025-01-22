@@ -329,7 +329,6 @@ const employerSignup = asyncHandler(async (req, res) => {
 		location,
 		locationName,
 		companyName,
-		companyEmail,
 		companySite,
 		companyAddress,
 		companyDescription,
@@ -347,7 +346,6 @@ const employerSignup = asyncHandler(async (req, res) => {
 			gender,
 			qualification,
 			companyName,
-			companyEmail,
 			companySite,
 			companyAddress,
 			companyDescription,
@@ -376,7 +374,6 @@ const employerSignup = asyncHandler(async (req, res) => {
 	const employerData = await JobPortal.create({
 		userId: userId,
 		companyName,
-		companyEmail,
 		companyWebSite: companySite,
 		companyAddress,
 		companyDescription,
@@ -584,65 +581,162 @@ const updateEmployerProfileInfo = asyncHandler(async (req, res) => {
 		companySize,
 		industryType,
 		employmentType,
-		phone,
+		companyNumber,
 		companyLinkedin,
 	} = req.body;
 
 	const companyLogo = req.files && req.files[0] ? req.files[0] : null;
-
 	const userId = req.user._id;
 
-	// check if phone already exist
-	const userExist = await User.findById(userId);
-	if (userExist && userExist._id.toString() !== userId.toString()) {
-		throw new ApiError(409, "Contact number already exists..");
+	// Fetch existing employer data
+	const employer = await JobPortal.findOne({ userId });
+	if (!employer) {
+		throw new ApiError(400, "Employer not found");
 	}
 
-	// update user data
-	const user = await User.findByIdAndUpdate(
-		userId,
-		{
-			phone,
-		},
-		{
-			new: true,
-		}
-	);
-
-	if (!user) {
-		throw new ApiError(400, "user not updated");
-	}
-
-	// update employer data
-	const employer = await JobPortal.findOneAndUpdate(
+	// Update other employer fields
+	await JobPortal.findOneAndUpdate(
 		{ userId },
 		{
 			companyName,
-			companyEmail,
 			companyWebSite,
 			companyAddress,
 			companyDescription,
 			companySize,
 			industryType,
 			employmentType,
+			companyNumber,
 			companyLinkedin,
 			companyLogo: companyLogo?.location,
 		},
-		{
-			new: true,
-		}
+		{ new: true }
 	);
-	if (!employer) {
-		throw new ApiError(400, "employer not found");
+
+	// Check if email is being updated
+	if (companyEmail && companyEmail !== employer.companyEmail) {
+		const currentTime = Date.now();
+
+		const existingemail = await JobPortal.findOne({ companyEmail });
+		if(existingemail) {
+			throw new ApiError(403, "This mail already verified by another company. you can't add.");
+		}
+
+		if (
+			employer.CMailVerifyOTP &&
+			employer.CMailOTPExpire &&
+			currentTime - new Date(employer.CMailOTPExpire).getTime() < 60000
+		) {
+			throw new ApiError(429, "OTP was sent recently. Please wait before updating the email.");
+		}
+		const otp = Math.floor(1000 + Math.random() * 9000); // Generate a 4-digit OTP
+
+		// Save new email to `UnverifiedCmail` and send OTP
+		employer.UnverifiedCmail = companyEmail;
+		employer.CMailVerifyOTP = otp;
+		employer.CMailOTPExpire = new Date(Date.now() + 10 * 60 * 1000); // OTP valid for 10 minutes
+
+		const mailOptions = {
+		from: `"BuddyPair Jobs" <${process.env.EMAIL_USER}>`,
+		to: companyEmail,
+		subject: "Company Mail Verification",
+		text: `Your OTP is ${otp}. It will expire in 10 minutes.`,
+		};
+
+		await SendMail(mailOptions);
+
+		// Save the updated employer data
+		await employer.save();
+		// Fetch updated user data
+		const updatedUser = await User.findById(userId)
+			.select("-password -refreshToken")
+			.populate({
+			path: "apps.jobPortal",
+			});
+
+		return res.json(
+			new ApiResponse(
+				200,
+				updatedUser,
+				"A verification email has been sent to the new email address. Please verify to complete the update."
+			)
+		);
 	}
 
+	// Fetch updated user data
 	const updatedUser = await User.findById(userId)
 		.select("-password -refreshToken")
 		.populate({
-			path: "apps.jobPortal",
+		path: "apps.jobPortal",
 		});
 
-	res.json(new ApiResponse(200, updatedUser, "profile updated"));
+	res.json(new ApiResponse(200, updatedUser, "Company profile updated successfully"));
+});
+
+// verify company mail otp
+const VerifyCompanyEmailOTP = asyncHandler(async (req, res) => {
+	const { email, otp } = req.body;
+
+	// Find employer with the provided unverified email and OTP
+	const employer = await JobPortal.findOne({
+		UnverifiedCmail: email,
+		CMailVerifyOTP: otp,
+		CMailOTPExpire: { $gte: Date.now() }, // Ensure OTP hasn't expired
+	});
+
+	if (!employer) {
+		throw new ApiError(400, "Invalid OTP or OTP has expired");
+	}
+
+	// Update companyEmail and clear verification fields
+	employer.companyEmail = email;
+	employer.UnverifiedCmail = null;
+	employer.CMailVerifyOTP = null;
+	employer.CMailOTPExpire = null;
+
+	await employer.save();
+
+	res.json(new ApiResponse(200, null, "Email verified successfully"));
+});
+
+// resend company mail otp
+const ResendCompanyEmailOTP = asyncHandler(async (req, res) => {
+	const { email } = req.body;
+
+	const employer = await JobPortal.findOne({ UnverifiedCmail: email });
+
+	if (!employer) {
+		throw new ApiError(404, "No unverified email found.");
+	}
+
+	const currentTime = Date.now();
+
+	if (
+		employer.emailVerificationOtp &&
+		employer.otpExpiry &&
+		currentTime - new Date(employer.otpExpiry).getTime() < 60000
+	) {
+		throw new ApiError(
+		429,
+		"OTP was sent recently. Please wait before resending."
+		);
+	}
+
+	const otp = Math.floor(1000 + Math.random() * 9000);
+	employer.emailVerificationOtp = otp;
+	employer.otpExpiry = new Date(currentTime + 10 * 60 * 1000);
+
+	await employer.save();
+
+	const mailOptions = {
+		from: `"BuddyPair Jobs" <${process.env.EMAIL_USER}>`,
+		to: email,
+		subject: "Resend Company Mail Verification OTP",
+		text: `Your new OTP is ${otp}. It will expire in 10 minutes.`,
+	};
+
+	await SendMail(mailOptions);
+
+	res.json(new ApiResponse(200, null, "Verification OTP resent successfully."));
 });
 
 // forgot password
@@ -707,6 +801,8 @@ module.exports = {
 	renewalOfAccessToken,
 	logout,
 	updateEmployerProfileInfo,
+	VerifyCompanyEmailOTP,
+	ResendCompanyEmailOTP,
 	forgotPassword,
 	resetPassword,
 };

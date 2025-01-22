@@ -65,7 +65,7 @@ const RightSubMenuLinks = [
 
 const LeftLinks = [
   {
-    title: "Proffessional Community",
+    title: "Professional Community",
     link: "/",
   },
   {
@@ -73,7 +73,7 @@ const LeftLinks = [
     link: "/job-portal",
   },
   {
-    title: "Matirimony",
+    title: "Matrimony",
     link: "/",
   },
   {
