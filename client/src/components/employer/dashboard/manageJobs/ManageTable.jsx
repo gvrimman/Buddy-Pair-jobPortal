@@ -97,7 +97,7 @@ function ManageTable() {
 								<td
 									onClick={() =>
 										navigate(
-											`/job-portal/employer/dashboard/job-applicants/${job._id}`
+											`/job-portal/jobs/applicants/${job._id}`
 										)
 									}
 									className="py-3 text-blue-600 font-semibold underline cursor-pointer">
@@ -128,7 +128,7 @@ function ManageTable() {
 											icon={<IoEyeOutline />}
 											text={"View Application"}
 										/>
-										<DialogModal isOpen={jobViewModalOpen}>
+										<DialogModal scale={{ s: "sm", m: "md" }} isOpen={jobViewModalOpen}>
 											<SingleJob
 												data={selectedJob}
 												setJobViewModalOpen={
@@ -141,7 +141,7 @@ function ManageTable() {
 									<div
 										onClick={() =>
 											navigate(
-												`/job-portal/employer/dashboard/edit-job/${job._id}`
+												`/job-portal/edit/job/${job._id}`
 											)
 										}>
 										<CommentButtons

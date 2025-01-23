@@ -29,6 +29,7 @@ import RefundPolicy from "./pages/shared/RefundPolicy";
 import TermsConditions from "./pages/shared/TermsConditions";
 import AboutUs from "./pages/shared/AboutUs";
 import ContactUs from "./pages/shared/ContactUs";
+import ComingSoon from "./pages/shared/ComingSoon";
 // const Layout = lazy(() => import("./components/layout/Layout"));
 const SplashScreen = lazy(() => import("./pages/shared/SplashScreen"));
 const EmployerHome = lazy(() => import("./pages/employer/EmployerHome"));
@@ -129,9 +130,12 @@ function App() {
               <Route path="job/:jobId" element={<JobView />} />
               <Route path="profile/:profileId" element={<ProfileView />} />
               <Route path="requests" element={<RequestsView />} />
-              <Route path="requests1" element={<EmployeeApplied />} />
               <Route path="jobs" element={<Jobs />} />
               <Route path="jobs/:jobId" element={<PostedJobView />} />
+              <Route path="manage/jobs" element={<ManageJobs />} />
+              <Route path="edit/job/:id" element={<UpdateJob />} />
+              <Route path="jobs/applicants" element={<AllApplicants />} />
+              <Route path="jobs/applicants/:id" element={<JobApplicatns />} />
               <Route path="messages" element={<Messages />} />
               <Route path="notifications" element={<EmployerNotification />} />
 
@@ -250,7 +254,8 @@ function App() {
 							/>
 						</Route>
 					</Route> */}
-					<Route path="*" element={<NotFound />} />
+          <Route path="comingsoon" element={<ComingSoon />} />
+          <Route path="*" element={<NotFound />} />
         </Routes>
       </Suspense>
     </div>

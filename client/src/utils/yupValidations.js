@@ -140,7 +140,10 @@ const employerLinkedinValidation = Yup.object().shape({
 // job posting validation
 const jobPostValidation = Yup.object().shape({
 	jobTitle: Yup.string().required("Please Enter your job title"),
-	jobDescription: Yup.string().required("Please Enter job description"),
+	jobDescription: Yup.string()
+		.required("Please Enter job description")
+		.min(500, 'Description must be at minimum 500 characters long')
+		.max(1000, 'Description must be at most 1000 characters long'),
 	industry: Yup.string().required("Please Enter your industry"),
 	jobType: Yup.string().required("Please Enter your job type"),
 	employmentType: Yup.string().required("Please Enter your employment type"),
@@ -148,9 +151,24 @@ const jobPostValidation = Yup.object().shape({
 	qualification: Yup.string().required("Please select your qualification"),
 	candidateGender: Yup.string(),
 	jobLocation: Yup.string().required("Please select your job location"),
-	offeredSalary: Yup.number().required("Enter your offered salary"),
+	offeredSalary: Yup.string()
+		.required("Enter your offered salary")
+		.matches(/^\d{1,}(?:[.,]\d{1,3})?\s*-\s*\d{1,}(?:[.,]\d{1,3})?$/, 'Invalid salary range format. Please use format like "12k - 20k" or "12000 - 20000"')
+		.test('validRange', 'Invalid salary range', function (value) {
+			if (!value) return true; // Allow empty values
+
+			const [min, max] = value.split('-').map(str => {
+			const num = Number(str.replace(/[^\d]/g, '')); // Remove non-numeric characters
+			return isNaN(num) ? 0 : num; 
+			});
+
+			return min <= max; 
+		}),
 	jobPlace: Yup.string().required("Please select your job place"),
-	deadline: Yup.date().required("Please select deadline date"),
+	deadline: Yup.date()
+		.required("Please select deadline date")
+		.min(new Date(), 'Date cannot be in the past')
+  		.max(new Date(new Date().getTime()+30*24*60*60*1000), 'Date must be within the last month'),
 	skills: Yup.array().required("Please Enter required skill"),
 });
 

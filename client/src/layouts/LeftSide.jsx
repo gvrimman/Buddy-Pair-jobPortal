@@ -6,7 +6,7 @@ function LeftSide() {
 	const Links = [
 		{
 			title: "Professional Community",
-			link: "/",
+			link: "/comingsoon",
 		},
 		{
 			title: "Job Portal",
@@ -14,21 +14,21 @@ function LeftSide() {
 		},
 		{
 			title: "Matrimony",
-			link: "/",
+			link: "/comingsoon",
 		},
 		{
 			title: "E commerce",
-			link: "/",
+			link: "/comingsoon",
 		},
 		{
 			title: "Study Abroad",
-			link: "/",
+			link: "/comingsoon",
 		},
 	];
 	return (
-		<div className="w-[20vw] p-3 rounded-lg bg-white border-2 border-purple-500 hidden md:block h-screen sticky top-1">
+		<div className="w-[20vw] p-3 rounded-lg bg-white border-2 border-theme-500 hidden md:block h-screen sticky top-1">
 			<div>
-				<h2 className="font-bold text-2xl text-purple-500">
+				<h2 className="font-bold text-2xl text-theme-500">
 					BuddyPair
 				</h2>
 			</div>
@@ -37,12 +37,12 @@ function LeftSide() {
 					{Links.map((link, i) => (
 						<li
 							key={i}
-							className="font-semibold text-gray-800 my-1 hover:bg-purple-200 rounded-lg hover:text-white transition-all ease-in-out duration-300">
+							className="font-semibold text-gray-800 my-1 hover:bg-theme-200 rounded-lg hover:text-white transition-all ease-in-out duration-300">
 							<NavLink
 								to={link?.link}
 								className={({ isActive }) =>
 									isActive
-										? " block p-2 bg-white border-2 border-purple-500 rounded-lg text-purple-500 hover:bg-purple-100"
+										? " block p-2 bg-white border-2 border-theme-500 rounded-lg text-theme-500 hover:bg-theme-100"
 										: "block p-2"
 								}>
 								{link?.title}

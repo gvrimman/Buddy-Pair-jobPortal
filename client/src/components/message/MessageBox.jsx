@@ -50,7 +50,7 @@ function MessageBox() {
 							<UsersList key={item._id} user={item} />
 						))
 					)}
-					{!userLists?.length && <h3 className="p-4 font-bold text-xl text-center text-purple-500 flex justify-center items-center">Their is no Users to show</h3>}
+					{!userLists?.length && <h3 className="p-4 font-bold text-xl text-center text-theme-500 flex justify-center items-center">Their is no Users to show</h3>}
 				</div>
 			</div>
 			{/* chatbox */}

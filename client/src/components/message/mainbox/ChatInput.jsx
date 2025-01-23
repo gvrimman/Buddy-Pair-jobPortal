@@ -49,7 +49,7 @@ function ChatInput({ receiver }) {
       <div className="w-full bg-white p-2 border-2 border-slate-500 rounded-lg">
         <input
           type="text"
-          className="w-full ps-2 bg-white text-black focus:outline-none placeholder:text-customViolet placeholder:font-semibold"
+          className="w-full ps-2 bg-white text-black focus:outline-none placeholder:text-theme-500 placeholder:font-semibold"
           placeholder="Message"
           value={chatValue}
           onChange={handleChangeValue}
@@ -58,7 +58,7 @@ function ChatInput({ receiver }) {
       </div>
       <button
         onClick={handleSendBtn}
-        className="bg-customViolet text-white text-center text-2xl p-[10px] rounded-full"
+        className="bg-theme-500 text-white text-center text-2xl p-[10px] rounded-full"
       >
         <IoMdSend />
       </button>

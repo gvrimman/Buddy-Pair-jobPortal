@@ -30,9 +30,9 @@ function UsersList({ user }) {
     <div
       className={`px-2 py-3 grid grid-cols-4 h-fit items-center cursor-pointer rounded-lg ${
         selectedUser?.userId === user?.userId
-          ? "bg-customViolet text-white"
+          ? "bg-theme-500 text-white"
           : ""
-      } hover:hover:bg-customViolet hover:text-white`}
+      } hover:hover:bg-theme-500 hover:text-white`}
       onClick={handleSelectedUser}
     >
       <div className={`mx-auto avatar ${isUserOnline ? "online" : ""}`}>
@@ -60,7 +60,7 @@ function UsersList({ user }) {
           {/* 35 <span className="text-xs">mins</span> */}
         </p>
         {user && unreadCount ? (
-          <p className="min-w-5 min-h-5 flex justify-center items-center text-xs font-semibold bg-customViolet text-white rounded-full">
+          <p className="min-w-5 min-h-5 flex justify-center items-center text-xs font-semibold bg-theme-500 text-white rounded-full">
             {unreadCount}
           </p>
         ) : null}

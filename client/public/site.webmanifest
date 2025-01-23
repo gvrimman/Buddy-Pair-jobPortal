@@ -107,8 +107,8 @@
       "type": "image/png"
     }
   ],
-  "theme_color": "#9c14b7",
-  "background_color": "#9c16b1",
+  "theme_color": "#1A86B6",
+  "background_color": "#136285",
   "display": "standalone",
   "orientation": "portrait",
   "start_url": "/",

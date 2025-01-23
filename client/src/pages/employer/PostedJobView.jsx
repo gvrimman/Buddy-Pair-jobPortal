@@ -22,7 +22,7 @@ function PostedJobView() {
 					isLoading ? "block" : "hidden"
 				}`}></div>
 			<span
-				className={`text-purple-900 text-2xl fixed top-1/2 left-1/2 transform -translate-x-1/2 -translate-y-1/2  ${
+				className={`text-theme-900 text-2xl fixed top-1/2 left-1/2 transform -translate-x-1/2 -translate-y-1/2  ${
 					isLoading ? "block" : "hidden"
 				} `}>
 				<TbLoader2 className="animate-spin text-lg" />
@@ -41,18 +41,18 @@ function PostedJobView() {
 					{job?.skills.map((skill, idx) => (
 						<div
 							key={idx}
-							className=" bg-purple-50 text-purple-600 w-fit px-4 py-1 rounded-full text-sm font-medium">
+							className=" bg-theme-50 text-theme-600 w-fit px-4 py-1 rounded-full text-sm font-medium">
 							{skill}
 						</div>
 					))}
 				</div>
 
 				<div className="my-4 shadow-lg border py-3 px-2 rounded-md flex items-center gap-2">
-					<div className="flex items-center gap-1 bg-purple-50 text-purple-600 w-fit px-4 py-1 rounded-full text-sm font-medium">
+					<div className="flex items-center gap-1 bg-theme-50 text-theme-600 w-fit px-4 py-1 rounded-full text-sm font-medium">
 						<span>Salary</span>
 					</div>
 					<span>:</span>
-					<div className="flex items-center gap-1 bg-purple-50 text-purple-600 w-fit px-4 py-1 rounded-full text-sm font-medium">
+					<div className="flex items-center gap-1 bg-theme-50 text-theme-600 w-fit px-4 py-1 rounded-full text-sm font-medium">
 						<span>
 							<FaIndianRupeeSign />
 						</span>

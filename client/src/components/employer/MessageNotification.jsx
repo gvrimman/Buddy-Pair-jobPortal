@@ -42,7 +42,7 @@ function MessageNotification() {
       >
         <RiMessage3Line />
         {/* {messages?.length === 0 ? null : (
-          <span className="absolute -top-3 -right-3 min-w-6 min-h-6 flex items-center justify-center bg-customViolet text-white text-sm rounded-full ">
+          <span className="absolute -top-3 -right-3 min-w-6 min-h-6 flex items-center justify-center bg-theme-500 text-white text-sm rounded-full ">
             {messages?.length}
           </span>
         )} */}
@@ -52,7 +52,7 @@ function MessageNotification() {
           <div className="flex items-center gap-4 mb-2">
             <h1 className="font-semibold">Messages</h1>
             <p
-              className="text-sm cursor-pointer hover:font-semibold hover:text-customViolet"
+              className="text-sm cursor-pointer hover:font-semibold hover:text-theme-500"
               onClick={handleMarkAsRead}
             >
               Mark all as read

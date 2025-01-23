@@ -66,7 +66,7 @@ const RightSubMenuLinks = [
 const LeftLinks = [
   {
     title: "Professional Community",
-    link: "/",
+    link: "/comingsoon",
   },
   {
     title: "Job Portal",
@@ -74,15 +74,15 @@ const LeftLinks = [
   },
   {
     title: "Matrimony",
-    link: "/",
+    link: "/comingsoon",
   },
   {
     title: "E commerce",
-    link: "/",
+    link: "/comingsoon",
   },
   {
     title: "Study Abroad",
-    link: "/",
+    link: "/comingsoon",
   },
 ];
 
@@ -126,23 +126,23 @@ function TopNav() {
       <div className="flex items-center gap-2">
         <span
           onClick={() => setLeftShow(true)}
-          className="text-3xl text-purple-600"
+          className="text-3xl text-theme-600"
         >
           <HiMenuAlt1 />
         </span>
-        <h2 className="font-bold text-2xl text-purple-500">BuddyPair</h2>
+        <h2 className="font-bold text-2xl text-theme-500">BuddyPair</h2>
       </div>
       <div className="flex items-center gap-3">
         <NavLink
           to="/job-portal/notifications"
-          className="text-3xl text-purple-600"
+          className="text-3xl text-theme-600"
         >
           <BsBell />
         </NavLink>
         {userInfo ? (
           <div
             onClick={() => setShow(!show)}
-            className="w-11 border-pink-400 border-[3px] overflow-hidden aspect-square rounded-full"
+            className="w-11 border-theme-400 border-[3px] overflow-hidden aspect-square rounded-full"
           >
             <img
               className="h-full w-full"
@@ -157,7 +157,7 @@ function TopNav() {
         ) : (
           <span
             onClick={() => setShow(!show)}
-            className="text-4xl text-purple-600 me-1"
+            className="text-4xl text-theme-600 me-1"
           >
             <IoPersonCircleOutline />
           </span>
@@ -171,10 +171,10 @@ function TopNav() {
             onClick={() => setShow(false)}
             className="fixed inset-0 bg-transparent backdrop-blur-sm"
           />
-          <div className="absolute right-0 left-10 top-0 bg-purple-400 bg-opacity-95 p-4 rounded-lg shadow-lg">
+          <div className="absolute right-0 left-10 top-0 bg-theme-400 bg-opacity-95 p-4 rounded-lg shadow-lg">
             <div className="flex items-center gap-3 relative">
               {userInfo && (
-                <div className="w-14 border-pink-400 border-[3px] overflow-hidden aspect-square rounded-full">
+                <div className="w-14 border-theme-600 border-[3px] overflow-hidden aspect-square rounded-full">
                   <img
                     className="h-full w-full"
                     src={
@@ -188,7 +188,7 @@ function TopNav() {
               )}
               {userInfo && (
                 <div>
-                  <h5 className="font-bold text-sm text-pink-600">
+                  <h5 className="font-bold text-sm text-theme-700">
                     {userInfo?.username}
                   </h5>
                   <span className="text-xs font-medium text-gray-800 leading-2">
@@ -199,7 +199,7 @@ function TopNav() {
 
               <span
                 onClick={() => setShow(false)}
-                className="absolute right-0 top-0 text-purple-900 text-2xl"
+                className="absolute right-0 top-0 text-theme-900 text-2xl"
               >
                 <IoMdCloseCircleOutline />
               </span>
@@ -211,14 +211,14 @@ function TopNav() {
                 {RightLinks.map((link, i) => (
                   <li
                     key={i}
-                    className="font-semibold text-gray-800 my-1 hover:bg-purple-200 rounded-lg hover:text-white transition-all ease-in-out duration-300"
+                    className="font-semibold text-gray-800 my-1 hover:bg-theme-200 rounded-lg hover:text-white transition-all ease-in-out duration-300"
                   >
                     <NavLink
                       end={true}
                       to={link?.link}
                       className={({ isActive }) =>
                         isActive
-                          ? " block p-2 bg-purple-500 text-white rounded-lg"
+                          ? " block p-2 bg-theme-500 text-white rounded-lg"
                           : "block p-2"
                       }
                     >
@@ -226,7 +226,7 @@ function TopNav() {
                     </NavLink>
                   </li>
                 ))}
-                <li className="font-semibold text-gray-800 my-1 hover:bg-purple-200 rounded-lg hover:text-white transition-all ease-in-out duration-300">
+                <li className="font-semibold text-gray-800 my-1 hover:bg-theme-200 rounded-lg hover:text-white transition-all ease-in-out duration-300">
                   <button
                     className="w-full text-left block p-2 rounded-lg"
                     onClick={() => setShowPolicySubMenu(!showPolicySubMenu)}
@@ -245,14 +245,14 @@ function TopNav() {
                   RightSubMenuLinks.map((link, i) => (
                     <li
                       key={i}
-                      className="font-semibold ml-3 text-gray-800 my-1 hover:bg-purple-200 rounded-lg hover:text-white transition-all ease-in-out duration-300"
+                      className="font-semibold ml-3 text-gray-800 my-1 hover:bg-theme-200 rounded-lg hover:text-white transition-all ease-in-out duration-300"
                     >
                       <NavLink
                         end={true}
                         to={link?.link}
                         className={({ isActive }) =>
                           isActive
-                            ? " block p-2 bg-purple-500 text-white rounded-lg"
+                            ? " block p-2 bg-theme-500 text-white rounded-lg"
                             : "block p-2"
                         }
                       >
@@ -292,10 +292,10 @@ function TopNav() {
             onClick={() => setLeftShow(false)}
             className="fixed inset-0 bg-transparent backdrop-blur-sm"
           />
-          <div className="absolute right-10 w-3/4 left-0 top-0 bg-purple-400 bg-opacity-95 p-4 rounded-lg shadow-lg">
+          <div className="absolute right-10 w-3/4 left-0 top-0 bg-theme-400 bg-opacity-95 p-4 rounded-lg shadow-lg">
             <span
               onClick={() => setLeftShow(false)}
-              className="absolute right-3 top-3 text-purple-900 text-2xl"
+              className="absolute right-3 top-3 text-theme-900 text-2xl"
             >
               <IoMdCloseCircleOutline />
             </span>
@@ -305,13 +305,13 @@ function TopNav() {
                 {LeftLinks.map((link, i) => (
                   <li
                     key={i}
-                    className="font-semibold text-gray-800 my-1 hover:bg-purple-200 rounded-lg hover:text-white transition-all ease-in-out duration-300"
+                    className="font-semibold text-gray-800 my-1 hover:bg-theme-200 rounded-lg hover:text-white transition-all ease-in-out duration-300"
                   >
                     <NavLink
                       to={link?.link}
                       className={({ isActive }) =>
                         isActive
-                          ? " block p-2 bg-purple-500 text-white rounded-lg"
+                          ? " block p-2 bg-theme-500 text-white rounded-lg"
                           : "block p-2"
                       }
                     >

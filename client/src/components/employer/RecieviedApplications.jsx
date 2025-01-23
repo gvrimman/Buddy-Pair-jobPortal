@@ -86,15 +86,15 @@ function RecieviedApplications() {
         Recieved Applicants({applicants?.length})
       </h4>
       <div className="mt-5 sticky top-10">
-        <div className="grid grid-cols-3 relative bg-white h-12 rounded-full border border-purple-300">
+        <div className="grid grid-cols-3 relative bg-white h-12 rounded-full border border-theme-300">
           {["Pending", "Approved", "Rejected"].map((tab, index) => (
             <button
               key={index}
               onClick={() => setActiveTab(index)}
               className={`text-sm font-medium m-1 py-2 rounded-full transition text-center ${
                 activeTab === index
-                  ? "bg-purple-500 text-white shadow-md"
-                  : "text-gray-600 hover:bg-purple-100 hover:text-purple-500"
+                  ? "bg-theme-500 text-white shadow-md"
+                  : "text-gray-600 hover:bg-theme-100 hover:text-theme-500"
               }`}
             >
               {tab}
@@ -118,7 +118,7 @@ function RecieviedApplications() {
               }`}
             ></div>
             <span
-              className={`text-purple-900 text-2xl fixed top-1/2 left-1/2 transform -translate-x-1/2 -translate-y-1/2  ${
+              className={`text-theme-900 text-2xl fixed top-1/2 left-1/2 transform -translate-x-1/2 -translate-y-1/2  ${
                 isLoading ? "block" : "hidden"
               } `}
             >
@@ -169,16 +169,16 @@ function RecieviedApplications() {
                 )}
 
                 <div className="flex flex-wrap gap-2 mb-3">
-                  <span className="bg-purple-100 text-purple-700 text-xs font-medium px-2 py-1 rounded">
+                  <span className="bg-theme-100 text-theme-700 text-xs font-medium px-2 py-1 rounded">
                     {data?.applicant.email}
                   </span>
-                  <span className="bg-purple-100 text-purple-700 text-xs font-medium px-2 py-1 rounded">
+                  <span className="bg-theme-100 text-theme-700 text-xs font-medium px-2 py-1 rounded">
                     {data?.applicant.phone}
                   </span>
                   {data?.skills?.map((skill, i) => (
                     <span
                       key={i}
-                      className="bg-purple-100 text-purple-700 text-xs font-medium px-2 py-1 rounded"
+                      className="bg-theme-100 text-theme-700 text-xs font-medium px-2 py-1 rounded"
                     >
                       {skill}
                     </span>

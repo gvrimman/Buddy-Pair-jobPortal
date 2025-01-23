@@ -49,7 +49,7 @@ const ContactForm = () => {
             name="name"
             value={formData.name}
             onChange={handleChange}
-            className="w-full p-3 border border-gray-300 rounded-md focus:ring-2 focus:ring-purple-500 focus:outline-none"
+            className="w-full p-3 border border-gray-300 rounded-md focus:ring-2 focus:ring-theme-500 focus:outline-none"
             placeholder="Enter your name"
             required
           />
@@ -61,7 +61,7 @@ const ContactForm = () => {
             name="email"
             value={formData.email}
             onChange={handleChange}
-            className="w-full p-3 border border-gray-300 rounded-md focus:ring-2 focus:ring-purple-500 focus:outline-none"
+            className="w-full p-3 border border-gray-300 rounded-md focus:ring-2 focus:ring-theme-500 focus:outline-none"
             placeholder="Enter your email"
             required
           />
@@ -72,7 +72,7 @@ const ContactForm = () => {
             name="message"
             value={formData.message}
             onChange={handleChange}
-            className="w-full p-3 border border-gray-300 rounded-md focus:ring-2 focus:ring-purple-500 focus:outline-none"
+            className="w-full p-3 border border-gray-300 rounded-md focus:ring-2 focus:ring-theme-500 focus:outline-none"
             placeholder="Write your message here"
             rows="5"
             required
@@ -81,7 +81,7 @@ const ContactForm = () => {
         <button
           type="submit"
           className={`w-full p-3 font-medium text-white rounded-md ${
-            isSubmitting ? "bg-purple-300" : "bg-purple-600 hover:bg-purple-700"
+            isSubmitting ? "bg-theme-300" : "bg-theme-600 hover:bg-theme-700"
           } transition-all`}
           disabled={isSubmitting}
         >

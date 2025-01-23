@@ -43,7 +43,7 @@ function LargeHeader() {
 							className="relative p-1 rounded-md text-2xl bg-[#ede7f6] text-[#673ab7] hover:bg-[#673ab7] hover:text-[#ffffff] hover:scale-105">
 							<IoBookmarkOutline />
 							{bookmarkedJobs?.length === 0 ? null : (
-								<span className="absolute -top-3 -right-3 min-w-6 min-h-6 flex items-center justify-center bg-customViolet text-white text-sm rounded-full ">
+								<span className="absolute -top-3 -right-3 min-w-6 min-h-6 flex items-center justify-center bg-theme-500 text-white text-sm rounded-full ">
 									{bookmarkedJobs?.length}
 								</span>
 							)}
@@ -58,7 +58,7 @@ function LargeHeader() {
 							className="relative p-1 rounded-md text-2xl bg-[#ede7f6] text-[#673ab7] hover:bg-[#673ab7] hover:text-[#ffffff] hover:scale-105">
 							<IoMdNotificationsOutline />
 							{unreadCount === 0 ? null : (
-								<span className="absolute -top-3 -right-3 min-w-6 min-h-6 flex items-center justify-center bg-customViolet text-white text-sm rounded-full ">
+								<span className="absolute -top-3 -right-3 min-w-6 min-h-6 flex items-center justify-center bg-theme-500 text-white text-sm rounded-full ">
 									{unreadCount}
 								</span>
 							)}

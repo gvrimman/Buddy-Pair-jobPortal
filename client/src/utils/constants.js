@@ -5,6 +5,12 @@ export const genderOptions = [
 	{ value: "other", valueToDisplay: "Other" },
 ];
 
+export const preferedGenderOptions = [
+	{ value: "male", valueToDisplay: "Male" },
+	{ value: "female", valueToDisplay: "Female" },
+	{ value: "both", valueToDisplay: "Both" },
+];
+
 export const qualificationOptions = [
 	{ value: "no_education", valueToDisplay: "No Formal Education" },
 	{ value: "primary_school", valueToDisplay: "Primary School" },

@@ -67,7 +67,7 @@ function ExperienceInfos() {
 
 	return (
     <div className="grid bg-white mx-2 p-4 rounded-md shadow">
-      <h2 className="py-2 text-xl text-purple-500 tracking-wide font-semibold">
+      <h2 className="py-2 text-xl text-theme-500 tracking-wide font-semibold">
         My Job Experience
       </h2>
       <form onSubmit={handleSubmit(onSubmit)}>
@@ -162,7 +162,7 @@ function ExperienceInfos() {
             />
             {userInfo?.apps?.jobPortal?.resume ? (
               <a href={userInfo?.apps?.jobPortal?.resume}>
-                <Button className="whitespace-nowrap bg-transparent text-purple-500 border border-purple-500">
+                <Button className="whitespace-nowrap bg-transparent text-theme-500 border border-theme-500">
                   dowload resume
                 </Button>
               </a>
@@ -173,7 +173,7 @@ function ExperienceInfos() {
         </div>
         <Button
           type="submit"
-          className="bg-purple-500 hover:bg-purple-400 w-fit mt-3 text-end"
+          className="bg-theme-500 hover:bg-theme-400 w-fit mt-3 text-end"
         >
           Update
         </Button>

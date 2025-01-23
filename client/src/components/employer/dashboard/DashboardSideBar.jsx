@@ -12,7 +12,7 @@ function DashboardSideBar() {
           <NavLink
             className={`flex items-center gap-4 ps-2 pr-5 py-3 font-semibold  ${
               pathname === item.path && " bg-[#ede7f6] text-[#673ab7] border-1 "
-            } transition ease-in-out duration-300 hover:bg-[#ede7f6] hover:text-customViolet hover:font-semibold rounded-md`}
+            } transition ease-in-out duration-300 hover:bg-[#ede7f6] hover:text-theme-500 hover:font-semibold rounded-md`}
             to={item.path}
             key={index}
           >

@@ -47,7 +47,7 @@ function Filter({search}) {
         />
         <button
           onClick={() => setIsFilterOpen(!isFilterOpen)}
-          className={`outline-none border bg-[#e0c7f8] text-lg text-purple-800 font-semibold p-3 rounded-md shadow-none hidden ${
+          className={`outline-none border bg-theme-100 text-lg text-theme-700 font-semibold p-3 rounded-md shadow-none hidden ${
             isFilterOpen ? "sm:hidden" : "sm:block"
           }`}
         >
@@ -58,14 +58,14 @@ function Filter({search}) {
       </div>
       <div className="flex gap-2 items-center sm:hidden">
         <Button
-          className="w-full my-2 bg-purple-500 text-white"
+          className="w-full my-2 bg-theme-500 text-white"
           onClick={search}
         >
           search
         </Button>
         <Button
           onClick={() => setIsModalOpen(true)}
-          className="outline-none border bg-[#e0c7f8] text-lg text-purple-500 font-semibold p-3 rounded-md shadow-none"
+          className="outline-none border bg-[#e0c7f8] text-lg text-theme-500 font-semibold p-3 rounded-md shadow-none"
         >
           <span>
             <RiFilterFill />
@@ -83,7 +83,7 @@ function Filter({search}) {
 					${isFilterOpen ? "sm:h-fit py-3" : "sm:invisible sm:max-h-0"}
 					${isModalOpen ? "translate-y-0" : "translate-y-[100%] sm:translate-y-0"}`}
       >
-        <div className="text-end sm:hidden">
+        <div className="text-end sm:hidden pt-1">
           <Button
             onClick={() => setIsModalOpen(false)}
             className="bg-gray-300 p-2 text-black text-base rounded-full"
@@ -115,12 +115,12 @@ function Filter({search}) {
           </div>
         </div>
 
-        <div className="absolute bottom-5 left-3 right-3 sm:static flex gap-2">
+        <div className="absolute bottom-[20%] left-3 right-3 sm:static flex gap-2">
           <Button
             onClick={() => {
               search(), setIsFilterOpen(false);
             }}
-            className="w-full sm:w-fit outline-none border bg-purple-500 text-sm text-white font-semibol rounded-md shadow-none p-2"
+            className="w-full sm:w-fit outline-none border bg-theme-500 text-sm text-white font-semibol rounded-md shadow-none p-2"
           >
             apply
           </Button>

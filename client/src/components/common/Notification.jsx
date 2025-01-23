@@ -24,7 +24,7 @@ function Notification() {
           <div
             key={i}
             onClick={() => handleRead(notification?._id, notification?.link)}
-            className="flex items-center gap-3 border border-purple-100 hover:border-customViolet hover:border-2 px-3 py-2 rounded transition cursor-pointer relative"
+            className="flex items-center gap-3 border border-theme-100 hover:border-theme-500 hover:border-2 px-3 py-2 rounded transition cursor-pointer relative"
           >
             <div className="w-16 md:w-20 aspect-square overflow-hidden rounded-full">
               <img
@@ -43,13 +43,13 @@ function Notification() {
               {notification.createdAt?.slice(0, 10)}
             </span>
             {!notification?.isRead && (
-              <div className="w-3 absolute top-2 right-2 rounded-full aspect-square bg-customViolet"></div>
+              <div className="w-3 absolute top-2 right-2 rounded-full aspect-square bg-theme-500"></div>
             )}
           </div>
         ))}
       </div>
       {!notifications.length && (
-        <h3 className="p-4 font-bold text-xl text-center text-purple-500 flex justify-center items-center">
+        <h3 className="p-4 font-bold text-xl text-center text-theme-500 flex justify-center items-center">
           Nothing to show
         </h3>
       )}

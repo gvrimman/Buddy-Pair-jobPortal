@@ -33,14 +33,14 @@ function ProfileView() {
           }`}
         ></div>
         <span
-          className={`text-purple-900 text-2xl fixed top-1/2 left-1/2 transform -translate-x-1/2 -translate-y-1/2  ${
+          className={`text-theme-900 text-2xl fixed top-1/2 left-1/2 transform -translate-x-1/2 -translate-y-1/2  ${
             isLoading ? "block" : "hidden"
           } `}
         >
           <TbLoader2 className="animate-spin text-lg" />
         </span>
         <div className="  flex items-baseline justify-between mb-3">
-          <div className="overflow-hidden aspect-square border-2 border-customViolet rounded-full w-16 h-16">
+          <div className="overflow-hidden aspect-square border-2 border-theme-500 rounded-full w-16 h-16">
             <img
               className="w-full h-full object-cover"
               src={
@@ -70,21 +70,21 @@ function ProfileView() {
                 <Link
                   title="Edit Profile"
                   to={"../edit/profile"}
-                  className="text-xs text-nowrap text-purple-800 underline"
+                  className="text-xs text-nowrap text-theme-700 underline"
                 >
                   Edit Profile
                 </Link>
                 <Link
                   title="Edit Company Profile"
                   to={"../edit/profile/company"}
-                  className="text-xs text-nowrap text-purple-800 underline"
+                  className="text-xs text-nowrap text-theme-700 underline"
                 >
                   Edit Company Profile
                 </Link>
                 <Link
                   title="Referral Program"
                   to={"referral"}
-                  className="text-xs text-nowrap text-purple-800 underline"
+                  className="text-xs text-nowrap text-theme-700 underline"
                 >
                   Referral Program
                 </Link>
@@ -95,7 +95,7 @@ function ProfileView() {
       </Container>
       <Container>
         <h4 className="font-medium text-sm my-2">About</h4>
-        <p className="text-xs leading-5">Not Avaliable</p>
+        <p className="text-xs leading-5">{profile?.apps?.jobPortal?.about || "Not avaliable"}</p>
       </Container>
       <Container>
         <h4 className="font-medium text-sm my-2">Major Skills</h4>
@@ -104,13 +104,13 @@ function ProfileView() {
             profile?.apps?.jobPortal?.skills?.map((skill, index) => (
               <div
                 key={index}
-                className="bg-purple-50 text-purple-600 w-fit px-4 py-1 rounded-full text-xs font-medium"
+                className="bg-theme-50 text-theme-600 w-fit px-4 py-1 rounded-full text-xs font-medium"
               >
                 {skill}
               </div>
             ))
           ) : (
-            <div className="bg-purple-50 text-center text-purple-600 w-fit px-4 py-1 rounded-full text-xs font-medium">
+            <div className="bg-theme-50 text-center text-theme-600 w-fit px-4 py-1 rounded-full text-xs font-medium">
               No skills added yet
             </div>
           )}

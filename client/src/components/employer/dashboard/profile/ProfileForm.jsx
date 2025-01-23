@@ -125,12 +125,12 @@ function ProfileForm() {
 
   return (
     <div className="grid bg-white mx-2 p-4 rounded-md shadow">
-      <h2 className="py-2 text-xl text-purple-500 tracking-wide font-semibold">
+      <h2 className="py-2 text-xl text-theme-500 tracking-wide font-semibold">
         Company Profile
       </h2>
       {!showOtpField ? (
         <form onSubmit={handleSubmit(onSubmit)}>
-          <div className=" rounded-full border border-purple-500 border-spacing-2 w-20 sm:w-24 aspect-square overflow-hidden mx-auto mb-8 relative">
+          <div className=" rounded-full border border-theme-500 border-spacing-2 w-20 sm:w-24 aspect-square overflow-hidden mx-auto mb-8 relative">
             <div className="absolute top-1/2 -translate-y-1/2 cursor-pointer opacity-0 scale-150">
               <TextInput
                 type={"file"}
@@ -219,7 +219,7 @@ function ProfileForm() {
           </div>
           <Button
             type="submit"
-            className="bg-purple-500 hover:bg-purple-400 my-3 w-fit"
+            className="bg-theme-500 hover:bg-theme-400 my-3 w-fit"
           >
             Update
           </Button>
@@ -234,7 +234,7 @@ function ProfileForm() {
           />
           <Button
             onClick={handleOtpSubmit}
-            className="bg-purple-500 hover:bg-purple-400 my-3 w-fit mx-1"
+            className="bg-theme-500 hover:bg-theme-400 my-3 w-fit mx-1"
           >
             Verify OTP
           </Button>

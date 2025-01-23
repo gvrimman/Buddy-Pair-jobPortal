@@ -37,7 +37,7 @@ function CandidatesLists({ page, setPage }) {
 					isLoading ? "block" : "hidden"
 				}`}></div>
 			<span
-				className={`text-purple-900 text-2xl absolute top-1/2 left-1/2 transform -translate-x-1/2 -translate-y-1/2  ${
+				className={`text-theme-900 text-2xl absolute top-1/2 left-1/2 transform -translate-x-1/2 -translate-y-1/2  ${
 					isLoading ? "block" : "hidden"
 				} `}>
 				<TbLoader2 className="animate-spin" />

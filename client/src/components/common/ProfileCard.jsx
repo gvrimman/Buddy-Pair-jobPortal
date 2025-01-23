@@ -37,7 +37,7 @@ function ProfileCard({ data }) {
         {data?.skills.map((skill, i) => (
           <span
             key={i}
-            className="bg-purple-100 text-purple-700 text-xs font-medium px-2 py-1 rounded"
+            className="bg-theme-100 text-theme-700 text-xs font-medium px-2 py-1 rounded"
           >
             {skill}
           </span>

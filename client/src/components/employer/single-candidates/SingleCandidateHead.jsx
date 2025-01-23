@@ -23,7 +23,7 @@ function SingleCandidateHead() {
             <h1 className="text-xl font-semibold capitalize">
               {candidate?.userId?.username || "Unknown Candidate"}
             </h1>
-            <p className="text-sm text-purple-600">
+            <p className="text-sm text-theme-600">
               {candidate?.jobDetails?.jobTitle || "No Job Title"}
             </p>
           </div>
@@ -34,7 +34,7 @@ function SingleCandidateHead() {
           {candidate?.skills?.map((skill, index) => (
             <span
               key={index}
-              className="px-3 py-1 bg-purple-100 text-purple-500 text-xs font-semibold rounded-full"
+              className="px-3 py-1 bg-theme-100 text-theme-500 text-xs font-semibold rounded-full"
             >
               {skill}
             </span>
@@ -64,11 +64,11 @@ function SingleCandidateHead() {
           <a
             href={candidate?.resume}
             download
-            className="px-5 py-3 bg-purple-600 hover:bg-purple-800 text-white text-sm font-medium rounded-lg"
+            className="px-5 py-3 bg-theme-600 hover:bg-theme-700 text-white text-sm font-medium rounded-lg"
           >
             Download CV
           </a>
-          <button className="p-3 bg-purple-100 text-purple-500 rounded-lg">
+          <button className="p-3 bg-theme-100 text-theme-500 rounded-lg">
             <IoBookmarkOutline className="text-xl" />
           </button>
         </div>

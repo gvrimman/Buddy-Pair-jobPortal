@@ -1,19 +1,12 @@
 import React from "react";
-import { useLocation, useNavigate } from "react-router-dom";
+import { useNavigate } from "react-router-dom";
 
 function JobCard({ data }) {
 	const navigate = useNavigate();
-	const location = useLocation();
 	return (
 		<div
 			className="bg-white shadow rounded-lg p-4"
-			onClick={() => {
-				if (location.pathname === "/job-portal/jobs") {
-					navigate(`/job-portal/jobs/${data?._id}`);
-				} else {
-					navigate(`/job-portal/job/${data?._id}`);
-				}
-			}}>
+			onClick={() => { navigate(`/job-portal/job/${data?._id}`) }}>
 			<h2 className="text-lg font-semibold mb-2">{data?.jobTitle}</h2>
 			<p className="text-gray-600 text-sm mb-1">
 				<span className="font-medium">Location:</span> {data?.jobPlace}
@@ -30,7 +23,7 @@ function JobCard({ data }) {
 				{data?.skills.map((skill, i) => (
 					<span
 						key={i}
-						className="bg-purple-100 text-purple-700 text-xs font-medium px-2 py-1 rounded">
+						className="bg-theme-100 text-theme-700 text-xs font-medium px-2 py-1 rounded">
 						{skill}
 					</span>
 				))}

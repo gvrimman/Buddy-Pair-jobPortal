@@ -29,7 +29,7 @@ function ReferralDashboard() {
       <h1 className="text-2xl font-bold text-gray-700">Referral Program</h1>
       {!referralCode ? (
         <button
-          className="mt-4 px-4 py-2 bg-purple-500 text-white rounded"
+          className="mt-4 px-4 py-2 bg-theme-500 text-white rounded"
           onClick={generateCode}
         >
           Generate Referral Code
@@ -88,7 +88,7 @@ function ReferralDashboard() {
                     settings.maxDiscount * settings.discountPerReferral
                 )}
               </p>
-              <button className="mt-2 px-4 py-2 bg-purple-500 text-white rounded">
+              <button className="mt-2 px-4 py-2 bg-theme-500 text-white rounded">
                 Buy Course
               </button>
             </div>

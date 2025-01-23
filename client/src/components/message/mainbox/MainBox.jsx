@@ -65,7 +65,7 @@ function MainBox({ handleBack }) {
 						</div>
 					))}
 					{!isLoading && chats?.length === 0 && (
-						<p className="text-center font-semibold text-customViolet">
+						<p className="text-center font-semibold text-theme-500">
 							Send a message to start the chat
 						</p>
 					)}

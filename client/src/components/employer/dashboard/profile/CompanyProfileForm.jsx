@@ -8,7 +8,7 @@ function CompanyProfileForm() {
 
 
   return (
-    <div className="grid gap-5 max-w-[900px] w-full">
+    <div className="grid gap-5 max-w-[900px] w-full mb-16">
       <ProfileForm />
       <SocialProfileForm />
       {/* <ContactForm  /> */}

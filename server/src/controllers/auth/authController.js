@@ -6,6 +6,7 @@ const ApiResponse = require("../../utils/apiResponse");
 const asyncHandler = require("../../utils/asyncHandler");
 const generateAccessAndRefreshToken = require("../../utils/generateAccessAndRefreshToken");
 const SendMail = require("../../config/mailer");
+const isCompanyMail = require("../../utils/mailChecker");
 
 const renewalOfAccessToken = asyncHandler(async (req, res) => {
 	const currentRefreshToken = req.cookies.refreshToken;
@@ -619,6 +620,10 @@ const updateEmployerProfileInfo = asyncHandler(async (req, res) => {
 		const existingemail = await JobPortal.findOne({ companyEmail });
 		if(existingemail) {
 			throw new ApiError(403, "This mail already verified by another company. you can't add.");
+		}
+
+		if(!isCompanyMail(companyEmail)) {
+			throw new ApiError(403, "Personal mail addresses are not accepted.");
 		}
 
 		if (

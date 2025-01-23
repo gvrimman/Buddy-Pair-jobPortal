@@ -26,7 +26,7 @@ function SocialMedia() {
         ].map((social, index) =>
           social.link ? (
             <a key={index} href={social.link} target="_blank" rel="noreferrer">
-              <div className="text-purple-300 hover:text-purple-500 text-lg cursor-pointer">
+              <div className="text-theme-300 hover:text-theme-500 text-lg cursor-pointer">
                 {social.icon}
               </div>
             </a>

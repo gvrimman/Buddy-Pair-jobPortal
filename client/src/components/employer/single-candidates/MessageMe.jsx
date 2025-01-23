@@ -29,7 +29,7 @@ function MessageMe() {
   return (
     <button
       onClick={handleClick}
-      className="w-full lg:w-auto px-4 py-2 bg-purple-600 hover:bg-purple-800 text-white text-base tracking-wider rounded-md"
+      className="w-full lg:w-auto px-4 py-2 bg-theme-600 hover:bg-theme-700 text-white text-base tracking-wider rounded-md"
     >
       Message Me
     </button>

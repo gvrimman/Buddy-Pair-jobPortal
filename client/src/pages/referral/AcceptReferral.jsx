@@ -46,7 +46,7 @@ function AcceptReferral() {
         </p>
         <a
           href="/job-portal"
-          className="mt-6 block px-6 py-2 bg-purple-500 text-white text-center rounded hover:bg-purple-600"
+          className="mt-6 block px-6 py-2 bg-theme-500 text-white text-center rounded hover:bg-theme-600"
         >
           Go to Homepage
         </a>

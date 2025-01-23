@@ -23,7 +23,7 @@ function JobDetails({ setUserData, onClose, openUserResumeModal, goBack }) {
 	return (
 		<div className="flex flex-col gap-4 px-1 py-5">
 			<div className="relative text-center">
-				{/* <h1 className="text-customViolet text-lg md:text-2xl font-bold">
+				{/* <h1 className="text-theme-500 text-lg md:text-2xl font-bold">
 					Work Experience
 				</h1> */}
 				<Typography

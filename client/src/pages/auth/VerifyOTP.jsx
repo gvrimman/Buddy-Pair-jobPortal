@@ -87,7 +87,7 @@ function VerifyOTP({
   return (
     <div className="flex flex-col gap-4 px-1 py-5">
       <div className="relative text-center">
-        <h1 className="text-customViolet text-lg md:text-2xl font-bold">
+        <h1 className="text-theme-500 text-lg md:text-2xl font-bold">
           Verify Email
         </h1>
         <p className="text-[#0000008a] text-sm md:text-base font-semibold my-2">
