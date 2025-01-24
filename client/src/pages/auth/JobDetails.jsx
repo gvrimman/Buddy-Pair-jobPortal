@@ -53,8 +53,8 @@ function JobDetails({ setUserData, onClose, openUserResumeModal, goBack }) {
 					<TextInput
 						type={"text"}
 						label={"Location"}
-						registering={register("location")}
-						errors={errors["location"]}
+						registering={register("companyLocation")}
+						errors={errors["companyLocation"]}
 					/>
 
 					<SelectInput
@@ -68,14 +68,14 @@ function JobDetails({ setUserData, onClose, openUserResumeModal, goBack }) {
 					<TextInput
 						type={"number"}
 						label={"Current CTC"}
-						registering={register("ctc")}
-						errors={errors["ctc"]}
+						registering={register("currentCTC")}
+						errors={errors["currentCTC"]}
 					/>
 					<TextInput
 						type={"number"}
 						label={"Expected CTC"}
-						registering={register("eCtc")}
-						errors={errors["eCtc"]}
+						registering={register("expectedCTC")}
+						errors={errors["expectedCTC"]}
 					/>
 				</div>
 				<div className="text-end">
