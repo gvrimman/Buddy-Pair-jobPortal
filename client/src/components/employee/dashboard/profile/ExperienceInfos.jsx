@@ -35,9 +35,9 @@ function ExperienceInfos() {
 			jobDetails: {
 				jobTitle: data.jobTitle,
 				companyName: data.companyName,
-				location: data.location,
-				ctc: data.ctc,
-				eCtc: data.eCtc,
+				companyLocation: data.companyLocation,
+				currentCTC: data.currentCTC,
+				expectedCTC: data.expectedCTC,
 				workExperience: data.workExperience,
 			},
 			profession: data.profession.map((prof) => prof.value),
@@ -98,23 +98,23 @@ function ExperienceInfos() {
           <TextInput
             label={"Company Location"}
             type={"text"}
-            value={userInfo?.apps?.jobPortal?.jobDetails?.location}
-            registering={register("location")}
-            errors={errors.location}
+            value={userInfo?.apps?.jobPortal?.jobDetails?.companyLocation}
+            registering={register("companyLocation")}
+            errors={errors.companyLocation}
           />
           <TextInput
             label={"Current CTC"}
             type={"number"}
-            value={userInfo?.apps?.jobPortal?.jobDetails?.ctc}
-            registering={register("ctc")}
-            errors={errors.ctc}
+            value={userInfo?.apps?.jobPortal?.jobDetails?.currentCTC}
+            registering={register("currentCTC")}
+            errors={errors.currentCTC}
           />
           <TextInput
             label={"Expected CTC"}
             type={"number"}
-            value={userInfo?.apps?.jobPortal?.jobDetails?.eCtc}
-            registering={register("eCtc")}
-            errors={errors.eCtc}
+            value={userInfo?.apps?.jobPortal?.jobDetails?.expectedCTC}
+            registering={register("expectedCTC")}
+            errors={errors.expectedCTC}
           />
 
           <SelectInput

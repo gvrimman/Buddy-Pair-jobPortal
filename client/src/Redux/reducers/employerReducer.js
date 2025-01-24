@@ -10,7 +10,7 @@ const initialState = {
 	rejected: [],
 	companies: [],
 	company: null,
-	isLoading: false,
+	isLoading: true,
 	error: null,
 	hasMore: true,
 	pagination: null,
@@ -38,6 +38,10 @@ const employerSlice = createSlice({
 		fetchJob(state, action) {
 			state.isLoading = false;
 			state.job = action.payload;
+		},
+		clearJob(state, action) {
+			state.isLoading = true;
+			state.job = null;
 		},
 		createJob(state, action) {
 			state.jobs.push(action.payload);
@@ -141,6 +145,7 @@ export const {
 	fetchStart,
 	fetchJobs,
 	fetchJob,
+	clearJob,
 	updateJob,
 	createJob,
 	deleteJob,

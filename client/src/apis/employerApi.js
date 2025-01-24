@@ -4,6 +4,7 @@ import {
 	fetchStart,
 	fetchJobs,
 	fetchJob,
+	clearJob,
 	createJob,
 	updateJob,
 	deleteJob,
@@ -52,6 +53,7 @@ export const getPostedJobs =
 	};
 
 export const getJobById = (id) => async (dispatch) => {
+	dispatch(clearJob());
 	dispatch(fetchStart());
 	try {
 		const response = await axiosInstance.get(`/employer/job/${id}`);

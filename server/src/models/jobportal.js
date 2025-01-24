@@ -39,11 +39,11 @@ const jobPortalSchema = new mongoose.Schema(
       required: true,
     },
     jobDetails: {
+      jobTitle: String,
       companyName: String,
-      designation: String,
-      LastWorkingDate: Date,
-      LastWithdrawnSalary: Number,
-      QuitReason: String,
+      companyLocation: String,
+      currentCTC: Number,
+      expectedCTC: Number,
       workExperience: String,
     },
     preferenceStatus: {

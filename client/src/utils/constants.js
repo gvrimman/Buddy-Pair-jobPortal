@@ -348,6 +348,13 @@ export const categoryData = [
 	{ value: "W-F-H", valueToDisplay: "W-F-H" },
 	{ value: "Hybrid", valueToDisplay: "Hybrid" },
 ];
+// job Status
+export const JobStatusData = [
+	{ value: "Active", valueToDisplay: "Active" },
+	{ value: "Closed", valueToDisplay: "Closed" },
+	{ value: "Paused", valueToDisplay: "Paused" },
+	{ value: "Inactive", valueToDisplay: "Inactive" },
+];
 
 export const postedDateData = [
 	"All",

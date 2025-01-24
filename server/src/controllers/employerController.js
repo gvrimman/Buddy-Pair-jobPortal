@@ -139,6 +139,7 @@ const updateJob = asyncHandler(async (req, res) => {
 		offeredSalary,
 		jobPlace,
 		deadline,
+		status,
 	} = req.body;
 
 	const selectedSkills = skills.map((skill) => skill.value);
@@ -159,6 +160,7 @@ const updateJob = asyncHandler(async (req, res) => {
 			offeredSalary,
 			jobPlace,
 			deadline,
+			status,
 		},
 		{
 			new: true,

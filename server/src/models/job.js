@@ -66,9 +66,10 @@ const jobSchema = new mongoose.Schema(
 			required: true,
 		},
 		status: {
-			type: Boolean,
+			type: String,
 			required: true,
-			default: true,
+			default: "Active",
+			enum: ["Active", "Closed", "Paused", "Inactive"],
 		},
 		shortListed: {
 			type: [mongoose.Types.ObjectId],

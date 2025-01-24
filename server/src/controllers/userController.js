@@ -112,7 +112,7 @@ const fetchMatchedJobs = asyncHandler(async (req, res) => {
 		sort = "newest",
 	} = req.query;
 
-	const query = {};
+	const query = {status: "Active"};
 
   if (name) {
     query.jobTitle = { $regex: name, $options: "i" };

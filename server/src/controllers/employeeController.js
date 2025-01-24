@@ -257,6 +257,9 @@ const applyJob = asyncHandler(async (req, res) => {
 	if (!job) {
 		throw new ApiError(400, "job not found");
 	}
+	if(job?.status !== "Active") {
+		throw new ApiError(400, "Currently job is not avaliable");
+	}
 	const isApplied = employee.appliedJobs.includes(jobId);
 	if (isApplied) {
 		throw new ApiError(400, "job already applied");
