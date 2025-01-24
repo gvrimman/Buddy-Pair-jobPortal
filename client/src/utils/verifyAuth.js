@@ -13,7 +13,7 @@ const verifyUser = async (dispatch, location) => {
   } catch (error) {
     console.error("User verification failed:", error);
     // Clear user state and perform logout if verification fails
-    await axiosInstance.post("auth/logout").catch(() => {});
+    await axios.post("auth/logout").catch(() => {});
     dispatch(clearUser());
     localStorage.clear();
     sessionStorage.clear();
