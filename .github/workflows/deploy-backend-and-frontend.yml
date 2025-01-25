@@ -29,7 +29,7 @@ jobs:
           # Navigate to the server folder and install dependencies
           cd server
           echo "Installing backend dependencies"
-          npm install
+          npm install || { echo "Dependency installation failed"; exit 1; }
 
           # Restart PM2 process
           echo "Restarting PM2 process"
@@ -38,25 +38,28 @@ jobs:
           # Navigate to the client folder
           cd ~/jobportal/client
           echo "Installing frontend dependencies"
-          npm install
+          npm install || { echo "Dependency installation failed"; exit 1; }
 
           # Build the frontend app
           echo "Building the frontend app"
-          npm run build
+          npm run build || { echo "Build process failed"; exit 1; }
 
           # Navigate to home directory and create a backup of the current frontend
           cd ~
-          echo "Backing up current frontend"
-          mv ~/frontend ~/frontendbackup$(date +%Y%m%d_%H%M%S)
-
-          # Copy the newly built frontend to the deployment folder
-          echo "Deploying new frontend"
-          cp -r ~/jobportal/client/dist ~/frontend
-
-          # Set permissions
-          echo "Setting permissions for frontend"
-          sudo chown -R www-data:www-data ~/frontend
-          sudo chmod -R 755 ~/frontend
+          if [ -d "~/jobportal/client/dist" ]; then
+            echo "Backing up current frontend"
+            mv ~/frontend ~/frontendbackup$(date +%Y%m%d_%H%M%S)
+          
+            echo "Deploying new frontend"
+            cp -r ~/jobportal/client/dist ~/frontend
+          
+            echo "Setting permissions for frontend"
+            sudo chown -R www-data:www-data ~/frontend
+            sudo chmod -R 755 ~/frontend
+          else
+            echo "Build folder does not exist. Exiting."
+            exit 1
+          fi
 
           # Restart NGINX
           echo "Restarting NGINX"
