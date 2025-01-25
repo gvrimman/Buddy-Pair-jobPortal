@@ -1,0 +1,74 @@
+name: CI/CD for Job Portal
+
+on:
+  push:
+    branches:
+      - main
+
+env:
+  S3_BUCKET_NAME: ${{ secrets.S3_BUCKET_NAME }}
+  CLOUDFRONT_DISTRIBUTION_ID: ${{ secrets.CLOUDFRONT_DISTRIBUTION_ID }}
+  EC2_HOST: ${{ secrets.EC2_HOST }}
+  EC2_USER: ubuntu
+  EC2_KEY: ${{ secrets.EC2_KEY }}
+  BACKEND_DIR: server
+  FRONTEND_DIR: client
+
+jobs:
+  deploy-frontend:
+    name: Deploy Frontend to S3
+    runs-on: ubuntu-latest
+
+    steps:
+      - name: Checkout code
+        uses: actions/checkout@v3
+
+      - name: Setup Node.js
+        uses: actions/setup-node@v3
+        with:
+          node-version: 18
+
+      - name: Install dependencies and build
+        run: |
+          cd ${{ env.FRONTEND_DIR }}
+          npm ci
+          npm run build
+
+      - name: Sync to S3
+        run: |
+          aws s3 sync --delete ${{ env.FRONTEND_DIR }}/dist s3://${{ env.S3_BUCKET_NAME }}
+        env:
+          AWS_ACCESS_KEY_ID: ${{ secrets.AWS_ACCESS_KEY_ID }}
+          AWS_SECRET_ACCESS_KEY: ${{ secrets.AWS_SECRET_ACCESS_KEY }}
+          AWS_REGION: ${{ secrets.AWS_REGION }}
+
+      - name: Invalidate CloudFront cache
+        run: |
+          aws cloudfront create-invalidation --distribution-id ${{ env.CLOUDFRONT_DISTRIBUTION_ID }} --paths "/*"
+        env:
+          AWS_ACCESS_KEY_ID: ${{ secrets.AWS_ACCESS_KEY_ID }}
+          AWS_SECRET_ACCESS_KEY: ${{ secrets.AWS_SECRET_ACCESS_KEY }}
+          AWS_REGION: ${{ secrets.AWS_REGION }}
+
+  deploy-backend:
+    name: Deploy Backend to EC2
+    runs-on: ubuntu-latest
+
+    steps:
+      - name: Checkout code
+        uses: actions/checkout@v3
+
+      - name: Add SSH key for EC2 access
+        run: |
+          mkdir -p ~/.ssh
+          echo "$EC2_KEY" > ~/.ssh/jobportal.pem
+          chmod 600 ~/.ssh/jobportal.pem
+
+      - name: Deploy to EC2
+        run: |
+          ssh -i ~/.ssh/jobportal.pem ${{ env.EC2_USER }}@${{ env.EC2_HOST }} << 'EOF'
+          cd ${{ env.BACKEND_DIR }}
+          git pull origin main
+          npm ci
+          pm2 restart all
+          EOF
