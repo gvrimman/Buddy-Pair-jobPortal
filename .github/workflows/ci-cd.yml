@@ -3,7 +3,7 @@ name: CI/CD for Job Portal
 on:
   push:
     branches:
-      - main
+      - rjryt
 
 env:
   S3_BUCKET_NAME: ${{ secrets.S3_BUCKET_NAME }}
