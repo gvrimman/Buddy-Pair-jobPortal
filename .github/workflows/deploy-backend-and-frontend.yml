@@ -1,0 +1,69 @@
+name: Deploy Backend and Frontend
+
+on:
+  push:
+    branches:
+      - main
+
+jobs:
+  deploy:
+    runs-on: ubuntu-latest
+
+    steps:
+    - name: Checkout Code
+      uses: actions/checkout@v3
+
+    - name: SSH into EC2 and Deploy Backend and Frontend
+      uses: appleboy/ssh-action@v0.1.10
+      with:
+        host: ${{ secrets.EC2_HOST }}
+        username: ${{ secrets.EC2_USER }}
+        key: ${{ secrets.EC2_KEY }}
+        port: 22
+        script: |
+          # Navigate to the backend project directory
+          cd ~/jobportal
+          echo "Pulling latest changes from main branch"
+          git pull origin main
+
+          # Navigate to the server folder and install dependencies
+          cd server
+          echo "Installing backend dependencies"
+          npm install || { echo "Dependency installation failed"; exit 1; }
+
+          # Restart PM2 process
+          echo "Restarting PM2 process"
+          pm2 restart all
+
+          # Navigate to the client folder
+          cd ~/jobportal/client
+          echo "Installing frontend dependencies"
+          npm install || { echo "Dependency installation failed"; exit 1; }
+
+          # Build the frontend app
+          echo "Building the frontend app"
+          npm run build || { echo "Build process failed"; exit 1; }
+
+          # Navigate to home directory and create a backup of the current frontend
+          cd ~
+          if [ -d "~/jobportal/client/dist" ]; then
+            echo "Backing up current frontend"
+            mv ~/frontend ~/frontendbackup$(date +%Y%m%d_%H%M%S)
+          
+            echo "Deploying new frontend"
+            cp -r ~/jobportal/client/dist ~/frontend
+          
+            echo "Setting permissions for frontend"
+            sudo chown -R www-data:www-data ~/frontend
+            sudo chmod -R 755 ~/frontend
+          else
+            echo "Build folder does not exist. Exiting."
+            exit 1
+          fi
+
+          # Restart NGINX
+          echo "Restarting NGINX"
+          sudo systemctl restart nginx
+
+          # Deployment completed
+          echo "Deployment completed"
