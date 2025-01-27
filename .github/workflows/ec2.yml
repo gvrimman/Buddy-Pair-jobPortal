@@ -1,0 +1,87 @@
+name: Manage EC2 Services
+
+on:
+  workflow_dispatch:
+
+jobs:
+  nginx-management:
+    name: Manage NGINX Service
+    runs-on: ubuntu-latest
+
+    steps:
+      - name: Connect to EC2 and Manage NGINX
+        uses: appleboy/ssh-action@v0.1.6
+        with:
+          host: ${{ secrets.EC2_HOST }}
+          username: ${{ secrets.EC2_USER }}
+          key: ${{ secrets.EC2_KEY }}
+          port: 22
+          script: |
+            echo "Choose an NGINX action:"
+            echo "1: Restart"
+            echo "2: Stop"
+            echo "3: Start"
+            echo "4: View Logs"
+            read -p "Enter action number: " ACTION
+            case $ACTION in
+              1)
+                echo "Restarting NGINX..."
+                sudo systemctl restart nginx
+                ;;
+              2)
+                echo "Stopping NGINX..."
+                sudo systemctl stop nginx
+                ;;
+              3)
+                echo "Starting NGINX..."
+                sudo systemctl start nginx
+                ;;
+              4)
+                echo "Fetching NGINX logs..."
+                sudo journalctl -u nginx --no-pager -n 100
+                ;;
+              *)
+                echo "Invalid action!"
+                ;;
+            esac
+
+  pm2-management:
+    name: Manage PM2 Service
+    runs-on: ubuntu-latest
+
+    steps:
+      - name: Connect to EC2 and Manage PM2
+        uses: appleboy/ssh-action@v0.1.6
+        with:
+          host: ${{ secrets.EC2_HOST }}
+          username: ${{ secrets.EC2_USER }}
+          key: ${{ secrets.EC2_KEY }}
+          port: 22
+          script: |
+            echo "Choose a PM2 action:"
+            echo "1: Restart all"
+            echo "2: Stop all"
+            echo "3: List processes"
+            echo "4: View Logs"
+            read -p "Enter action number: " ACTION
+            case $ACTION in
+              1)
+                echo "Restarting all PM2 processes..."
+                pm2 restart all
+                ;;
+              2)
+                echo "Stopping all PM2 processes..."
+                pm2 stop all
+                ;;
+              3)
+                echo "Listing PM2 processes..."
+                pm2 list
+                ;;
+              4)
+                echo "Fetching PM2 logs..."
+                pm2 logs --lines 100
+                ;;
+              *)
+                echo "Invalid action!"
+                ;;
+            esac
