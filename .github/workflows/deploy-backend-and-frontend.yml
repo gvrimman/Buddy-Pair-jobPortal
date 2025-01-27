@@ -79,12 +79,12 @@ jobs:
           # Backup current frontend
           echo "Backing up current frontend"
           if [ -d "~/frontend" ]; then
-            mv ~/frontend ~/frontend-backup-$(date +%Y%m%d_%H%M%S)
+            sudo mv ~/frontend ~/frontend-backup-$(date +%Y%m%d_%H%M%S)
           fi
 
           # Move the new frontend to the deployment folder
           echo "Deploying new frontend"
-          mv ~/jobportal/frontend-temp ~/frontend
+          sudo mv ~/jobportal/frontend-temp ~/frontend
 
           # Set permissions for frontend
           echo "Setting permissions for frontend"
