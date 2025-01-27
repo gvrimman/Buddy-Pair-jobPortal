@@ -1,0 +1,120 @@
+name: Manage EC2 Services
+
+on:
+  workflow_dispatch:
+    inputs:
+      service:
+        description: "Service to manage (nginx, pm2, logs)"
+        required: true
+        type: choice
+        options:
+          - nginx
+          - pm2
+          - logs
+      action:
+        description: "Action to perform (start, stop, restart, status, view logs)"
+        required: true
+        type: choice
+        options:
+          - start
+          - stop
+          - restart
+          - status
+          - view logs
+      process_name:
+        description: "PM2 process name (required for pm2 actions; use 'all' for all processes)"
+        required: false
+        default: "all"
+
+jobs:
+  manage-ec2:
+    runs-on: ubuntu-latest
+
+    steps:
+    - name: SSH into EC2 and Manage Services
+      uses: appleboy/ssh-action@v0.1.10
+      with:
+        host: ${{ secrets.EC2_HOST }}
+        username: ${{ secrets.EC2_USER }}
+        key: ${{ secrets.EC2_KEY }}
+        port: 22
+        script: |
+          echo "Selected service: ${{ github.event.inputs.service }}"
+          echo "Action: ${{ github.event.inputs.action }}"
+          echo "PM2 Process Name (if applicable): ${{ github.event.inputs.process_name }}"
+
+          case "${{ github.event.inputs.service }}" in
+            nginx)
+              case "${{ github.event.inputs.action }}" in
+                start)
+                  echo "Starting NGINX"
+                  sudo systemctl start nginx || { echo "Failed to start NGINX"; exit 1; }
+                  ;;
+                stop)
+                  echo "Stopping NGINX"
+                  sudo systemctl stop nginx || { echo "Failed to stop NGINX"; exit 1; }
+                  ;;
+                restart)
+                  echo "Restarting NGINX"
+                  sudo systemctl restart nginx || { echo "Failed to restart NGINX"; exit 1; }
+                  ;;
+                status)
+                  echo "Checking NGINX status"
+                  sudo systemctl status nginx
+                  ;;
+                "view logs")
+                  echo "Viewing NGINX logs"
+                  sudo tail -n 50 /var/log/nginx/error.log
+                  ;;
+                *)
+                  echo "Invalid action for NGINX"
+                  exit 1
+                  ;;
+              esac
+              ;;
+            pm2)
+              case "${{ github.event.inputs.action }}" in
+                start)
+                  echo "Starting PM2 process ${{ github.event.inputs.process_name }}"
+                  pm2 start ${{ github.event.inputs.process_name }} || { echo "Failed to start PM2 process"; exit 1; }
+                  ;;
+                stop)
+                  echo "Stopping PM2 process ${{ github.event.inputs.process_name }}"
+                  pm2 stop ${{ github.event.inputs.process_name }} || { echo "Failed to stop PM2 process"; exit 1; }
+                  ;;
+                restart)
+                  echo "Restarting PM2 process ${{ github.event.inputs.process_name }}"
+                  pm2 restart ${{ github.event.inputs.process_name }} || { echo "Failed to restart PM2 process"; exit 1; }
+                  ;;
+                status)
+                  echo "Getting status of PM2 process ${{ github.event.inputs.process_name }}"
+                  pm2 describe ${{ github.event.inputs.process_name }} || { echo "Failed to get PM2 process status"; exit 1; }
+                  ;;
+                "view logs")
+                  echo "Viewing PM2 logs for ${{ github.event.inputs.process_name }}"
+                  if [ "${{ github.event.inputs.process_name }}" = "all" ]; then
+                    pm2 logs --lines 50
+                  else
+                    pm2 logs ${{ github.event.inputs.process_name }} --lines 50
+                  fi
+                  ;;
+                *)
+                  echo "Invalid action for PM2"
+                  exit 1
+                  ;;
+              esac
+              ;;
+            logs)
+              echo "Viewing all logs"
+              echo "--- NGINX Logs ---"
+              sudo tail -n 50 /var/log/nginx/error.log
+              echo "--- PM2 Logs ---"
+              pm2 logs --lines 50
+              ;;
+            *)
+              echo "Invalid service. Supported services: nginx, pm2, logs"
+              exit 1
+              ;;
+          esac
+
+          echo "Action ${{ github.event.inputs.action }} on ${{ github.event.inputs.service }} completed successfully"
