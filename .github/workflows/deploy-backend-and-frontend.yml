@@ -10,10 +10,31 @@ jobs:
     runs-on: ubuntu-latest
 
     steps:
+    # Step 1: Checkout Code
     - name: Checkout Code
       uses: actions/checkout@v3
 
-    - name: SSH into EC2 and Deploy Backend and Frontend
+    # Step 2: Set up Node.js (for building the frontend)
+    - name: Set up Node.js
+      uses: actions/setup-node@v3
+      with:
+        node-version: 18
+
+    # Step 3: Install dependencies and build frontend
+    - name: Install Dependencies and Build Frontend
+      working-directory: client
+      env:
+        VITE_API_URL: ${{ secrets.VITE_API_URL }}
+        VITE_CLIENT_URL: ${{ secrets.VITE_CLIENT_URL }}
+        VITE_BASE_URL: ${{ secrets.VITE_BASE_URL }}
+        VITE_NODE_ENV: ${{ secrets.VITE_NODE_ENV }}
+        VITE_GOOGLE_MAPS_API_KEY: ${{ secrets.VITE_GOOGLE_MAPS_API_KEY }}
+      run: |
+        npm install || { echo "Dependency installation failed"; exit 1; }
+        npm run build || { echo "Client build failed"; exit 1; }
+
+    # Step 4: SSH into EC2 and Deploy Backend
+    - name: Deploy to EC2
       uses: appleboy/ssh-action@v0.1.10
       with:
         host: ${{ secrets.EC2_HOST }}
@@ -35,31 +56,40 @@ jobs:
           echo "Restarting PM2 process"
           pm2 restart all
 
-          # Navigate to the client folder
-          cd ~/jobportal/client
-          echo "Installing frontend dependencies"
-          npm install || { echo "Dependency installation failed"; exit 1; }
+    # Step 5: Upload Frontend to EC2
+    - name: Upload Frontend to EC2
+      uses: appleboy/scp-action@v0.1.9
+      with:
+        host: ${{ secrets.EC2_HOST }}
+        username: ${{ secrets.EC2_USER }}
+        key: ${{ secrets.EC2_KEY }}
+        port: 22
+        source: client/dist/
+        target: ~/jobportal/frontend-temp/
 
-          # Build the frontend app
-          echo "Building the frontend app"
-          npm run build || { echo "Build process failed"; exit 1; }
-
-          # Navigate to home directory and create a backup of the current frontend
-          cd ~
-          if [ -d "~/jobportal/client/dist" ]; then
-            echo "Backing up current frontend"
-            mv ~/frontend ~/frontendbackup$(date +%Y%m%d_%H%M%S)
-          
-            echo "Deploying new frontend"
-            cp -r ~/jobportal/client/dist ~/frontend
-          
-            echo "Setting permissions for frontend"
-            sudo chown -R www-data:www-data ~/frontend
-            sudo chmod -R 755 ~/frontend
-          else
-            echo "Build folder does not exist. Exiting."
-            exit 1
+    # Step 6: SSH into EC2 to deploy frontend
+    - name: Deploy Frontend
+      uses: appleboy/ssh-action@v0.1.10
+      with:
+        host: ${{ secrets.EC2_HOST }}
+        username: ${{ secrets.EC2_USER }}
+        key: ${{ secrets.EC2_KEY }}
+        port: 22
+        script: |
+          # Backup current frontend
+          echo "Backing up current frontend"
+          if [ -d "~/frontend" ]; then
+            mv ~/frontend ~/frontend-backup-$(date +%Y%m%d_%H%M%S)
           fi
+
+          # Move the new frontend to the deployment folder
+          echo "Deploying new frontend"
+          mv ~/jobportal/frontend-temp ~/frontend
+
+          # Set permissions for frontend
+          echo "Setting permissions for frontend"
+          sudo chown -R www-data:www-data ~/frontend
+          sudo chmod -R 755 ~/frontend
 
           # Restart NGINX
           echo "Restarting NGINX"
