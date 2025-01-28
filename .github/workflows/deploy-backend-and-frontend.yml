@@ -82,6 +82,12 @@ jobs:
             sudo mv ~/frontend ~/frontend-backup-$(date +%Y%m%d_%H%M%S)
           fi
 
+          # Remove the existing frontend-temp directory if it exists
+          if [ -d "~/frontend/frontend-temp" ]; then
+            echo "Removing existing temp files"
+            sudo rm -rf ~/frontend/frontend-temp
+          fi
+
           # Move the new frontend to the deployment folder
           echo "Deploying new frontend"
           sudo mv ~/jobportal/frontend-temp ~/frontend
