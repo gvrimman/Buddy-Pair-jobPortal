@@ -48,13 +48,19 @@ jobs:
           git pull origin main
 
           # Navigate to the server folder and install dependencies
-          cd server
+          cd ~/jobportal/server
           echo "Installing backend dependencies"
           npm install || { echo "Dependency installation failed"; exit 1; }
 
           # Restart PM2 process
           echo "Restarting PM2 process"
           pm2 restart all
+
+          # Remove the existing frontend-temp directory if it exists
+          if [ -d "~/frontend-temp" ]; then
+            echo "Removing existing frontend temp files"
+            sudo rm -rf ~/frontend-temp
+          fi
 
     # Step 5: Upload Frontend to EC2
     - name: Upload Frontend to EC2
@@ -64,7 +70,7 @@ jobs:
         username: ${{ secrets.EC2_USER }}
         key: ${{ secrets.EC2_KEY }}
         port: 22
-        source: client/dist/
+        source: client/dist/*
         target: ~/frontend-temp/
 
     # Step 6: SSH into EC2 to deploy frontend
@@ -77,20 +83,16 @@ jobs:
         port: 22
         script: |
           # Backup current frontend
-          echo "Backing up current frontend"
           if [ -d "~/frontend" ]; then
+            echo "Backing up current frontend"
             sudo mv ~/frontend ~/frontend-backup-$(date +%Y%m%d_%H%M%S)
           fi
 
-          # Remove the existing frontend-temp directory if it exists
-          if [ -d "~/frontend-temp" ]; then
-            echo "Removing existing temp files"
-            sudo rm -rf ~/frontend-temp
-          fi
-
           # Move the new frontend to the deployment folder
-          echo "Deploying new frontend"
-          sudo mv ~/frontend-temp ~/frontend
+          if [ -d "~/frontend-temp" ]; then
+            echo "Deploying new frontend"
+            sudo mv ~/frontend-temp ~/frontend
+          fi
 
           # Set permissions for frontend
           echo "Setting permissions for frontend"
