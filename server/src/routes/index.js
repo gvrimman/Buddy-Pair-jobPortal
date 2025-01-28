@@ -9,19 +9,6 @@ const referralRouter = require("./referralRouter");
 const contactRoutes = require("./contactRouter");
 const router = express.Router();
 
-if (process.env.NODE_ENV === "production") {
-  router.get("/csrf-token", (req, res) => {
-    // Send the CSRF token in a cookie
-    res.cookie("XSRF-TOKEN", req.csrfToken(), {
-      httpOnly: false,
-      secure: process.env.NODE_ENV === "production",
-      sameSite: "Strict",
-      domain: process.env.COOKIE_DOMAIN,
-    });
-    res.json({ message: "CSRF token set" });
-  });
-}
-
 // all routes
 router.use("/auth", authRoutes);
 router.use("/employer", emplyerRoutes);

@@ -5,7 +5,6 @@ const dbConfig = require("./config/db");
 const apiRoutes = require("./routes/index");
 const { app, server } = require("./socket/socket");
 const gloabalErrorHandler = require("./utils/gloabalErrorHandler");
-const CSRFErrorHandler = require("./utils/CSRFErrorHandler");
 const NotFoundErrorHandler = require("./utils/NotFoundErrorHandler");
 const cookieParser = require("cookie-parser");
 const session = require("express-session");
@@ -15,7 +14,6 @@ const helmet = require("helmet");
 const morgan = require("morgan");
 const fs = require("fs");
 const path = require("path");
-const csrf = require("csurf");
 // port
 const PORT = process.env.PORT || 3000;
 
@@ -39,18 +37,7 @@ app.use(
 		//allowedHeaders: ["Content-Type", "Authorization", "x-csrf-token", "Accept"],
 	})
 );
-if (process.env.NODE_ENV === "production") {
-  app.use(
-    csrf({
-      cookie: {
-        httpOnly: true,
-        secure: process.env.NODE_ENV === "production",
-        sameSite: "strict",
-        domain: process.env.COOKIE_DOMAIN,
-      },
-    })
-  );
-}
+
 app.use(cookieParser());
 
 app.use(
@@ -70,17 +57,6 @@ app.use(
 
 if (process.env.NODE_ENV === "production") {
   app.use(helmet());
-  // app.use(
-  //   helmet.contentSecurityPolicy({
-  //     directives: {
-  //       defaultSrc: ["'self'"],
-  //       scriptSrc: ["'self'", "http://localhost:5173"],
-  //       styleSrc: ["'self'", "http://localhost:5173"],
-  //       connectSrc: ["'self'", "http://localhost:3000"],
-  //       imgSrc: ["'self'", "data:"],
-  //     },
-  //   })
-  // );
 }
 
 // Create a write stream for logging
@@ -102,9 +78,6 @@ app.use("/api", apiRoutes);
 
 app.use(NotFoundErrorHandler);
 
-if (process.env.NODE_ENV === "production") {
-  app.use(CSRFErrorHandler);
-}
 app.use(gloabalErrorHandler);
 
 // Server error logger

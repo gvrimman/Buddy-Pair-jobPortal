@@ -1,99 +1,68 @@
 import React, { lazy, Suspense, useEffect } from "react";
-import { showError } from "./utils/toast";
 import { useDispatch } from "react-redux";
 import verifyUser from "./utils/verifyAuth";
 import { Routes, Route, useLocation } from "react-router-dom";
-import NotFound from "./pages/shared/NotFound";
-import ProtectedRoute from "./router/ProtectedRoute";
-import EmployeeMessages from "./pages/employee/dashboard/EmployeeMessages";
-import Messages from "./pages/employer/dashboard/Messages";
-import SingleCompany from "./pages/employee/SingleCompany";
-import PublicRoute from "./router/PublicRoute";
-import PageLoader from "./pages/shared/PageLoader";
-import EmployeeNotification from "./pages/employee/dashboard/EmployeeNotification";
 import useListenNotification from "./hooks/useListenNotification";
-import FetchCSRFToken from "./utils/generateCSRFToken";
 import { useSocket } from "./hooks/useSocket";
-import EmployerNotification from "./pages/employer/dashboard/EmployerNotification";
-import Layout from "./layouts/Layout";
-//import JobportalUserInfo from "./pages/auth/jobportal-auth/jobportalUserInfo";
-import JobView from "./pages/employer/JobView";
-import ProfileView from "./pages/employer/ProfileView";
-import RequestsView from "./pages/employer/RequestsView";
-import Jobs from "./pages/employer/Jobs";
-import PostedJobView from "./pages/employer/PostedJobView";
-import AcceptReferral from "./pages/referral/AcceptReferral";
-import ReferralDashboard from "./pages/referral/ReferralDashboard";
-import AdminSettings from "./pages/referral/AdminSettings";
-import PrivacyPolicy from "./pages/shared/PrivacyPolicy";
-import RefundPolicy from "./pages/shared/RefundPolicy";
-import TermsConditions from "./pages/shared/TermsConditions";
-import AboutUs from "./pages/shared/AboutUs";
-import ContactUs from "./pages/shared/ContactUs";
-import ComingSoon from "./pages/shared/ComingSoon";
-// const Layout = lazy(() => import("./components/layout/Layout"));
+
+const ErrorBoundary = lazy(() => import("./components/common/ErrorBoundary"));
+const NotFound = lazy(() => import("./pages/shared/NotFound"));
+const ProtectedRoute = lazy(() => import("./router/ProtectedRoute"));
+const EmployeeMessages = lazy(() => import("./pages/employee/dashboard/EmployeeMessages"));
+const Messages = lazy(() => import("./pages/employer/dashboard/Messages"));
+const SingleCompany = lazy(() => import("./pages/employee/SingleCompany"));
+const PublicRoute = lazy(() => import("./router/PublicRoute"));
+const PageLoader = lazy(() => import("./pages/shared/PageLoader"));
+const EmployeeNotification = lazy(() => import("./pages/employee/dashboard/EmployeeNotification"));
+const EmployerNotification = lazy(() => import("./pages/employer/dashboard/EmployerNotification"));
+const Layout = lazy(() => import("./layouts/Layout"));
+const JobportalUserInfo = lazy(() => import("./pages/auth/jobportal-auth/JobportalUserInfo"));
+const JobView = lazy(() => import("./pages/employer/JobView"));
+const ProfileView = lazy(() => import("./pages/employer/ProfileView"));
+const RequestsView = lazy(() => import("./pages/employer/RequestsView"));
+const Jobs = lazy(() => import("./pages/employer/Jobs"));
+const PostedJobView = lazy(() => import("./pages/employer/PostedJobView"));
+const AcceptReferral = lazy(() => import("./pages/referral/AcceptReferral"));
+const ReferralDashboard = lazy(() => import("./pages/referral/ReferralDashboard"));
+const AdminSettings = lazy(() => import("./pages/referral/AdminSettings"));
+const PrivacyPolicy = lazy(() => import("./pages/shared/PrivacyPolicy"));
+const RefundPolicy = lazy(() => import("./pages/shared/RefundPolicy"));
+const TermsConditions = lazy(() => import("./pages/shared/TermsConditions"));
+const AboutUs = lazy(() => import("./pages/shared/AboutUs"));
+const ContactUs = lazy(() => import("./pages/shared/ContactUs"));
+const ComingSoon = lazy(() => import("./pages/shared/ComingSoon"));
 const SplashScreen = lazy(() => import("./pages/shared/SplashScreen"));
 const EmployerHome = lazy(() => import("./pages/employer/EmployerHome"));
 const Candidates = lazy(() => import("./pages/employer/Candidates"));
-const EmployerCompanies = lazy(() =>
-  import("./pages/employer/EmployerCompanies")
-);
-const EmployerDashboard = lazy(() =>
-  import("./pages/employer/dashboard/EmployerDashboard")
-);
+const EmployerCompanies = lazy(() => import("./pages/employer/EmployerCompanies"));
+const EmployerDashboard = lazy(() => import("./pages/employer/dashboard/EmployerDashboard"));
 const PostJobs = lazy(() => import("./pages/employer/dashboard/PostJobs"));
 const LandingPage = lazy(() => import("./pages/shared/LandingPage"));
 const EmployerLayout = lazy(() => import("./layouts/EmployerLayout"));
-const EmployerDashboardLayout = lazy(() =>
-  import("./layouts/EmployerDashboardLayout")
-);
-const CompanyProfile = lazy(() =>
-  import("./pages/employer/dashboard/CompanyProfile")
-);
+const EmployerDashboardLayout = lazy(() => import("./layouts/EmployerDashboardLayout"));
+const CompanyProfile = lazy(() => import("./pages/employer/dashboard/CompanyProfile"));
 const ManageJobs = lazy(() => import("./pages/employer/dashboard/ManageJobs"));
-const AllApplicants = lazy(() =>
-  import("./pages/employer/dashboard/AllApplicants")
-);
+const AllApplicants = lazy(() => import("./pages/employer/dashboard/AllApplicants"));
 const EmployeeLayout = lazy(() => import("./layouts/EmplyeeLayout"));
-const EmployeeDashboardLayout = lazy(() =>
-  import("./layouts/EmployeeDashboardLayout")
-);
+const EmployeeDashboardLayout = lazy(() => import("./layouts/EmployeeDashboardLayout"));
 const Home = lazy(() => import("./pages/employee/Home"));
 const FindJobs = lazy(() => import("./pages/employee/FindJobs"));
 const HomeCompanies = lazy(() => import("./pages/employee/HomeCompanies"));
-const UpdateJob = lazy(() =>
-  import("./components/employer/dashboard/manageJobs/UpdateJob")
-);
+const UpdateJob = lazy(() => import("./components/employer/dashboard/manageJobs/UpdateJob"));
 const SingleJob = lazy(() => import("./pages/employee/SingleJob"));
 const Saved = lazy(() => import("./pages/employee/Saved"));
-const EmployeeBookMarked = lazy(() =>
-  import("./pages/employee/dashboard/EmployeeBookMarked")
-);
-const EmployeeProfile = lazy(() =>
-  import("./pages/employee/dashboard/EmployeeProfile")
-);
-const EmployeeDashboard = lazy(() =>
-  import("./pages/employee/dashboard/EmployeeDashboard")
-);
-const EmployeeApplied = lazy(() =>
-  import("./pages/employee/dashboard/EmployeeApplied")
-);
-const EmployeeChangePassword = lazy(() =>
-  import("./pages/employee/dashboard/EmployeeChangePassword")
-);
+const EmployeeBookMarked = lazy(() => import("./pages/employee/dashboard/EmployeeBookMarked"));
+const EmployeeProfile = lazy(() => import("./pages/employee/dashboard/EmployeeProfile"));
+const EmployeeDashboard = lazy(() => import("./pages/employee/dashboard/EmployeeDashboard"));
+const EmployeeApplied = lazy(() => import("./pages/employee/dashboard/EmployeeApplied"));
+const EmployeeChangePassword = lazy(() => import("./pages/employee/dashboard/EmployeeChangePassword"));
 const SingleCandidate = lazy(() => import("./pages/employer/SingleCandidate"));
-const JobApplicatns = lazy(() =>
-  import("./pages/employer/dashboard/JobApplicatns")
-);
-const SingleEmployerCompany = lazy(() =>
-  import("./pages/employer/SingleEmployerCompany")
-);
-import ErrorBoundary from "./components/common/ErrorBoundary";
+const JobApplicatns = lazy(() => import("./pages/employer/dashboard/JobApplicatns"));
+const SingleEmployerCompany = lazy(() => import("./pages/employer/SingleEmployerCompany"));
 
 function App() {
   useSocket(); // Initializes the socket
   useListenNotification(); // Listens for notifications globally
-  FetchCSRFToken();
 
   const dispatch = useDispatch();
   const location = useLocation();
