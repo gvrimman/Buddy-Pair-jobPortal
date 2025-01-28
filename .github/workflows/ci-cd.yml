@@ -5,7 +5,7 @@ on:
     branches:
       - rjryt
 
-env:
+env: 
   S3_BUCKET_NAME: ${{ secrets.S3_BUCKET_NAME }}
   CLOUDFRONT_DISTRIBUTION_ID: ${{ secrets.CLOUDFRONT_DISTRIBUTION_ID }}
   EC2_HOST: ${{ secrets.EC2_HOST }}
