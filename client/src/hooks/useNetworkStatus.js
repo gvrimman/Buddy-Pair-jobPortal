@@ -3,9 +3,10 @@ import { showSuccess, showWarn } from "../utils/toast";
 import { toast } from "react-toastify";
 
 export const useNetworkStatus = () => {
-  const [isOnline, setIsOnline] = useState(navigator.onLine);
+  const [isOnline, setIsOnline] = useState(true);
 
   useEffect(() => {
+    setIsOnline(navigator.onLine);
     const handleOnline = () => {
       setIsOnline(true);
       toast.dismiss("offline-warning");
