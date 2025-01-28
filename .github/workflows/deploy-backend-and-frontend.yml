@@ -65,7 +65,7 @@ jobs:
         key: ${{ secrets.EC2_KEY }}
         port: 22
         source: client/dist/
-        target: ~/jobportal/frontend-temp/
+        target: ~/frontend-temp/
 
     # Step 6: SSH into EC2 to deploy frontend
     - name: Deploy Frontend
@@ -83,14 +83,14 @@ jobs:
           fi
 
           # Remove the existing frontend-temp directory if it exists
-          if [ -d "~/frontend/frontend-temp" ]; then
+          if [ -d "~/frontend-temp" ]; then
             echo "Removing existing temp files"
-            sudo rm -rf ~/frontend/frontend-temp
+            sudo rm -rf ~/frontend-temp
           fi
 
           # Move the new frontend to the deployment folder
           echo "Deploying new frontend"
-          sudo mv ~/jobportal/frontend-temp ~/frontend
+          sudo mv ~/frontend-temp ~/frontend
 
           # Set permissions for frontend
           echo "Setting permissions for frontend"
