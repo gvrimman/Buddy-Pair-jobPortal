@@ -17,13 +17,17 @@ const path = require("path");
 // port
 const PORT = process.env.PORT || 3000;
 
+app.set("trust proxy", true);
+
 if (process.env.NODE_ENV === "production") {
   // middlewares
   app.use(
     rateLimit({
       windowMs: 15 * 60 * 1000, // 15 minutes
-      max: 50, // Limit each IP to 50 requests per window
+      max: 100, // Limit each IP to 100 requests per window
       message: "Too many login attempts, please try again after 15 minutes.",
+      standardHeaders: true, // Include rate limit info in the `RateLimit-*` headers
+      legacyHeaders: false, // Disable `X-RateLimit-*` headers
     })
   );
 }
@@ -32,9 +36,9 @@ app.use(express.urlencoded({ extended: true }));
 app.use(
 	cors({
 		origin: process.env.CLIENT_URL,
-		//methods: "GET,POST,PUT,PATCH,DELETE,OPTIONS",
+		methods: "GET,POST,PUT,PATCH,DELETE,OPTIONS",
 		credentials: true,
-		//allowedHeaders: ["Content-Type", "Authorization", "x-csrf-token", "Accept"],
+		allowedHeaders: ["Content-Type", "Authorization", "x-csrf-token", "Accept"],
 	})
 );
 
@@ -88,8 +92,6 @@ process.on("unhandledRejection", (reason, promise) => {
 process.on("uncaughtException", (err, origin) => {
   console.log("[uncaughtException]: ", origin, err);
 });
-
-app.set("trust proxy", true);
 
 // Makes the app to listen port
 dbConfig().then(() => {
