@@ -1,8 +1,6 @@
 import axios from "axios";
-import { showError } from "./toast";
-import { Navigate } from "react-router-dom";
-import { history } from "./history";
-// import RefreshTokenErrorRedirection from "../hooks/RefreshTokenErrorRedirecting";
+import { showError, showWarn } from "./toast";
+import { toast } from "react-toastify";
 
 const axiosInstance = axios.create({
 	baseURL: `${import.meta.env.VITE_BASE_URL}`,
@@ -37,6 +35,36 @@ axiosInstance.interceptors.response.use(
 	(response) => response,
 	async (error) => {
 		const originalRequest = error.config;
+		// Handle network error (disconnected)
+		if (!window.navigator.onLine) {
+			showWarn("You are offline. Check your internet connection.", {
+				autoClose: false,
+				toastId: "offline-warning",
+			});
+			return Promise.reject({
+				message: "Network is offline. Please check your connection.",
+			});
+		}else if(toast.isActive("offline-warning")){
+			toast.dismiss("offline-warning");
+		}
+		// Handle server errors (API Gateway is unavailable)
+		if (error.response?.status >= 500 && error.response?.status < 600) {
+			showError("API Gateway is currently unavailable. Please try again later.", {
+				autoClose: 10000,
+				toastId: "api-unavailable", // Prevent duplicate toasts
+			});
+
+			// Optional: Retry logic for recoverable errors
+			if (!originalRequest._ErrRetry && error.response?.status === 502) {
+				originalRequest._ErrRetry = true; // Avoid infinite retries
+				try {
+					await new Promise((resolve) => setTimeout(resolve, 3000)); // Wait 3 seconds
+					return axiosInstance(originalRequest); // Retry the request
+				} catch (retryError) {
+					return Promise.reject(retryError);
+				}
+			}
+		}
 		if (
 			error.response?.status === 401 ||
 			(error.response?.status === 402 && !originalRequest._retry)
@@ -59,7 +87,7 @@ axiosInstance.interceptors.response.use(
 					return axiosInstance(originalRequest);
 				}
 			} catch (retryError) {
-				console.error("Failed in retrying request ERROR:", retryError);
+				console.log("Failed in retrying request ERROR:", retryError);
 				// history.push("/");
 				return Promise.reject({
 					message: "Refresh token failed. Redirecting to login.",
@@ -67,7 +95,32 @@ axiosInstance.interceptors.response.use(
 				});
 			}
 		}
+		if (
+			error.response?.status === 403 &&
+			error.response.data.message === "Invalid CSRF token" &&
+			!originalRequest._csrfRetry
+		) {
+			originalRequest._csrfRetry = true; // Avoid retry loop
+			try {
+				// Refresh CSRF token
+				await axiosInstance.get("/csrf-token");
 
+				// Retry original request with new CSRF token
+				originalRequest.headers["X-CSRF-Token"] = document.cookie
+				.split("; ")
+				.find((row) => row.startsWith("XSRF-TOKEN="))
+				?.split("=")[1];
+				return axiosInstance.request(originalRequest);
+			} catch (csrfRefreshError) {
+				console.log("Failed to refresh CSRF token. Redirecting to login.");
+				return Promise.reject(csrfRefreshError);
+			}
+		}
+		if(error.code === "ERR_NETWORK" && !error.response) {
+			error.response = {};
+			error.response.data = {};
+			error.response.data.message = "API is Unavaliable";
+		}
 		// history.push("/");
 		return Promise.reject(error);
 	}

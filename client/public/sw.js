@@ -41,7 +41,31 @@ self.addEventListener("fetch", (event) => {
     event.respondWith(
       fetch(event.request).catch(() => caches.match(OFFLINE_URL))
     );
-  } else {
+  } /*else if (event.request.url.includes("/api/")) {
+    event.respondWith(
+      (async () => {
+        try {
+          const response = await fetch(event.request);
+          if (!response.ok) {
+            // If the response status is not OK, return a custom error response
+            return new Response(
+              JSON.stringify({
+                message: "API Gateway is unavailable",
+                orginalResponse: response,
+              }),
+              { status: 503, headers: { "Content-Type": "application/json" } }
+            );
+          }
+          return response; // Return the successful response
+        } catch (error) {
+          return new Response(
+            JSON.stringify({ message: "Network error or API unavailable", orginalError:error }),
+            { status: 503, headers: { "Content-Type": "application/json" } }
+          );
+        }
+      })()
+    );
+  } */else {
     event.respondWith(
       caches.match(event.request).then((response) => {
         return response || fetch(event.request);

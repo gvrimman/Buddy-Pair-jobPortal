@@ -4,7 +4,7 @@ const FetchCSRFToken = async() => {
     try {
         await axios.get('csrf-token');
     } catch (error) {
-        console.error('Failed to fetch CSRF token:', error);
+        console.log('Failed to fetch CSRF token:', error);
     }
 };
 

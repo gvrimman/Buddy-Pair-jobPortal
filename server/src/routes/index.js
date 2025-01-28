@@ -16,8 +16,9 @@ if (process.env.NODE_ENV === "production") {
       httpOnly: false,
       secure: process.env.NODE_ENV === "production",
       sameSite: "Strict",
+      domain: process.env.COOKIE_DOMAIN,
     });
-    res.json({ message: "CSRF token set in cookie" });
+    res.json({ message: "CSRF token set" });
   });
 }
 

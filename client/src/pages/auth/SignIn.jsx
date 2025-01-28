@@ -50,7 +50,7 @@ function SignIn({
 			}
 		} catch (error) {
 			setIsLoading(false);
-			console.error("Login Error:", error);
+			console.log("Login Error:", error);
 			showError(error?.response?.data?.message);
 		}
 	};

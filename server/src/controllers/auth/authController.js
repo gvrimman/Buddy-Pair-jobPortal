@@ -28,7 +28,9 @@ const renewalOfAccessToken = asyncHandler(async (req, res) => {
 		const accessToken = await user.generateAccessToken();
 		res.cookie("accessToken", accessToken, {
 			httpOnly: true,
-			secure: true,
+			secure: process.env.NODE_ENV === "production",
+        	sameSite: "strict",
+        	domain: process.env.COOKIE_DOMAIN,
 		});
 
 		res.json(
@@ -119,8 +121,9 @@ const signup = asyncHandler(async (req, res) => {
 
 	const options = {
 		httpOnly: true,
-		secure: true,
-		maxAge: 7 * 24 * 60 * 60 * 1000,
+		secure: process.env.NODE_ENV === "production",
+        sameSite: "strict",
+        domain: process.env.COOKIE_DOMAIN,
 	};
 
 	res.cookie("accessToken", accessToken, options)
@@ -456,8 +459,9 @@ const login = asyncHandler(async (req, res) => {
 		});
 	const options = {
 		httpOnly: true,
-		secure: true,
-		maxAge: 7 * 24 * 60 * 60 * 1000,
+		secure: process.env.NODE_ENV === "production",
+        sameSite: "strict",
+        domain: process.env.COOKIE_DOMAIN,
 	};
 
 	res.cookie("accessToken", accessToken, options)

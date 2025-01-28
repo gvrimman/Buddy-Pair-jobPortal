@@ -1,4 +1,5 @@
 import React, { lazy, Suspense, useEffect } from "react";
+import { showError } from "./utils/toast";
 import { useDispatch } from "react-redux";
 import verifyUser from "./utils/verifyAuth";
 import { Routes, Route, useLocation } from "react-router-dom";
@@ -87,6 +88,7 @@ const JobApplicatns = lazy(() =>
 const SingleEmployerCompany = lazy(() =>
   import("./pages/employer/SingleEmployerCompany")
 );
+import ErrorBoundary from "./components/common/ErrorBoundary";
 
 function App() {
   useSocket(); // Initializes the socket
@@ -103,161 +105,163 @@ function App() {
 
   return (
     <div>
-      <Suspense fallback={<PageLoader />}>
-        <Routes>
-          <Route key={"/"} path="/" element={<PublicRoute />}>
-            <Route index element={<LandingPage />} />
-            <Route path="/auth" element={<SplashScreen />} />
-          </Route>
-
-          {/* This Router for Job Portal Employer */}
-
-          {/* <Route
-						path="/job-portal/auth"
-						element={<JobportalUserInfo />}
-					/> */}
-
-          <Route
-            path="/job-portal"
-            element={<ProtectedRoute roles={["employer"]} />}
-          >
-            <Route element={<Layout />}>
-              <Route index element={<EmployerHome />} />
-
-              <Route path="profile" element={<ProfileView />} />
-              <Route path="edit/profile" element={<EmployeeProfile />} />
-              <Route path="edit/profile/company" element={<CompanyProfile />} />
-              <Route path="job/:jobId" element={<JobView />} />
-              <Route path="profile/:profileId" element={<ProfileView />} />
-              <Route path="requests" element={<RequestsView />} />
-              <Route path="jobs" element={<Jobs />} />
-              <Route path="jobs/:jobId" element={<PostedJobView />} />
-              <Route path="manage/jobs" element={<ManageJobs />} />
-              <Route path="edit/job/:id" element={<UpdateJob />} />
-              <Route path="jobs/applicants" element={<AllApplicants />} />
-              <Route path="jobs/applicants/:id" element={<JobApplicatns />} />
-              <Route path="messages" element={<Messages />} />
-              <Route path="notifications" element={<EmployerNotification />} />
-
-              <Route path="candidates" element={<Candidates />} />
-              <Route path="companies" element={<EmployerCompanies />} />
-              <Route path="candidate/:id" element={<SingleCandidate />} />
-              <Route path="company/:id" element={<SingleEmployerCompany />} />
-
-              <Route path="referral" element={<AcceptReferral />} />
-              <Route path="profile/referral" element={<ReferralDashboard />} />
-              <Route
-                path="referral/admin/settings"
-                element={<AdminSettings />}
-              />
+      <ErrorBoundary>
+        <Suspense fallback={<PageLoader />}>
+          <Routes>
+            <Route key={"/"} path="/" element={<PublicRoute />}>
+              <Route index element={<LandingPage />} />
+              <Route path="/auth" element={<SplashScreen />} />
             </Route>
-          </Route>
-          {/**Static routes */}
-          <Route path="/job-portal" element={<Layout />}>
-            <Route path="privacy-policy" element={<PrivacyPolicy />} />
-            <Route path="refund-policy" element={<RefundPolicy />} />
-            <Route path="terms-conditions" element={<TermsConditions />} />
-            <Route path="contact-us" element={<ContactUs />} />
-            <Route path="about-us" element={<AboutUs />} />
-          </Route>
 
-          {/* Router for Job Portal Employer Dashboard */}
-          {/* <Route
-						path="/job-portal/employer/dashboard"
-						element={<ProtectedRoute roles={["employer"]} />}>
-						<Route element={<EmployerDashboardLayout />}>
-							<Route index element={<EmployerDashboard />} />
-							<Route
-								path="company-profile"
-								element={<CompanyProfile />}
-							/>
-							<Route path="post-job" element={<PostJobs />} />
-							<Route
-								path="manage-jobs"
-								element={<ManageJobs />}
-							/>
-							<Route
-								path="edit-job/:id"
-								element={<UpdateJob />}
-							/>
-							<Route
-								path="all-applicants"
-								element={<AllApplicants />}
-							/>
-							<Route
-								path="job-applicants/:id"
-								element={<JobApplicatns />}
-							/>
+            {/* This Router for Job Portal Employer */}
 
-							<Route path="messages" element={<Messages />} />
-							{
-								<Route
-									path="notifications"
-									element={<EmployerNotification />}
-								/>
-							}
-						</Route>
-					</Route> */}
+            {/* <Route
+              path="/job-portal/auth"
+              element={<JobportalUserInfo />}
+            /> */}
 
-          {/* This Router for Job Portal Employee */}
+            <Route
+              path="/job-portal"
+              element={<ProtectedRoute roles={["employer"]} />}
+            >
+              <Route element={<Layout />}>
+                <Route index element={<EmployerHome />} />
 
-          {/* <Route
-						path="/job-portal/employee"
-						element={<ProtectedRoute roles={["employee"]} />}>
-						<Route element={<EmployeeLayout />}>
-							<Route index element={<Home />} />
-							<Route path="jobs" element={<FindJobs />} />
-							<Route
-								path="companies"
-								element={<HomeCompanies />}
-							/>
-							<Route path="saved-jobs" element={<Saved />} />
-							
-							<Route path="job/:id" element={<SingleJob />} />
-							<Route
-								path="company/:id"
-								element={<SingleCompany />}
-							/>
-						</Route>
-					</Route> */}
+                <Route path="profile" element={<ProfileView />} />
+                <Route path="edit/profile" element={<EmployeeProfile />} />
+                <Route path="edit/profile/company" element={<CompanyProfile />} />
+                <Route path="job/:jobId" element={<JobView />} />
+                <Route path="profile/:profileId" element={<ProfileView />} />
+                <Route path="requests" element={<RequestsView />} />
+                <Route path="jobs" element={<Jobs />} />
+                <Route path="jobs/:jobId" element={<PostedJobView />} />
+                <Route path="manage/jobs" element={<ManageJobs />} />
+                <Route path="edit/job/:id" element={<UpdateJob />} />
+                <Route path="jobs/applicants" element={<AllApplicants />} />
+                <Route path="jobs/applicants/:id" element={<JobApplicatns />} />
+                <Route path="messages" element={<Messages />} />
+                <Route path="notifications" element={<EmployerNotification />} />
 
-          {/* This Router for Job Portal Employee Dashboard  */}
+                <Route path="candidates" element={<Candidates />} />
+                <Route path="companies" element={<EmployerCompanies />} />
+                <Route path="candidate/:id" element={<SingleCandidate />} />
+                <Route path="company/:id" element={<SingleEmployerCompany />} />
 
-          {/* <Route
-						path="/job-portal/employee/dashboard"
-						element={<ProtectedRoute roles={["employee"]} />}>
-						<Route element={<EmployeeDashboardLayout />}>
-							<Route index element={<EmployeeDashboard />} />
-							<Route
-								path="profile"
-								element={<EmployeeProfile />}
-							/>
-							<Route
-								path="applied-jobs"
-								element={<EmployeeApplied />}
-							/>
-							<Route
-								path="bookmarked-jobs"
-								element={<EmployeeBookMarked />}
-							/>
-							<Route
-								path="messages"
-								element={<EmployeeMessages />}
-							/>
-							<Route
-								path="notification"
-								element={<EmployeeNotification />}
-							/>
-							<Route
-								path="change-password"
-								element={<EmployeeChangePassword />}
-							/>
-						</Route>
-					</Route> */}
-          <Route path="comingsoon" element={<ComingSoon />} />
-          <Route path="*" element={<NotFound />} />
-        </Routes>
-      </Suspense>
+                <Route path="referral" element={<AcceptReferral />} />
+                <Route path="profile/referral" element={<ReferralDashboard />} />
+                <Route
+                  path="referral/admin/settings"
+                  element={<AdminSettings />}
+                />
+              </Route>
+            </Route>
+            {/**Static routes */}
+            <Route path="/job-portal" element={<Layout />}>
+              <Route path="privacy-policy" element={<PrivacyPolicy />} />
+              <Route path="refund-policy" element={<RefundPolicy />} />
+              <Route path="terms-conditions" element={<TermsConditions />} />
+              <Route path="contact-us" element={<ContactUs />} />
+              <Route path="about-us" element={<AboutUs />} />
+            </Route>
+
+            {/* Router for Job Portal Employer Dashboard */}
+            {/* <Route
+              path="/job-portal/employer/dashboard"
+              element={<ProtectedRoute roles={["employer"]} />}>
+              <Route element={<EmployerDashboardLayout />}>
+                <Route index element={<EmployerDashboard />} />
+                <Route
+                  path="company-profile"
+                  element={<CompanyProfile />}
+                />
+                <Route path="post-job" element={<PostJobs />} />
+                <Route
+                  path="manage-jobs"
+                  element={<ManageJobs />}
+                />
+                <Route
+                  path="edit-job/:id"
+                  element={<UpdateJob />}
+                />
+                <Route
+                  path="all-applicants"
+                  element={<AllApplicants />}
+                />
+                <Route
+                  path="job-applicants/:id"
+                  element={<JobApplicatns />}
+                />
+
+                <Route path="messages" element={<Messages />} />
+                {
+                  <Route
+                    path="notifications"
+                    element={<EmployerNotification />}
+                  />
+                }
+              </Route>
+            </Route> */}
+
+            {/* This Router for Job Portal Employee */}
+
+            {/* <Route
+              path="/job-portal/employee"
+              element={<ProtectedRoute roles={["employee"]} />}>
+              <Route element={<EmployeeLayout />}>
+                <Route index element={<Home />} />
+                <Route path="jobs" element={<FindJobs />} />
+                <Route
+                  path="companies"
+                  element={<HomeCompanies />}
+                />
+                <Route path="saved-jobs" element={<Saved />} />
+                
+                <Route path="job/:id" element={<SingleJob />} />
+                <Route
+                  path="company/:id"
+                  element={<SingleCompany />}
+                />
+              </Route>
+            </Route> */}
+
+            {/* This Router for Job Portal Employee Dashboard  */}
+
+            {/* <Route
+              path="/job-portal/employee/dashboard"
+              element={<ProtectedRoute roles={["employee"]} />}>
+              <Route element={<EmployeeDashboardLayout />}>
+                <Route index element={<EmployeeDashboard />} />
+                <Route
+                  path="profile"
+                  element={<EmployeeProfile />}
+                />
+                <Route
+                  path="applied-jobs"
+                  element={<EmployeeApplied />}
+                />
+                <Route
+                  path="bookmarked-jobs"
+                  element={<EmployeeBookMarked />}
+                />
+                <Route
+                  path="messages"
+                  element={<EmployeeMessages />}
+                />
+                <Route
+                  path="notification"
+                  element={<EmployeeNotification />}
+                />
+                <Route
+                  path="change-password"
+                  element={<EmployeeChangePassword />}
+                />
+              </Route>
+            </Route> */}
+            <Route path="comingsoon" element={<ComingSoon />} />
+            <Route path="*" element={<NotFound />} />
+          </Routes>
+        </Suspense>
+      </ErrorBoundary>
     </div>
   );
 }

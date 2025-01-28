@@ -14,21 +14,21 @@ const googleAuthCallback = (req, res, next) => {
 	passport.authenticate("google", (err, user, info) => {
 		if (err) {
 			return res.redirect(
-				`http://localhost:5173/auth?error=${encodeURIComponent(
+				`${process.env.CLIENT_URL}/auth?error=${encodeURIComponent(
 					err.message
 				)}`
 			);
 		}
 		if (!user) {
 			return res.redirect(
-				"http://localhost:5173/auth?error=Authentication failed"
+				`${process.env.CLIENT_URL}/auth?error=Authentication failed`
 			);
 		}
 
 		req.logIn(user, async (loginErr) => {
 			if (loginErr) {
 				return res.redirect(
-					`http://localhost:5173/auth?error=${encodeURIComponent(
+					`${process.env.CLIENT_URL}/auth?error=${encodeURIComponent(
 						loginErr.message
 					)}`
 				);
@@ -49,22 +49,23 @@ const googleAuthCallback = (req, res, next) => {
 
 						const options = {
 							httpOnly: true,
-							secure: true,
-							maxAge: 7 * 24 * 60 * 60 * 1000,
+							secure: process.env.NODE_ENV === "production",
+							sameSite: "strict",
+							domain: process.env.COOKIE_DOMAIN,
 						};
 
 						res.cookie("accessToken", accessToken, options);
 						res.cookie("refreshToken", refreshToken, options);
 
 						return res.redirect(
-							`http://localhost:5173/auth?user=${encodeURIComponent(
+							`${process.env.CLIENT_URL}/auth?user=${encodeURIComponent(
 								JSON.stringify(existingUser)
 							)}`
 						);
 					} catch (tokenError) {
 						console.error("Token generation error:", tokenError);
 						return res.redirect(
-							`http://localhost:5173/auth?error=${encodeURIComponent(
+							`${process.env.CLIENT_URL}/auth?error=${encodeURIComponent(
 								"Failed to generate authentication tokens"
 							)}`
 						);
@@ -85,20 +86,21 @@ const googleAuthCallback = (req, res, next) => {
 
 						const options = {
 							httpOnly: true,
-							secure: true,
-							maxAge: 7 * 24 * 60 * 60 * 1000,
+							secure: process.env.NODE_ENV === "production",
+							sameSite: "strict",
+							domain: process.env.COOKIE_DOMAIN,
 						};
 
 						res.cookie("accessToken", accessToken, options);
 						res.cookie("refreshToken", refreshToken, options);
 
 						return res.redirect(
-							"http://localhost:5173/auth?modal=userinfo"
+							`${process.env.CLIENT_URL}/auth?modal=userinfo`
 						);
 					} catch (tokenError) {
 						console.error("Token generation error:", tokenError);
 						return res.redirect(
-							`http://localhost:5173/auth?error=${encodeURIComponent(
+							`${process.env.CLIENT_URL}/auth?error=${encodeURIComponent(
 								"Failed to generate authentication tokens"
 							)}`
 						);
@@ -107,7 +109,7 @@ const googleAuthCallback = (req, res, next) => {
 			} catch (error) {
 				console.error("Authentication error:", error);
 				return res.redirect(
-					`http://localhost:5173/auth?error=${encodeURIComponent(
+					`${process.env.CLIENT_URL}/auth?error=${encodeURIComponent(
 						error.message
 					)}`
 				);

@@ -40,7 +40,16 @@ app.use(
 	})
 );
 if (process.env.NODE_ENV === "production") {
-  app.use(csrf({ cookie: true }));
+  app.use(
+    csrf({
+      cookie: {
+        httpOnly: true,
+        secure: process.env.NODE_ENV === "production",
+        sameSite: "strict",
+        domain: process.env.COOKIE_DOMAIN,
+      },
+    })
+  );
 }
 app.use(cookieParser());
 
@@ -52,8 +61,9 @@ app.use(
     cookie: {
       secure: process.env.NODE_ENV === "production",
       httpOnly: true,
-      sameSite: "None",
+      sameSite: "strict",
       maxAge: 7 * 24 * 60 * 60 * 1000,
+      domain: process.env.COOKIE_DOMAIN,
     },
   })
 );

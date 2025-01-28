@@ -13,10 +13,14 @@ const toastConfig = {
   progress: undefined,
 };
 
-export const showSuccess = (message) => {
-  toast.success(message, toastConfig);
+export const showSuccess = (message, config={}) => {
+  toast.success(message, {...toastConfig, ...config});
 };
 
-export const showError = (message) => {
-  toast.error(message, toastConfig);
+export const showError = (message, config = {}) => {
+  toast.error(message, { ...toastConfig, ...config });
+};
+
+export const showWarn = (message, config = {}) => {
+  toast.warn(message, { ...toastConfig, ...config });
 };

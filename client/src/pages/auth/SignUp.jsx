@@ -36,7 +36,7 @@ function SignUp({ onClose, openSignInModal, openOTPVerifyModal, closeBtnClick, s
 				openOTPVerifyModal();
 			}, 300);
 		} catch (error) {
-			console.log(error);
+			console.log("SignUp Error:", error);
 			setIsLoading(false);
 			showError(error.response?.data?.message);
 		}
