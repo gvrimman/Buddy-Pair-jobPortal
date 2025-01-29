@@ -38,7 +38,7 @@ axiosInstance.interceptors.response.use(
 		// Handle network error (disconnected)
 		if (!window.navigator.onLine) {
 			showWarn("You are offline. Check your internet connection.", {
-				autoClose: false,
+				autoClose: 10000,
 				toastId: "offline-warning",
 			});
 			return Promise.reject({

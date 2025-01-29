@@ -16,7 +16,7 @@ createRoot(document.getElementById("root")).render(
 				<ThemeProvider>
 					<Router history={history}>
 						<App />
-						<ToastContainer draggable draggablePercent={50} limit={5} />
+						<ToastContainer limit={5} />
 					</Router>
 				</ThemeProvider>
 			</PersistGate>
