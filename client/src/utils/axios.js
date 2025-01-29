@@ -44,7 +44,7 @@ axiosInstance.interceptors.response.use(
 			return Promise.reject({
 				message: "Network is offline. Please check your connection.",
 			});
-		}else if(toast.isActive("offline-warning")){
+		}else {
 			toast.dismiss("offline-warning");
 		}
 		// Handle server errors (API Gateway is unavailable)
