@@ -7,7 +7,7 @@ import BottomNav from "./BottomNav";
 import { useNetworkStatus } from "../hooks/useNetworkStatus";
 
 function Layout() {
-	const isOnline = useNetworkStatus();
+	const { isOnline } = useNetworkStatus();
 	return (
 		<div className="flex flex-col md:flex-row gap-3 mt-1 sticky top-0 w-full max-w-[1600px] mx-auto">
 			{!isOnline && (
