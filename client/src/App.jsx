@@ -105,7 +105,7 @@ function App() {
   const location = useLocation();
 
   useEffect(() => {
-    setLogoutFunction(() => () => {
+    setLogoutFunction(() => {
       dispatch(clearUser());
       localStorage.clear();
       sessionStorage.clear();
