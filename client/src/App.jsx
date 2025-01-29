@@ -4,6 +4,8 @@ import verifyUser from "./utils/verifyAuth";
 import { Routes, Route, useLocation } from "react-router-dom";
 import useListenNotification from "./hooks/useListenNotification";
 import { useSocket } from "./hooks/useSocket";
+import { clearUser } from "./Redux/reducers/userReducer";
+import { setLogoutFunction } from "./utils/axios";
 
 import ErrorBoundary from "./components/common/ErrorBoundary";
 import ProtectedRoute from "./router/ProtectedRoute";
@@ -103,6 +105,11 @@ function App() {
   const location = useLocation();
 
   useEffect(() => {
+    setLogoutFunction(() => () => {
+      dispatch(clearUser());
+      localStorage.clear();
+      sessionStorage.clear();
+    });
     // Verify user authentication on app load
     verifyUser(dispatch, location);
   }, [dispatch]);

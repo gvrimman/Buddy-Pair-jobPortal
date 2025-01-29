@@ -10,6 +10,12 @@ const axiosInstance = axios.create({
 	},
 });
 
+let logoutFunction = null; // This will be set dynamically
+
+export const setLogoutFunction = (logoutFn) => {
+	logoutFunction = logoutFn;
+};
+
 // Response Interceptor
 axiosInstance.interceptors.response.use(
 	(response) => response,
@@ -51,7 +57,7 @@ axiosInstance.interceptors.response.use(
 		) {
 			originalRequest._retry = true;
 			if (error.response?.status === 402) {
-				// history.push("/");
+				if (logoutFunction) logoutFunction();
 				return Promise.reject(
 					new Error(
 						"Session expired or token not found. Redirecting to login."
@@ -68,7 +74,7 @@ axiosInstance.interceptors.response.use(
 				}
 			} catch (retryError) {
 				console.log("Failed in retrying request ERROR:", retryError);
-				// history.push("/");
+				if (logoutFunction) logoutFunction();
 				return Promise.reject({
 					message: "Refresh token failed. Redirecting to login.",
 					status: 401,
@@ -81,7 +87,6 @@ axiosInstance.interceptors.response.use(
 			error.response.data = {};
 			error.response.data.message = "API is Unavaliable";
 		}
-		// history.push("/");
 		return Promise.reject(error);
 	}
 );
