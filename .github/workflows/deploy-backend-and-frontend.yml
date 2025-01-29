@@ -3,7 +3,7 @@ name: Deploy Backend and Frontend
 on:
   push:
     branches:
-      - rjryt
+      - main
 
 jobs:
   deploy:
@@ -91,7 +91,7 @@ jobs:
           # Move the new frontend to the deployment folder
           if [ -d "~/frontend-temp" ]; then
             echo "Deploying new frontend"
-            sudo mv ~/frontend-temp ~/frontend
+            sudo mv ~/frontend-temp/client/dist ~/frontend
           fi
 
           # Set permissions for frontend
