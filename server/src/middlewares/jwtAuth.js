@@ -27,7 +27,6 @@ const verifyJwt = asyncHandler(async (req, _, next) => {
 		req.user = user;
 		next();
 	} catch (error) {
-		console.error("Jwt verification ERROR:", error);
 		throw new ApiError(401, "AccessToken expired", error);
 	}
 });
