@@ -20,18 +20,18 @@ const PORT = process.env.PORT || 3000;
 
 app.set("trust proxy", true);
 
-if (process.env.NODE_ENV === "production") {
-  // middlewares
-  app.use(
-    rateLimit({
-      windowMs: 15 * 60 * 1000, // 15 minutes
-      max: 100, // Limit each IP to 100 requests per window
-      message: "Too many login attempts, please try again after 15 minutes.",
-      standardHeaders: true, // Include rate limit info in the `RateLimit-*` headers
-      legacyHeaders: false, // Disable `X-RateLimit-*` headers
-    })
-  );
-}
+// if (process.env.NODE_ENV === "production") {
+//   // middlewares
+//   app.use(
+//     rateLimit({
+//       windowMs: 15 * 60 * 1000, // 15 minutes
+//       max: 100, // Limit each IP to 100 requests per window
+//       message: "Too many login attempts, please try again after 15 minutes.",
+//       standardHeaders: true, // Include rate limit info in the `RateLimit-*` headers
+//       legacyHeaders: false, // Disable `X-RateLimit-*` headers
+//     })
+//   );
+// }
 app.use(express.json({ limit: "30mb" }));
 app.use(express.urlencoded({ extended: true }));
 app.use(
