@@ -98,15 +98,12 @@ const SingleEmployerCompany = lazy(() =>
 );
 
 function App() {
-  console.log("App Rendered");
   useSocket(); // Initializes the socket
   useListenNotification(); // Listens for notifications globally
   
   const dispatch = useDispatch();
   const location = useLocation();
   
-  console.log("dispatch: ", dispatch);
-
   useEffect(() => {
     setLogoutFunction(() => {
       dispatch(clearUser());

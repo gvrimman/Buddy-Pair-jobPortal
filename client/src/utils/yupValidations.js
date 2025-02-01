@@ -142,8 +142,7 @@ const jobPostValidation = Yup.object().shape({
 	jobTitle: Yup.string().required("Please Enter your job title"),
 	jobDescription: Yup.string()
 		.required("Please Enter job description")
-		.min(500, 'Description must be at minimum 500 characters long')
-		.max(1000, 'Description must be at most 1000 characters long'),
+		.max(10000, 'Description must be at most 10000 characters long'),
 	industry: Yup.string().required("Please Enter your industry"),
 	jobType: Yup.string().required("Please Enter your job type"),
 	employmentType: Yup.string().required("Please Enter your employment type"),

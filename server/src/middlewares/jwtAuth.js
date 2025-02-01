@@ -8,15 +8,11 @@ const verifyJwt = asyncHandler(async (req, res, next) => {
 	if (!accessToken) {
 		throw new ApiError(401, "Failed to obtain AccessToken");
 	}
-	console.log("Auth Token: ", accessToken);
 	try {
-		console.log("Token Secret: ", process.env.ACCESS_TOKEN_SECRET_KEY);
 		const decodedToken = jwt.verify(
 			accessToken,
 			process.env.ACCESS_TOKEN_SECRET_KEY
 		);
-		console.log("decodedToken: ", decodedToken);
-
 		const user = await User.findById(decodedToken._id).select(
 			"-password -refreshToken"
 		);
@@ -26,12 +22,10 @@ const verifyJwt = asyncHandler(async (req, res, next) => {
 				"User not found with the id we got from decoding the accessToken"
 			);
 		}
-		console.log("Auth User: ", user.username);
 
 		req.user = user;
 		next();
 	} catch (error) {
-		console.log("Auth error: ", error);
 		throw new ApiError(401, "AccessToken expired", error);
 	}
 });

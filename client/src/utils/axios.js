@@ -83,7 +83,6 @@ axiosInstance.interceptors.response.use(
 		}
 		
 		if(error.code === "ERR_NETWORK" && !error.response) {
-			console.error(error);
 			showError("API is Unavaliable", {
 				autoClose: 10000,
 				toastId: "api-unavailable", 
