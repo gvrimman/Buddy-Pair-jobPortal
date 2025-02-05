@@ -49,9 +49,9 @@ function MainBox({ handleBack }) {
 				<ChatHeader user={selectedUser} handleBack={handleBack} />
 			</div>
 			{/* message main container */}
-			<div className="w-full h-[calc(100vh-120px)] overflow-hidden relative py-2 bg-customBgColor shadow-md shadow-gray-300 rounded-md">
+			<div className="w-full h-[calc(100vh-120px)] overflow-hidden relative bg-customBgColor shadow-md shadow-gray-300 rounded-md">
 				{/* message container */}
-				<div className="w-full pt-3 flex flex-col gap-3 overflow-y-auto custom-scrollbar h-full">
+				<div className="w-full flex flex-col gap-3 my-1 overflow-y-auto custom-scrollbar h-[calc(100vh-181px)]">
 					{chats?.map((chat, index) => (
 						<div key={index} ref={lastChat}>
 							<ChatBox

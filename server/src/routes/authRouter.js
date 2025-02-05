@@ -8,6 +8,7 @@ const {
   ResendEmailOTP,
   employerSignup,
   employeeSignup,
+  employerSignupV2,
   login,
   updateProfileInfo,
   updatePassword,
@@ -51,6 +52,14 @@ router.route("/employer-signup").post(
     { name: "companyLogo", maxCount: 1 },
   ]),
   employerSignup
+);
+
+router.route("/employer-signup/v2").post(
+  verifyJwt,
+  upload.fields([
+    { name: "profileImage", maxCount: 1 }
+  ]),
+  employerSignupV2
 );
 
 // user sign in

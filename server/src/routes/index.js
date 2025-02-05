@@ -7,6 +7,7 @@ const messageRoutes = require("./messageRouter");
 const notificationRoutes = require("./notificationRouter");
 const referralRouter = require("./referralRouter");
 const contactRoutes = require("./contactRouter");
+const companyRoutes = require("./companyRouter");
 const router = express.Router();
 
 // all routes
@@ -18,5 +19,6 @@ router.use("/message", messageRoutes);
 router.use("/notification", notificationRoutes);
 router.use("/referral", referralRouter);
 router.use("/contact", contactRoutes);
+router.use("/company", companyRoutes);
 
 module.exports = router;

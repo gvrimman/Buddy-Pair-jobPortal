@@ -55,7 +55,7 @@ function SearchBar() {
 				<input
 					type="text"
 					placeholder="Search"
-					className="bg-customBgColor placeholder:text-sm placeholder:text-black focus:outline-none"
+					className="bg-customBgColor placeholder:text-sm placeholder:text-black focus:outline-none w-full"
 					value={searchValue}
 					onChange={(e) => setSearchValue(e.target.value)}
 					onKeyDown={handleEnterBtn}

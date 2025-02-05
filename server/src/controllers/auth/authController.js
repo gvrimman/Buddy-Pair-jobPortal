@@ -1,5 +1,6 @@
 const jwt = require("jsonwebtoken");
 const JobPortal = require("../../models/jobportal");
+const Company = require("../../models/company");
 const User = require("../../models/user");
 const ApiError = require("../../utils/apiError");
 const ApiResponse = require("../../utils/apiResponse");
@@ -428,6 +429,85 @@ const employerSignup = asyncHandler(async (req, res) => {
 	);
 });
 
+const employerSignupV2 = asyncHandler(async (req, res) => {
+  const userId = req.user._id;
+  const { dob, gender, qualification, profession, location, company } =
+    req.body;
+  const { profileImage } = req.files;
+
+  // validate all required fields
+  if (
+    [
+      dob,
+      gender,
+      qualification,
+      company
+    ].some((field) => !field || field.trim() === "")
+  ) {
+    throw new ApiError(400, "All fields must be required");
+  }
+
+  const existingCompany = await Company.findById(company);
+  if (!existingCompany) {
+    throw new ApiError(400, "Company didn't exist");
+  }
+
+  // age calculation
+  let age = new Date().getFullYear() - new Date(dob).getFullYear();
+  const monthDifference = new Date().getMonth() - new Date(dob).getMonth();
+
+  if (
+    monthDifference < 0 ||
+    (monthDifference === 0 && new Date().getDate() < new Date(dob).getDate())
+  ) {
+    age--;
+  }
+
+  // save to database
+  const employerData = await JobPortal.create({
+    userId: userId,
+    company,
+    profileImage: profileImage ? profileImage[0]?.location : "",
+    dob,
+    age,
+    gender,
+    qualification,
+    profession,
+    location: {
+      type: "Point",
+      coordinates: location, // or if you're constructing it, ensure the order is [longitude, latitude]
+    },
+    role: "employer",
+  });
+
+  await employerData.save();
+
+  if (!employerData) {
+    throw new ApiError(400, "data not created");
+  }
+
+  // save createdEmployee id in user
+  await User.findByIdAndUpdate(
+    req.user._id,
+    {
+      "apps.jobPortal": employerData._id,
+    },
+    {
+      new: true,
+    }
+  );
+
+  const createdEmployer = await User.findById(req.user._id)
+    .select("-password -refreshToken")
+    .populate({
+      path: "apps.jobPortal",
+    });
+
+  res.json(
+    new ApiResponse(200, createdEmployer, "Signup as Employer Successful")
+  );
+});
+
 const login = asyncHandler(async (req, res) => {
 	const { email, password } = req.body;
 
@@ -804,6 +884,7 @@ module.exports = {
 	ResendEmailOTP,
 	employeeSignup,
 	employerSignup,
+	employerSignupV2,
 	login,
 	updateProfileInfo,
 	updatePassword,

@@ -119,6 +119,11 @@ const jobPortalSchema = new mongoose.Schema(
       type: Date,
       default: Date.now,
     },
+    company: {
+      type: mongoose.Schema.Types.ObjectId,
+      ref: "Company",
+      default: null,
+    },
     companyName: { type: String },
     companyEmail: { type: String },
     UnverifiedCmail: { type: String },
