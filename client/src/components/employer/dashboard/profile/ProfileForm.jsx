@@ -75,7 +75,7 @@ function ProfileForm() {
         workType: data.employmentType,
       };
       const response = await axiosInstance.put(
-        `/auth/update-employer-profile`,
+        `company/update-company`,
         finalData,
         {
           headers: {
