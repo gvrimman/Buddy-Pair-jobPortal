@@ -86,6 +86,31 @@ const jobValidation = Yup.object().shape({
 	eCtc: Yup.number().required("Enter your expected CTC"),
 });
 
+const companyValidationSchema = Yup.object().shape({
+  name: Yup.string().required("Company name is required"),
+  email: Yup.string().email("Invalid email").required("Email is required"),
+  website: Yup.string().url("Invalid URL").required("Website is required"),
+  industry: Yup.string().required("Industry is required"),
+  location: Yup.string().required("Location is required"),
+  address: Yup.string().required("Address is required"),
+  description: Yup.string().required("Description is required"),
+  size: Yup.string().required("Company size is required"),
+  workType: Yup.string().required("Please Select your employment type"),
+  linkedin: Yup.string()
+    .url("Invalid LinkedIn URL")
+    .required("LinkedIn is required"),
+  companyLogo: Yup.mixed()
+    .required("Company logo is required")
+    .test("fileType", "Only image files are allowed", (value) => {
+      if (!value || value.length === 0) return true;
+      return value[0]?.type.startsWith("image/");
+    })
+    .test("fileSize", "File is too large, max size is 20MB", (value) => {
+      if (!value || value.length === 0) return true;
+      return value[0]?.size <= 5 * 1024 * 1024;
+    }),
+});
+
 const emplyerInfoValidation = Yup.object().shape({
 	profileImage: Yup.mixed()
 		.notRequired()
@@ -122,13 +147,13 @@ const employerProfileValidation = Yup.object().shape({
 		.required("Email is required"),
 	companyWebSite: Yup.string().required("Please Enter your company website"),
 	companyAddress: Yup.string().required("Please Enter your company address"),
+	companyLocation: Yup.string().required("Please Enter your company location"),
 	companyDescription: Yup.string().required(
 		"Please Enter your company description"
 	),
 	companySize: Yup.string().required("Please Select your company size"),
 	industryType: Yup.string().required("Please Select your company type"),
-	employmentType: Yup.string().required("Please Select your employment type"),
-	companyNumber: Yup.string().min(10, "Minimum 10 characters"),
+	employmentType: Yup.string().required("Please Select your employment type")
 });
 
 const employerLinkedinValidation = Yup.object().shape({
@@ -288,6 +313,7 @@ export {
 	userAdditionInfoValidation,
 	userInfoValidation,
 	jobValidation,
+	companyValidationSchema,
 	emplyerInfoValidation,
 	jobPostValidation,
 	profileInfoValidation,

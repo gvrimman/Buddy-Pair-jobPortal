@@ -58,14 +58,16 @@ function SplashScreen() {
 
 	const [searchParams] = useSearchParams();
 	const error = searchParams.get("error");
-	
-	if (error) {
-		// Display the error message to the user
-		showError(`Error: ${error}`);
-		setTimeout(() => {
-			navigate("/");
-		}, 100);
-	}
+
+	useEffect(()=>{
+		if (error) {
+			// Display the error message to the user
+			showError(`Error: ${error}`, {toastId: "loginerror"});
+			setTimeout(() => {
+				navigate("/");
+			}, 100);
+		}
+	}, [error]);
 
 	useEffect(() => {
 		if (location?.landValue) {

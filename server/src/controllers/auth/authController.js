@@ -433,23 +433,23 @@ const employerSignupV2 = asyncHandler(async (req, res) => {
   const userId = req.user._id;
   const { dob, gender, qualification, profession, location, company } =
     req.body;
-  const { profileImage } = req.files;
+  const profileImage = req.files && req.files[0] ? req.files[0] : null;
 
   // validate all required fields
   if (
     [
       dob,
       gender,
-      qualification,
-      company
+      qualification
     ].some((field) => !field || field.trim() === "")
   ) {
     throw new ApiError(400, "All fields must be required");
   }
-
-  const existingCompany = await Company.findById(company);
-  if (!existingCompany) {
-    throw new ApiError(400, "Company didn't exist");
+  if(company){
+	  const existingCompany = await Company.findById(company);
+	  if (!existingCompany) {
+		throw new ApiError(400, "Company didn't exist");
+	  }
   }
 
   // age calculation
@@ -466,7 +466,7 @@ const employerSignupV2 = asyncHandler(async (req, res) => {
   // save to database
   const employerData = await JobPortal.create({
     userId: userId,
-    company,
+    company: company || null,
     profileImage: profileImage ? profileImage[0]?.location : "",
     dob,
     age,
@@ -536,6 +536,9 @@ const login = asyncHandler(async (req, res) => {
 		.select("-password -refreshToken -emailVerifyOtp -resetPasswordOtp")
 		.populate({
 			path: "apps.jobPortal",
+			populate: {
+				path: "company", 
+			},
 		});
 	const options = {
 		httpOnly: true,
@@ -634,6 +637,9 @@ const updateProfileInfo = asyncHandler(async (req, res) => {
 		.select("-password -refreshToken")
 		.populate({
 			path: "apps.jobPortal",
+			populate: {
+				path: "company", 
+			},
 		});
 
 	res.json(new ApiResponse(200, updatedUser, "profile updated"));
@@ -739,7 +745,10 @@ const updateEmployerProfileInfo = asyncHandler(async (req, res) => {
 		const updatedUser = await User.findById(userId)
 			.select("-password -refreshToken")
 			.populate({
-			path: "apps.jobPortal",
+				path: "apps.jobPortal",
+				populate: {
+					path: "company", 
+				},
 			});
 
 		return res.json(

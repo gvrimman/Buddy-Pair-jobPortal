@@ -56,9 +56,7 @@ router.route("/employer-signup").post(
 
 router.route("/employer-signup/v2").post(
   verifyJwt,
-  upload.fields([
-    { name: "profileImage", maxCount: 1 }
-  ]),
+  upload.any({ name: "profileImage", maxCount: 1 }),
   employerSignupV2
 );
 

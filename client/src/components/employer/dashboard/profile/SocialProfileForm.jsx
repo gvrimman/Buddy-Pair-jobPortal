@@ -21,12 +21,11 @@ function SocialProfileForm() {
 
 	const onSubmit = async (data) => {
 		try {
-			const response = await axiosInstance.put(
-				`/auth/update-employer-profile`,
-				data
-			);
+			const response = await axiosInstance.put(`company/update-company`, {
+        linkedin: data.companyLinkedin,
+      });
 			showSuccess(response?.data?.message);
-			dispatch(updateEmployerInfo(response?.data?.data));
+			dispatch(updateEmployerInfo({...userInfo, "apps.jobPortal.company": response?.data?.data}));
 		} catch (error) {
 			showError(error?.response?.data?.message);
 		}
@@ -44,7 +43,7 @@ function SocialProfileForm() {
             label={"LinkedIn"}
             registering={register("companyLinkedin")}
             errors={errors.companyLinkedin}
-            value={userInfo?.apps?.jobPortal?.companyLinkedin}
+            value={userInfo?.apps?.jobPortal?.company?.linkedin}
           />
         </div>
         <Button

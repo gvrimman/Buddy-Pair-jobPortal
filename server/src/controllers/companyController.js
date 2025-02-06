@@ -1,5 +1,6 @@
 const Company = require("../models/company");
 const EmployerRequest = require("../models/employerRequest");
+const JobPortal = require("../models/jobportal");
 const SendMail = require("../config/mailer");
 const ApiError = require("../utils/apiError"); // your custom error class
 const ApiResponse = require("../utils/apiResponse");
@@ -13,6 +14,7 @@ const getAllCompanies = asyncHandler(async (req, res) => {
 const updateCompanyProfile = asyncHandler(async (req, res, next) => {
   try {
     const companyLogo = req.files && req.files[0] ? req.files[0] : null;
+    console.log(companyLogo);
     const userId = req.user._id;
     const company = await Company.findOne({ createdBy: userId });
     if (!company) {
@@ -100,14 +102,31 @@ const registerCompany = asyncHandler(async (req, res, next) => {
       description,
       size,
       linkedin,
+      workType,
     } = req.body;
     const companyLogo = req.files && req.files[0] ? req.files[0] : null;
     const userId = req.user._id;
+    const userData = await JobPortal.findOne({ userId });
 
     // Check if company already exists
-    const existingCompany = await Company.findOne({ email });
-    if (existingCompany) {
+    const emailCheck = await Company.findOne({ email });
+    if (emailCheck) {
       throw new ApiError(400, "A company with this email already exists.");
+    }
+    const websiteCheck = await Company.findOne({ website });
+    if (websiteCheck) {
+      throw new ApiError(
+        400,
+        "A company with this website already exists."
+      );
+    }
+    const nameCheck = await Company.findOne({ name });
+    if (nameCheck) {
+      throw new ApiError(400, "A company with this name already exists.");
+    }
+    const userCheck = await Company.findOne({ createdBy: userId });
+    if (userCheck) {
+      throw new ApiError(400, "A company is already exists under your account.");
     }
 
     // Generate OTP
@@ -124,16 +143,20 @@ const registerCompany = asyncHandler(async (req, res, next) => {
       address,
       description,
       size,
+      workType,
       linkedin,
       emailVerified: false,
       unVerifiedEmail: email,
       emailVerifyOTP: otp,
       emailOTPExpire: otpExpire,
-      createdBy: userId, // assuming user is authenticated and attached to req.user
-      logo: companyLogo
+      createdBy: userId, 
+      logo: companyLogo ? companyLogo[0]?.location : null,
     });
 
     await company.save();
+
+    userData.company = company._id;
+    await userData.save();
 
     // Send verification email
     const mailOptions = {

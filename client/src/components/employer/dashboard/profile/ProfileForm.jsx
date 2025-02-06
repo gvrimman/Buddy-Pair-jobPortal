@@ -62,9 +62,21 @@ function ProfileForm() {
       return;
     }
     try {
+      const finalData = {
+        companyLogo: data.companyLogo,
+        name: data.companyName,
+        email: data.companyEmail,
+        website: data.companyWebSite,
+        industry: data.industryType,
+        location: data.companyLocation,
+        address: data.companyAddress,
+        description: data.companyDescription,
+        size: data.companySize,
+        workType: data.employmentType,
+      };
       const response = await axiosInstance.put(
         `/auth/update-employer-profile`,
-        data,
+        finalData,
         {
           headers: {
             "Content-Type": "multipart/form-data",
@@ -76,7 +88,12 @@ function ProfileForm() {
         setShowOtpField(true);
       }
       showSuccess(response?.data?.message);
-      dispatch(updateEmployerInfo(response?.data?.data));
+      dispatch(
+        updateEmployerInfo({
+          ...userInfo,
+          "apps.jobPortal.company": response?.data?.data,
+        })
+      );
     } catch (error) {
       showError(error?.response?.data?.message);
       if (error?.response?.data?.message.includes("OTP was sent recently")) {
@@ -142,7 +159,9 @@ function ProfileForm() {
             </div>
             <img
               src={
-                previewSrc ? previewSrc : userInfo?.apps?.jobPortal?.companyLogo
+                previewSrc
+                  ? previewSrc
+                  : userInfo?.apps?.jobPortal?.company?.logo
               }
               alt=""
               className="w-full h-full object-cover"
@@ -155,28 +174,21 @@ function ProfileForm() {
               label={"Company Name"}
               errors={errors.companyName}
               registering={register("companyName")}
-              value={userInfo?.apps?.jobPortal?.companyName}
+              value={userInfo?.apps?.jobPortal?.company?.name}
             />
             <TextInput
               type={"email"}
               label={"Email address"}
               errors={errors.companyEmail}
               registering={register("companyEmail")}
-              value={userInfo?.apps?.jobPortal?.companyEmail}
-            />
-            <TextInput
-              type={"text"}
-              label={"Company contact number"}
-              errors={errors.companyNumber}
-              registering={register("companyNumber")}
-              value={userInfo?.apps?.jobPortal?.companyNumber}
+              value={userInfo?.apps?.jobPortal?.company?.email}
             />
             <TextInput
               type={"text"}
               label={"Website"}
               errors={errors.companyWebSite}
               registering={register("companyWebSite")}
-              value={userInfo?.apps?.jobPortal?.companyWebSite}
+              value={userInfo?.apps?.jobPortal?.company?.website}
             />
             <SelectInput
               name={"companySize"}
@@ -184,21 +196,28 @@ function ProfileForm() {
               control={control}
               options={companySizeOptions}
               errors={errors["companySize"]}
-              value={userInfo?.apps?.jobPortal?.companySize}
+              value={userInfo?.apps?.jobPortal?.company?.size}
             />
             <TextInput
               type={"text"}
               label={"Company Description"}
               registering={register("companyDescription")}
               errors={errors.companyDescription}
-              value={userInfo?.apps?.jobPortal?.companyDescription}
+              value={userInfo?.apps?.jobPortal?.company?.description}
             />
             <TextInput
               type={"text"}
               label={"Company Address"}
               registering={register("companyAddress")}
               errors={errors.companyAddress}
-              value={userInfo?.apps?.jobPortal?.companyAddress}
+              value={userInfo?.apps?.jobPortal?.company?.address}
+            />
+            <TextInput
+              type={"text"}
+              label={"Company Location"}
+              registering={register("companyLocation")}
+              errors={errors.companyLocation}
+              value={userInfo?.apps?.jobPortal?.company?.location}
             />
             <SelectInput
               name={"employmentType"}
@@ -206,7 +225,7 @@ function ProfileForm() {
               control={control}
               options={preferredJobType}
               errors={errors["employmentType"]}
-              value={userInfo?.apps?.jobPortal?.employmentType}
+              value={userInfo?.apps?.jobPortal?.company?.workType}
             />
             <SelectInput
               name={"industryType"}
@@ -214,7 +233,7 @@ function ProfileForm() {
               control={control}
               options={industyTypeOptions}
               errors={errors["industryType"]}
-              value={userInfo?.apps?.jobPortal?.industryType}
+              value={userInfo?.apps?.jobPortal?.company?.industry}
             />
           </div>
           <Button
