@@ -1,0 +1,39 @@
+<!DOCTYPE html>
+<html lang="en">
+  <head>
+    <meta charset="UTF-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+    <title>Server Down - Buddypair</title>
+    <script>
+      setInterval(() => {
+        fetch("/")
+          .then(() => {
+            if (navigator.serviceWorker.controller) {
+              navigator.serviceWorker.controller.postMessage({
+                type: "CHECK_AND_RELOAD",
+              });
+            }
+          })
+          .catch(() => console.log("Frontend still down"));
+      }, 5000);
+    </script>
+
+    <style>
+      body {
+        text-align: center;
+        padding: 50px;
+        font-family: Arial, sans-serif;
+      }
+      h1 {
+        color: #333;
+      }
+      p {
+        margin: 20px 0;
+      }
+    </style>
+  </head>
+  <body>
+    <h1>Frontend Server is Down</h1>
+    <p>The website is temporarily unavailable. Please try again later.</p>
+  </body>
+</html>

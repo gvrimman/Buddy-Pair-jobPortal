@@ -1,0 +1,59 @@
+<!DOCTYPE html>
+<html lang="en">
+  <head>
+    <meta charset="UTF-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+    <title>Gateway unavaliable - Buddypair</title>
+    <script>
+      let backendURL = null;
+
+      // Detect backend URL from existing API calls
+      function detectBackendURL() {
+        const requests = performance.getEntriesByType("resource");
+        for (const request of requests) {
+          if (request.name.includes("/api/")) {
+            const url = new URL(request.name);
+            backendURL = `${url.origin}`;
+            break;
+          }
+        }
+      }
+
+      setInterval(() => {
+        detectBackendURL();
+        if (!backendURL) return; // Wait until we detect backend
+
+        fetch(`${backendURL}/api`, { mode: "no-cors" })
+          .then(() => {
+            if (navigator.serviceWorker.controller) {
+              navigator.serviceWorker.controller.postMessage({
+                type: "CHECK_AND_RELOAD",
+              });
+            }
+          })
+          .catch(() => console.log("Backend still down"));
+      }, 5000);
+    </script>
+
+    <style>
+      body {
+        text-align: center;
+        padding: 50px;
+        font-family: Arial, sans-serif;
+      }
+      h1 {
+        color: #333;
+      }
+      p {
+        margin: 20px 0;
+      }
+    </style>
+  </head>
+  <body>
+    <h1>Api Gateway is Down</h1>
+    <p>
+      The API server is temporarily unavailable. Cached data may still be
+      accessible.
+    </p>
+  </body>
+</html>

@@ -79,6 +79,13 @@ if (process.env.NODE_ENV === 'development') {
 app.use(passport.initialize());
 app.use(passport.session());
 
+//Default route
+router.get(["/", "/api"], (req, res) => {
+  res
+    .status(200)
+    .json({ success: true, message: "Welcome to job portal api." });
+});
+
 app.use("/api", apiRoutes);
 
 app.use(NotFoundErrorHandler);

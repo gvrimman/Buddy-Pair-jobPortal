@@ -53,7 +53,7 @@
     <meta name="language" content="English" />
     <meta name="revisit-after" content="1 days" />
     <meta name="author" content="BuddyPair Team" />
-    <meta name="theme-color" content="#1A86B6">
+    <meta name="theme-color" content="#1A86B6" />
 
     <!-- Apple Touch Icons -->
     <link
@@ -108,7 +108,6 @@
     <link rel="icon" type="image/png" href="/favicon-32x32.png" sizes="32x32" />
     <link rel="icon" type="image/png" href="/favicon-16x16.png" sizes="16x16" />
     <link rel="icon" type="image/png" href="/favicon-128.png" sizes="128x128" />
-
   </head>
   <body>
     <div id="root"></div>
@@ -119,14 +118,19 @@
           navigator.serviceWorker
             .register("/sw.js")
             .then((registration) => {
-              console.log(
-                "Service Worker registered with scope:",
-                registration.scope
-              );
+              console.log("Service Worker registered:", registration);
             })
             .catch((error) => {
               console.error("Service Worker registration failed:", error);
             });
+        });
+
+        navigator.serviceWorker.addEventListener("message", (event) => {
+          if (event.data?.type === "VITE_NAVIGATE_RELOAD") {
+            if (navigator.onLine) {
+              window.location.href = window.location.pathname;
+            }
+          }
         });
       }
     </script>
