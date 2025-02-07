@@ -11,6 +11,7 @@ const STATIC_ASSETS = [
   "/web-app-manifest-512x512.png",
   "/assets/sounds/message-pop-alert.mp3",
   "/assets/sounds/positive-notification.wav",
+  "/assets/sounds/message-long-pop.wav",
   "/site.webmanifest",
   "/favicon-96x96.png",
   "/favicon.ico",

@@ -1,7 +1,7 @@
 import { useEffect } from "react";
 import { useDispatch, useSelector } from "react-redux";
 
-import notificationSound from "/assets/sounds/positive-notification.wav";
+import IncomingMsgAlert from "/assets/sounds/message-long-pop.wav";
 import { setChat, setUnreadMessages } from "../Redux/reducers/chatReducer";
 
 function useListenMessage() {
@@ -15,14 +15,11 @@ function useListenMessage() {
       //Sending Message:
       socket?.on("newMessage", (newMessage) => {
         newMessage.shouldShake = true;
-        const audio = new Audio(notificationSound);
-        audio.play();
-        console.log(
-          selectedUser.userId === newMessage.senderId,
-          selectedUser.userId,
-          newMessage.senderId,
-          newMessage.receiverId
-        );
+        if(selectedUser.userId === newMessage.senderId) {
+          const audio = new Audio(IncomingMsgAlert);
+          audio.play();
+        }
+        
         const isChatOpen =
           selectedUser.userId === newMessage.senderId ? true : false;
         if (isChatOpen) {
@@ -32,7 +29,7 @@ function useListenMessage() {
 
       // Setting Notification As Read or Unread:
       socket?.on("getNotification", (res) => {
-        const isChatOpen = selectedUser?._id === res.senderId ? true : false;
+        const isChatOpen = selectedUser?.userId === res.senderId ? true : false;
         if (!isChatOpen) {
           dispatch(setUnreadMessages(res));
         }

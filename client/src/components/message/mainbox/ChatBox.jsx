@@ -15,7 +15,7 @@ function ChatBox({ userImg, userId, chat, receiver }) {
 
   useEffect(() => {
     if (chat.senderId === receiver.userId) {
-      dispatch(markUserMessagesAsRead(receiver.userId));
+      //dispatch(markUserMessagesAsRead(receiver.userId));
     }
   }, [receiver]);
 
