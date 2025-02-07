@@ -102,7 +102,7 @@ function CompanyBody({  page, setPage }) {
 							<button
 								onClick={() =>
 									navigate(
-										`/job-portal/employee/company/${company._id}`
+										`/job-portal/company/${company._id}`
 									)
 								}
 								className="w-10 h-10 flex justify-center items-center text-lg text-blue-500 hover:bg-slate-200 hover:animate-pulse rounded-full">

@@ -95,7 +95,7 @@ function BodySection({ query, page, setPage }) {
 							<button
 								onClick={() =>
 									navigate(
-										`/job-portal/employer/company/${company._id}`
+										`/job-portal/company/${company._id}`
 									)
 								}
 								className="w-10 h-10 flex justify-center items-center  text-blue-500 hover:bg-slate-200 hover:animate-pulse rounded-full">

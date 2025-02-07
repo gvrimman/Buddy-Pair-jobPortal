@@ -46,7 +46,7 @@ function ProfileView() {
               src={
                 profile && profile?.apps?.jobPortal.profileImage
                   ? profile?.apps?.jobPortal.profileImage
-                  : "https://cdn.iconscout.com/icon/free/png-256/free-avatar-icon-download-in-svg-png-gif-file-formats--user-boy-avatars-flat-icons-pack-people-456322.png"
+                  : "https://encrypted-tbn0.gstatic.com/images?q=tbn:ANd9GcSNJryFTSQUV8Zuu_EGw2iUCpMbIIKWHBl2eQ&s"
               }
               alt=""
             />
@@ -74,13 +74,13 @@ function ProfileView() {
                 >
                   Edit Profile
                 </Link>
-                <Link
+                {profile?.apps?.jobPortal?.role === "employer" && <Link
                   title="Edit Company Profile"
                   to={"../edit/profile/company"}
                   className="text-xs text-nowrap text-theme-700 underline"
                 >
                   Edit Company Profile
-                </Link>
+                </Link>}
                 <Link
                   title="Referral Program"
                   to={"referral"}

@@ -160,9 +160,9 @@ function App() {
                 />
 
                 <Route path="candidates" element={<Candidates />} />
-                <Route path="companies" element={<EmployerCompanies />} />
+                <Route path="companies" element={<HomeCompanies />} />
                 <Route path="candidate/:id" element={<SingleCandidate />} />
-                <Route path="company/:id" element={<SingleEmployerCompany />} />
+                <Route path="company/:id" element={<SingleCompany />} />
 
                 <Route path="referral" element={<AcceptReferral />} />
                 <Route
