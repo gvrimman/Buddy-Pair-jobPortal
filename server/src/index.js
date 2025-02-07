@@ -80,7 +80,7 @@ app.use(passport.initialize());
 app.use(passport.session());
 
 //Default route
-router.get(["/", "/api"], (req, res) => {
+app.get(["/", "/api"], (req, res) => {
   res
     .status(200)
     .json({ success: true, message: "Welcome to job portal api." });
