@@ -114,24 +114,37 @@
     <script type="module" src="/src/main.jsx"></script>
     <script>
       if ("serviceWorker" in navigator) {
-        window.addEventListener("load", () => {
-          navigator.serviceWorker
-            .register("/sw.js")
-            .then((registration) => {
-              console.log("Service Worker registered:", registration);
-            })
-            .catch((error) => {
-              console.error("Service Worker registration failed:", error);
-            });
-        });
+        navigator.serviceWorker
+          .register("/sw.js")
+          .then((registration) => {
+            console.log(
+              "✅ Service Worker registered with scope:",
+              registration.scope
+            );
 
-        navigator.serviceWorker.addEventListener("message", (event) => {
-          if (event.data?.type === "VITE_NAVIGATE_RELOAD") {
-            if (navigator.onLine) {
-              window.location.href = window.location.pathname;
+            // Check for updates in the background
+            if (registration.waiting || registration.installing) {
+              console.log("⚡ New Service Worker detected!");
             }
-          }
-        });
+
+            // Periodically check for updates
+            setInterval(() => {
+              registration
+                .update()
+                .catch((err) =>
+                  console.warn("Service Worker update failed:", err)
+                );
+            }, 60 * 60 * 1000); // Check every 1 hour
+
+            // Listen for updates and apply them
+            navigator.serviceWorker.addEventListener("controllerchange", () => {
+              console.log("🔄 Service Worker updated, reloading...");
+              window.location.reload();
+            });
+          })
+          .catch((error) => {
+            console.error("❌ Service Worker registration failed:", error);
+          });
       }
     </script>
   </body>

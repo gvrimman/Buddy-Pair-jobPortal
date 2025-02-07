@@ -1,10 +1,8 @@
 const CACHE_NAME = "jobportal-cache-v1";
+const CACHE_NAME_PREFIX = "jobportal-cache";
 const OFFLINE_PAGE = "/offline.html";
-const SERVER_UNAVAILABLE_PAGE = "/server-unavailable.html";
-const GATEWAY_UNAVAILABLE_PAGE = "/gateway-unavailable.html";
+const SERVER_DOWN_PAGE = "/server-down.html";
 const SYNC_QUEUE = "sync-requests";
-
-let backendURL = null; // Dynamically detected backend URL
 
 // Static assets to cache
 const STATIC_ASSETS = [
@@ -19,33 +17,54 @@ const STATIC_ASSETS = [
   "/favicon.svg",
   "/logo.png",
   OFFLINE_PAGE,
-  SERVER_UNAVAILABLE_PAGE,
-  GATEWAY_UNAVAILABLE_PAGE,
+  SERVER_DOWN_PAGE,
 ];
 
 // API routes to cache (stale-while-revalidate strategy)
-const CACHED_API_ROUTES = ["/api/jobs", "/api/categories"];
+const CACHED_API_ROUTES = [
+  "/api/jobs",
+  "/api/user/findjobs",
+  "/api/user/similarprofiles",
+  "/api/employee/applied-jobs",
+  "/api/message/chat/all",
+  "/api/user/profile",
+];
 
 // Install event - Cache static assets
 self.addEventListener("install", (event) => {
   event.waitUntil(
-    caches.open(CACHE_NAME).then((cache) => cache.addAll(STATIC_ASSETS))
+    caches
+      .open(CACHE_NAME)
+      .then((cache) => {
+        return Promise.all(
+          STATIC_ASSETS.map((asset) =>
+            cache
+              .add(asset)
+              .catch((err) => console.warn("Failed to cache:", asset, err))
+          )
+        );
+      })
+      .then(() => self.skipWaiting()) // ✅ Ensures immediate activation
   );
-  self.skipWaiting();
 });
 
 // Activate event - Cleanup old caches
 self.addEventListener("activate", (event) => {
   event.waitUntil(
-    caches.keys().then((cacheNames) => {
-      return Promise.all(
-        cacheNames
-          .filter((name) => name !== CACHE_NAME)
-          .map((name) => caches.delete(name))
-      );
-    })
+    caches
+      .keys()
+      .then((cacheNames) =>
+        Promise.all(
+          cacheNames
+            .filter(
+              (name) =>
+                name.startsWith(CACHE_NAME_PREFIX) && name !== CACHE_NAME
+            ) // ✅ Safer cache deletion
+            .map((name) => caches.delete(name))
+        )
+      )
+      .then(() => self.clients.claim()) // ✅ Ensures immediate control
   );
-  self.clients.claim();
 });
 
 // Fetch event - Handle requests properly
@@ -56,24 +75,35 @@ self.addEventListener("fetch", (event) => {
   // Check if frontend server is down
   if (event.request.mode === "navigate") {
     event.respondWith(
-      fetch(request).catch(() => caches.match(SERVER_UNAVAILABLE_PAGE))
+      fetch(request).catch(() => {
+        if (!navigator.onLine) {
+          return caches.match(OFFLINE_PAGE);
+        }
+        return caches.match(SERVER_DOWN_PAGE);
+      })
     );
     return;
-  }
-
-  // Detect API requests dynamically (Assuming API requests contain "/api/")
-  if (!backendURL && request.url.includes("/api/")) {
-    const url = new URL(request.url);
-    backendURL = `${url.origin}`; // Extract backend domain
-    console.log("Detected backend URL:", backendURL);
   }
 
   // Cache static assets
   if (STATIC_ASSETS.includes(url.pathname)) {
     event.respondWith(
-      caches
-        .match(request)
-        .then((cachedResponse) => cachedResponse || fetch(request))
+      caches.open(CACHE_NAME).then((cache) =>
+        cache.match(request).then((cachedResponse) => {
+          return (
+            cachedResponse ||
+            fetch(request)
+              .then((networkResponse) => {
+                if (!networkResponse || !networkResponse.ok) {
+                  throw new Error("Failed to fetch static asset");
+                }
+                cache.put(request, networkResponse.clone()); // ✅ Store in cache
+                return networkResponse;
+              })
+              .catch(() => cachedResponse) // ✅ Return cache if fetch fails
+          );
+        })
+      )
     );
     return;
   }
@@ -102,13 +132,17 @@ self.addEventListener("fetch", (event) => {
       caches.open(CACHE_NAME).then((cache) => {
         return fetch(request)
           .then((networkResponse) => {
+            if (!networkResponse || !networkResponse.ok) {
+              throw new Error("Network response not OK");
+            }
             cache.put(request, networkResponse.clone());
             return networkResponse;
           })
-          .catch(
-            () =>
-              caches.match(request) || caches.match(GATEWAY_UNAVAILABLE_PAGE)
-          );
+          .catch(() => {
+            return caches.match(request).then((cachedResponse) => {
+              return cachedResponse || new Response("Offline", { status: 503 });
+            });
+          });
       })
     );
     return;
@@ -116,12 +150,16 @@ self.addEventListener("fetch", (event) => {
 
   // Handle general fetch failures
   event.respondWith(
-    fetch(request).catch(() => {
-      if (!navigator.onLine) {
-        return caches.match(OFFLINE_PAGE);
-      }
-      return caches.match(request);
-    })
+    fetch(request).catch(() =>
+      caches.match(request).then(
+        (cachedResponse) =>
+          cachedResponse ||
+          new Response("Offline", {
+            status: 503,
+            statusText: "Service Unavailable",
+          })
+      )
+    )
   );
 });
 
@@ -129,50 +167,34 @@ self.addEventListener("fetch", (event) => {
 self.addEventListener("sync", (event) => {
   if (event.tag === "retry-requests") {
     event.waitUntil(
-      self.indexedDB.open(SYNC_QUEUE, 1).then((db) => {
-        const transaction = db.transaction(SYNC_QUEUE, "readwrite");
-        const store = transaction.objectStore(SYNC_QUEUE);
-        store.getAll().then((requests) => {
-          requests.forEach(({ url, options }) => {
-            fetch(url, options)
-              .then(() => store.delete(url))
-              .catch(() => console.error("Failed to retry:", url));
-          });
-        });
+      new Promise((resolve, reject) => {
+        const request = indexedDB.open(SYNC_QUEUE, 1);
+
+        request.onsuccess = () => {
+          const db = request.result;
+          const transaction = db.transaction(SYNC_QUEUE, "readwrite");
+          const store = transaction.objectStore(SYNC_QUEUE);
+
+          const getAllRequest = store.getAll();
+
+          getAllRequest.onsuccess = () => {
+            const requests = getAllRequest.result;
+            if (requests.length === 0) return resolve(); // No requests to retry
+
+            let promises = requests.map(({ id, url, options }) =>
+              fetch(url, options)
+                .then(() => store.delete(id)) // ✅ Use `id` to delete from IndexedDB
+                .catch(() => console.error("Failed to retry:", url))
+            );
+
+            Promise.all(promises).then(resolve).catch(reject);
+          };
+
+          getAllRequest.onerror = reject;
+        };
+
+        request.onerror = reject;
       })
     );
   }
 });
-
-// Function to check backend availability
-async function isBackendAvailable() {
-  if (!backendURL) return false; // No backend detected yet
-  try {
-    const response = await fetch(`${backendURL}/api/health`, { mode: "no-cors" });
-    return response.ok;
-  } catch {
-    return false;
-  }
-}
-
-// Auto-reload when backend becomes available
-async function checkAndReloadClients() {
-  const clients = await self.clients.matchAll();
-  clients.forEach((client) => {
-    client.postMessage({ type: "VITE_NAVIGATE_RELOAD" });
-  });
-}
-
-self.addEventListener("online", async () => {
-  if (await isBackendAvailable()) {
-    checkAndReloadClients();
-  }
-});
-
-self.addEventListener("message", (event) => {
-  if (event.data?.type === "CHECK_AND_RELOAD") {
-    checkAndReloadClients();
-  }
-});
-
-self.addEventListener("offline", checkAndReloadClients);

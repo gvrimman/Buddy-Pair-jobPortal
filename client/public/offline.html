@@ -4,18 +4,6 @@
     <meta charset="UTF-8" />
     <meta name="viewport" content="width=device-width, initial-scale=1.0" />
     <title>Offline - Buddypair</title>
-    <script>
-      window.addEventListener("load", () => {
-        setInterval(() => {
-          if (navigator.onLine && navigator.serviceWorker.controller) {
-            navigator.serviceWorker.controller.postMessage({
-              type: "CHECK_AND_RELOAD",
-            });
-          }
-        }, 5000);
-      });
-    </script>
-
     <style>
       body {
         text-align: center;
