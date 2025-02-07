@@ -2,7 +2,7 @@ const mongoose = require("mongoose");
 
 const companySchema = new mongoose.Schema({
   name: { type: String, required: true, unique: true },
-  email: { type: String, required: true, unique: true },
+  email: { type: String, unique: true },
   website: { type: String, required: true, unique: true },
   emailVerified: { type: Boolean, default: false },
   unVerifiedEmail: { type: String },

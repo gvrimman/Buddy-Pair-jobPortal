@@ -292,8 +292,8 @@ const employeeSignup = asyncHandler(async (req, res) => {
 		socialLinks,
 		skills,
 		jobDetails: jobDetails ? jobDetails : { workExperience: "fresher" },
-		profileImage: profileImage ? profileImage[0]?.location : "",
-		resume: resume ? resume[0]?.location : "",
+		profileImage: profileImage ? profileImage?.location : "",
+		resume: resume ? resume?.location : "",
 		role: "employee",
 	});
 
@@ -386,8 +386,8 @@ const employerSignup = asyncHandler(async (req, res) => {
 		industryType,
 		employmentType,
 		companyLinkedin,
-		companyLogo: companyLogo ? companyLogo[0]?.location : "",
-		profileImage: profileImage ? profileImage[0]?.location : "",
+		companyLogo: companyLogo ? companyLogo?.location : "",
+		profileImage: profileImage ? profileImage?.location : "",
 		dob,
 		age,
 		gender,
@@ -467,7 +467,7 @@ const employerSignupV2 = asyncHandler(async (req, res) => {
   const employerData = await JobPortal.create({
     userId: userId,
     company: company || null,
-    profileImage: profileImage ? profileImage[0]?.location : "",
+    profileImage: profileImage ? profileImage?.location : "",
     dob,
     age,
     gender,

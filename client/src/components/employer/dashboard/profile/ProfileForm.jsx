@@ -10,13 +10,17 @@ import {
   preferredJobType,
 } from "../../../../utils/constants";
 import { useDispatch, useSelector } from "react-redux";
-import { showError, showSuccess } from "../../../../utils/toast";
+import { showError, showSuccess, showWarn } from "../../../../utils/toast";
 import axiosInstance from "../../../../utils/axios";
 import { updateEmployerInfo } from "../../../../Redux/reducers/userReducer";
+import { useNavigate } from "react-router-dom";
 
 function ProfileForm() {
-  const { userInfo } = useSelector((state) => state.user);
+  const { userInfo, isLoading } = useSelector((state) => state.user);
   const dispatch = useDispatch();
+  const navigate = useNavigate();
+  const [isEditable, setIsEditable] = useState(true);
+  const [isRegistering, setIsRegistering] = useState(false);
   const { register, handleSubmit, errors, reset, control, watch } =
     useFormHandler(employerProfileValidation);
 
@@ -39,6 +43,31 @@ function ProfileForm() {
     handleImagePreview();
   }, [prfImg]);
   // ----------------------------------------------------------------
+
+  useEffect(() => {
+    if(!isLoading && userInfo?.apps?.jobPortal?.role !== "employer") {
+      navigate("/job-portal/profile");
+    }
+    const editor = userInfo?._id;
+    const companyAuthor = userInfo?.apps?.jobPortal?.company?.createdBy;
+    const unVerifiedEmail = userInfo?.apps?.jobPortal?.company?.unVerifiedEmail;
+    const verifiedEmail = userInfo?.apps?.jobPortal?.company?.email;
+    setIsEditable(editor === companyAuthor && companyAuthor);
+    if (
+      editor === companyAuthor &&
+      companyAuthor &&
+      unVerifiedEmail &&
+      !verifiedEmail
+    ) {
+      setNewEmail(unVerifiedEmail);
+      setShowOtpField(true);
+      showWarn("Company mail verification is pending.", {
+        toastId: "mail-verify",
+      });
+    }
+    companyAuthor ? setIsRegistering(false) : setIsRegistering(true);
+  }, [userInfo]);
+
   const [showOtpField, setShowOtpField] = useState(false);
   const [otp, setOtp] = useState("");
   const [newEmail, setNewEmail] = useState("");
@@ -91,7 +120,13 @@ function ProfileForm() {
       dispatch(
         updateEmployerInfo({
           ...userInfo,
-          "apps.jobPortal.company": response?.data?.data,
+          apps: {
+            ...userInfo.apps,
+            jobPortal: {
+              ...userInfo.apps.jobPortal,
+              company: response?.data?.data,
+            },
+          },
         })
       );
     } catch (error) {
@@ -104,19 +139,28 @@ function ProfileForm() {
   };
 
   const handleOtpSubmit = async () => {
-    if(!otp) {
+    if (!otp) {
       showError("Provide OTP to continue");
       return;
     }
     try {
-      const response = await axiosInstance.post(
-        `/auth/update-employer-profile/verifyotp`,
-        {
-          email: newEmail,
-          otp,
-        }
-      );
+      const response = await axiosInstance.post(`company/verify-email-otp`, {
+        email: newEmail,
+        otp,
+      });
       showSuccess(response?.data?.message);
+      dispatch(
+        updateEmployerInfo({
+          ...userInfo,
+          apps: {
+            ...userInfo.apps,
+            jobPortal: {
+              ...userInfo.apps.jobPortal,
+              company: response?.data?.data,
+            },
+          },
+        })
+      );
       setShowOtpField(false);
     } catch (error) {
       showError(error?.response?.data?.message);
@@ -126,12 +170,9 @@ function ProfileForm() {
   const handleResendOtp = async () => {
     try {
       setResendLoading(true);
-      const response = await axiosInstance.post(
-        `/auth/update-employer-profile/resendotp`,
-        {
-          email: newEmail,
-        }
-      );
+      const response = await axiosInstance.post(`company/resend-email-otp`, {
+        email: newEmail,
+      });
       showSuccess(response?.data?.message);
     } catch (error) {
       showError(error?.response?.data?.message);
@@ -155,6 +196,7 @@ function ProfileForm() {
                 label={"Company Logo"}
                 registering={register("companyLogo")}
                 errors={errors["companyLogo"]}
+                disabled={!isEditable}
               />
             </div>
             <img
@@ -168,6 +210,11 @@ function ProfileForm() {
               loading="lazy"
             />
           </div>
+          {!isEditable && (
+            <div className="w-full text-center text-gray-800">
+              You are previewing the company profile.
+            </div>
+          )}
           <div className="mt-5 grid lg:grid-cols-2 gap-3">
             <TextInput
               type={"text"}
@@ -175,6 +222,7 @@ function ProfileForm() {
               errors={errors.companyName}
               registering={register("companyName")}
               value={userInfo?.apps?.jobPortal?.company?.name}
+              disabled={!isEditable}
             />
             <TextInput
               type={"email"}
@@ -182,6 +230,7 @@ function ProfileForm() {
               errors={errors.companyEmail}
               registering={register("companyEmail")}
               value={userInfo?.apps?.jobPortal?.company?.email}
+              disabled={!isEditable}
             />
             <TextInput
               type={"text"}
@@ -189,6 +238,7 @@ function ProfileForm() {
               errors={errors.companyWebSite}
               registering={register("companyWebSite")}
               value={userInfo?.apps?.jobPortal?.company?.website}
+              disabled={!isEditable}
             />
             <SelectInput
               name={"companySize"}
@@ -197,6 +247,7 @@ function ProfileForm() {
               options={companySizeOptions}
               errors={errors["companySize"]}
               value={userInfo?.apps?.jobPortal?.company?.size}
+              disabled={!isEditable}
             />
             <TextInput
               type={"text"}
@@ -204,6 +255,7 @@ function ProfileForm() {
               registering={register("companyDescription")}
               errors={errors.companyDescription}
               value={userInfo?.apps?.jobPortal?.company?.description}
+              disabled={!isEditable}
             />
             <TextInput
               type={"text"}
@@ -211,6 +263,7 @@ function ProfileForm() {
               registering={register("companyAddress")}
               errors={errors.companyAddress}
               value={userInfo?.apps?.jobPortal?.company?.address}
+              disabled={!isEditable}
             />
             <TextInput
               type={"text"}
@@ -218,6 +271,7 @@ function ProfileForm() {
               registering={register("companyLocation")}
               errors={errors.companyLocation}
               value={userInfo?.apps?.jobPortal?.company?.location}
+              disabled={!isEditable}
             />
             <SelectInput
               name={"employmentType"}
@@ -226,6 +280,7 @@ function ProfileForm() {
               options={preferredJobType}
               errors={errors["employmentType"]}
               value={userInfo?.apps?.jobPortal?.company?.workType}
+              disabled={!isEditable}
             />
             <SelectInput
               name={"industryType"}
@@ -234,10 +289,12 @@ function ProfileForm() {
               options={industyTypeOptions}
               errors={errors["industryType"]}
               value={userInfo?.apps?.jobPortal?.company?.industry}
+              disabled={!isEditable}
             />
           </div>
           <Button
             type="submit"
+            disabled={!isEditable}
             className="bg-theme-500 hover:bg-theme-400 my-3 w-fit"
           >
             Update
@@ -250,9 +307,11 @@ function ProfileForm() {
             label={"Enter OTP"}
             value={otp}
             onChange={(e) => setOtp(e.target.value)}
+            disabled={!isEditable}
           />
           <Button
             onClick={handleOtpSubmit}
+            disabled={!isEditable}
             className="bg-theme-500 hover:bg-theme-400 my-3 w-fit mx-1"
           >
             Verify OTP

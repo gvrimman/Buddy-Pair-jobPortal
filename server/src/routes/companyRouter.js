@@ -3,6 +3,7 @@ const { upload } = require("../middlewares/multer");
 const {
   registerCompany,
   verifyCompanyEmailOTP,
+  ResendCompanyEmailOTP,
   updateCompanyProfile,
   SendJoinRequest,
   VerifyRequest,
@@ -25,6 +26,7 @@ router.post(
 
 // Verify email OTP
 router.post("/verify-email-otp", verifyJwt, verifyCompanyEmailOTP);
+router.post("/resend-email-otp", verifyJwt, ResendCompanyEmailOTP);
 
 // Update company profile (with email update handling)
 router.put(

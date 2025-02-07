@@ -1,4 +1,4 @@
-import React, { useState } from "react";
+import React, { useState, useEffect } from "react";
 import InputForms from "../../../common/InputForms";
 import { Button } from "@material-tailwind/react";
 import TextInput from "../../../common/TextInput";
@@ -14,10 +14,17 @@ import { updateEmployerInfo } from "../../../../Redux/reducers/userReducer";
 
 function SocialProfileForm() {
 	const { userInfo } = useSelector((state) => state.user);
+  const [isEditable, setIsEditable] = useState(true);
 	const dispatch = useDispatch();
 	// hook form validation
 	const { register, handleSubmit, errors, reset, control, watch } =
 		useFormHandler(employerLinkedinValidation);
+
+    useEffect(() => {
+      const editor = userInfo?._id;
+      const companyAuthor = userInfo?.apps?.jobPortal?.company?.createdBy;
+      setIsEditable(editor === companyAuthor && companyAuthor);
+    }, [userInfo]);
 
 	const onSubmit = async (data) => {
 		try {
@@ -25,7 +32,21 @@ function SocialProfileForm() {
         linkedin: data.companyLinkedin,
       });
 			showSuccess(response?.data?.message);
-			dispatch(updateEmployerInfo({...userInfo, "apps.jobPortal.company": response?.data?.data}));
+			dispatch(
+        updateEmployerInfo({
+          ...userInfo,
+          apps: {
+            ...userInfo.apps,
+            jobPortal: {
+              ...userInfo.apps.jobPortal,
+              company: {
+                ...userInfo.apps.jobPortal.company,
+                linkedin: response?.data?.data.linkedin,
+              },
+            },
+          },
+        })
+      );
 		} catch (error) {
 			showError(error?.response?.data?.message);
 		}
@@ -44,10 +65,12 @@ function SocialProfileForm() {
             registering={register("companyLinkedin")}
             errors={errors.companyLinkedin}
             value={userInfo?.apps?.jobPortal?.company?.linkedin}
+            disabled={!isEditable}
           />
         </div>
         <Button
           type="submit"
+          disabled={!isEditable}
           className="bg-theme-500 hover:bg-theme-400 my-3 w-fit"
         >
           update
