@@ -1,4 +1,4 @@
-const CACHE_NAME = "jobportal-cache-v1";
+const CACHE_NAME = "jobportal-cache-v2";
 const CACHE_NAME_PREFIX = "jobportal-cache";
 const OFFLINE_PAGE = "/offline.html";
 const SERVER_DOWN_PAGE = "/server-down.html";
@@ -141,7 +141,7 @@ self.addEventListener("fetch", (event) => {
           })
           .catch(() => {
             return caches.match(request).then((cachedResponse) => {
-              return cachedResponse || new Response("Offline", { status: 503 });
+              return cachedResponse;
             });
           });
       })
@@ -152,14 +152,7 @@ self.addEventListener("fetch", (event) => {
   // Handle general fetch failures
   event.respondWith(
     fetch(request).catch(() =>
-      caches.match(request).then(
-        (cachedResponse) =>
-          cachedResponse ||
-          new Response("Offline", {
-            status: 503,
-            statusText: "Service Unavailable",
-          })
-      )
+      caches.match(request).then((cachedResponse) => cachedResponse)
     )
   );
 });
